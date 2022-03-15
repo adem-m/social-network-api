@@ -40,4 +40,5 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         port: 22
         key: ${{ secrets.SSH_KEY }}
+        command_timeout: "20s"
         script: /home/${{ secrets.EC2_USERNAME }}/restart.sh &
