@@ -34,6 +34,6 @@ jobs:
         port: 22
         key: ${{ secrets.SSH_KEY }}
         source: "target/social-network-api-1.0-SNAPSHOT.jar"
-        target: "/home/${{ secrets.EC2_USERNAME }}/social-network-api-1.0-SNAPSHOT.jar"
+        target: "/home/${{ secrets.EC2_USERNAME }}"
     - name: Run app
       run: ssh -i key.pem ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} 'java -jar /home/${{ secrets.EC2_USERNAME }}/social-network-api-1.0-SNAPSHOT.jar'
