@@ -6,8 +6,6 @@ name: Continuous integration and deployment
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   build_and_deploy:
@@ -42,4 +40,4 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         port: 22
         key: ${{ secrets.SSH_KEY }}
-        script: /home/${{ secrets.EC2_USERNAME }}/restart.sh
+        script: /home/${{ secrets.EC2_USERNAME }}/restart.sh &
