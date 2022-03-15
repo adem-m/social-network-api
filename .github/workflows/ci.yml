@@ -27,6 +27,6 @@ jobs:
     - name: Build
       run: mvn clean install -DskipTests=true
     - name: Upload to EC2
-      run: echo "${{ secrets.SSH_KEY }}" > key.pem; scp -i key.pem target/social-network-api-1.0-SNAPSHOT.jar ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:~
+      run: echo "${{ secrets.SSH_KEY }}" > key.pem; cat key.pem; scp -i key.pem target/social-network-api-1.0-SNAPSHOT.jar ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:~
     - name: Run app
       run: ssh -i key.pem ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} 'java -jar /home/${{ secrets.EC2_USERNAME }}/social-network-api-1.0-SNAPSHOT.jar'
