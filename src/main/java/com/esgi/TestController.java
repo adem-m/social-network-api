@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 public class TestController {
     @GetMapping("/test")
     public ResponseEntity<String> test() {
+        String pythonScript = "print('Hello')\nprint('World')";
         ProcessBuilder processBuilder = new ProcessBuilder();
 
         // -- Linux --
@@ -20,7 +21,10 @@ public class TestController {
 //        processBuilder.command("bash", "-c", "ls /home/mkyong/");
 
         // Run a shell script
-        processBuilder.command("/home/ec2-user/run_python.sh");
+        processBuilder.command(
+                "echo " + pythonScript + " > /home/ec2-user/python_src/test.py",
+                "/home/ec2-user/run_python.sh"
+        );
 
         // -- Windows --
 
