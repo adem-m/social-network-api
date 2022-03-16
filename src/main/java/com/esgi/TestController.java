@@ -22,7 +22,7 @@ public class TestController {
 
         // Run a shell script
         processBuilder.command(
-                "echo " + pythonScript + " > /home/ec2-user/python_src/test.py",
+                "echo \"" + pythonScript + "\" > /home/ec2-user/python_src/test.py",
                 "/home/ec2-user/run_python.sh"
         );
 
