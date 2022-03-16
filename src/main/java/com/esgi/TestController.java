@@ -20,11 +20,13 @@ public class TestController {
         // Run a shell command
 //        processBuilder.command("bash", "-c", "ls /home/mkyong/");
 
+        try {
+            new ProcessBuilder().command("echo \"" + pythonScript + "\" > /home/ec2-user/python_src/test.py").start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         // Run a shell script
-        processBuilder.command(
-                "echo \"" + pythonScript + "\" > /home/ec2-user/python_src/test.py",
-                "/home/ec2-user/run_python.sh"
-        );
+        processBuilder.command("/home/ec2-user/run_python.sh");
 
         // -- Windows --
 
