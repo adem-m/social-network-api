@@ -29,7 +29,7 @@ final public class CodeService {
     }
 
     private Output runScript(Script script) {
-        Duration duration = null;
+        Duration duration;
         final long startTime = System.nanoTime();
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command(script.command());
@@ -37,19 +37,23 @@ final public class CodeService {
         try {
             Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
             String line;
             while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+            while ((line = errorReader.readLine()) != null) {
                 output.append(line).append("\n");
             }
             int exitCode = process.waitFor();
             final long endTime = System.nanoTime();
             duration = new Duration((endTime - startTime) / 1_000_000);
             if (exitCode != SUCCESS_CODE) {
-                return Output.fail("Error while running script, exit code :" + exitCode, duration);
+                return Output.fail(output.toString(), duration);
             }
 
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            throw new ScriptRunningException();
         }
         return Output.success(output.toString(), duration);
     }
