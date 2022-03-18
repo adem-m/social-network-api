@@ -76,10 +76,8 @@ public class TestController {
             }
 
             int exitVal = process.waitFor();
-            System.out.println("exit val :" + exitVal);
-            System.out.println(output);
             if (exitVal != 0) {
-                throw new UnsupportedOperationException("Cannot run script");
+                return "Error while running script, exit code : " + exitVal;
             }
 
         } catch (IOException | InterruptedException e) {
