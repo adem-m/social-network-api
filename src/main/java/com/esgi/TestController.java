@@ -9,14 +9,33 @@ import java.nio.charset.StandardCharsets;
 
 @RestController
 public class TestController {
-    final private String FILE_PATH = "/home/ec2-user/python_src/test.py";
 
-    @GetMapping("/test")
-    public final ResponseEntity<String> test() {
+    @GetMapping("/c-test")
+    public final ResponseEntity<String> cTest() {
+        final String cScript = """
+                #include <stdio.h>
+                int main() {
+                   printf("Hello, cWorld!");
+                   return 0;
+                }
+                """;
+        final long startTime = System.nanoTime();
+
+        createFile("/home/ec2-user/c_src/app.c", cScript);
+        final String output = executeCommand("/home/ec2-user/run_c.sh");
+
+        final long endTime = System.nanoTime();
+
+        final long duration = (endTime - startTime) / 1_000_000;
+        return ResponseEntity.ok(output + " " + duration + "ms");
+    }
+
+    @GetMapping("/python-test")
+    public final ResponseEntity<String> pythonTest() {
         final String pythonScript = "print('Hello')\nprint('World')";
         final long startTime = System.nanoTime();
 
-        createFile(FILE_PATH, pythonScript);
+        createFile("/home/ec2-user/python_src/app.py", pythonScript);
         final String output = executeCommand("/home/ec2-user/run_python.sh");
 
         final long endTime = System.nanoTime();
