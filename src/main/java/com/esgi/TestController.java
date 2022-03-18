@@ -75,12 +75,12 @@ public class TestController {
                 output.append(line).append("\n");
             }
 
-            int exitVal = process.waitFor();
-            if (exitVal != 0) {
-                throw new UnsupportedOperationException("Cannot run script");
-            }
+//            int exitVal = process.waitFor();
+//            if (exitVal != 0) {
+//                throw new UnsupportedOperationException("Cannot run script");
+//            }
 
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return output.toString();
