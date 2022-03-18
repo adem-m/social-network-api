@@ -15,7 +15,7 @@ public class TestController {
         final String cScript = """
                 #include <stdio.h>
                 int main() {
-                   printf("Hello, cWorld!");
+                   printf("Hello, cWorld!\\n");
                    return 0;
                 }
                 """;
@@ -75,12 +75,14 @@ public class TestController {
                 output.append(line).append("\n");
             }
 
-//            int exitVal = process.waitFor();
-//            if (exitVal != 0) {
-//                throw new UnsupportedOperationException("Cannot run script");
-//            }
+            int exitVal = process.waitFor();
+            System.out.println("exit val :" + exitVal);
+            System.out.println(output);
+            if (exitVal != 0) {
+                throw new UnsupportedOperationException("Cannot run script");
+            }
 
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         return output.toString();
