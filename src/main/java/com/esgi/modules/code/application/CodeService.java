@@ -23,8 +23,8 @@ final public class CodeService {
     }
 
     public Output execute(Code code) {
-        Script script = LANGUAGE_SCRIPT.get(code.language());
         fileService.createFile(code.language().getSourceName(), code.source());
+        Script script = LANGUAGE_SCRIPT.get(code.language());
         return runScript(script);
     }
 
