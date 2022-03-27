@@ -17,6 +17,8 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
+@RestController
 public class FriendshipController {
     private final CommandBus commandBus;
     private final QueryBus queryBus;
