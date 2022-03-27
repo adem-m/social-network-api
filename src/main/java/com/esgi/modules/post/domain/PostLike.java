@@ -1,16 +1,28 @@
 package com.esgi.modules.post.domain;
 
+import com.esgi.kernel.Entity;
 import com.esgi.modules.user.domain.UserId;
 
 import java.util.Objects;
 
-public final class PostLike {
+public final class PostLike implements Entity<PostLikeId> {
+    private final PostLikeId postLikeId;
     private final UserId userId;
     private final PostId postId;
 
-    public PostLike(UserId userId, PostId postId){
+    public PostLike(PostLikeId postLikeId,UserId userId, PostId postId){
+        this.postLikeId = postLikeId;
         this.userId = userId;
         this.postId = postId;
+    }
+
+    @Override
+    public PostLikeId id() {
+        return postLikeId;
+    }
+
+    public PostLikeId getPostLikeId() {
+        return postLikeId;
     }
 
     public UserId getUserId() {
