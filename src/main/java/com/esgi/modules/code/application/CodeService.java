@@ -57,7 +57,7 @@ final public class CodeService {
             }
 
         } catch (IOException | InterruptedException e) {
-            throw new ScriptRunningException();
+            throw new ScriptRunningException(script);
         }
         return Output.success(output.toString(), duration);
     }
