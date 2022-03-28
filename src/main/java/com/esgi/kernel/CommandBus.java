@@ -1,5 +1,6 @@
 package com.esgi.kernel;
 
-public interface CommandBus {
-    <C extends Command, R> R send(C command);
+public interface CommandBus<TCommand extends Command, R> {
+    void addHandler(Class<TCommand> commandC, CommandHandler handler);
+    R send(TCommand command);
 }

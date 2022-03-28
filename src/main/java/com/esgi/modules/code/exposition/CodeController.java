@@ -31,7 +31,7 @@ final public class CodeController {
         CreateFile createFile = new CreateFile(code.language().getSourceName(), code.source());
         commandBus.send(createFile);
         RunCode runCode = new RunCode(code);
-        Output output = commandBus.send(runCode);
+        Output output = (Output) commandBus.send(runCode);
         RunCodeResponse response = new RunCodeResponse(
                 output.getValue(),
                 output.getStatus().name(),
