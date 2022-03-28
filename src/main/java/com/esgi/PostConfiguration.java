@@ -1,49 +1,52 @@
 package com.esgi;
 
-import com.esgi.kernel.*;
-import com.esgi.modules.infrastructure.DefaultEventDispatcher;
+import com.esgi.kernel.CommandBus;
+import com.esgi.kernel.EventDispatcher;
+import com.esgi.kernel.QueryBus;
 import com.esgi.modules.infrastructure.InMemoryPostRepository;
 import com.esgi.modules.post.application.*;
 import com.esgi.modules.post.domain.PostRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @Configuration
 public class PostConfiguration {
+    private final KernelConfiguration kernelConfiguration;
+
+    public PostConfiguration(KernelConfiguration kernelConfiguration) {
+        this.kernelConfiguration = kernelConfiguration;
+    }
+
     @Bean
     public PostRepository postRepository() {
         return new InMemoryPostRepository();
     }
 
     @Bean
-    public EventDispatcher<Event> postEventEventDispatcher() {
-        final Map<Class<? extends Event>, List<EventListener<? extends Event>>> listenerMap = new HashMap<>();
-        listenerMap.put(CreatePostEvent.class, List.of(new CreatePostEventListener()));
-        return new DefaultEventDispatcher(listenerMap);
+    public CreatePostEventListener createPostEventListener() {
+        EventDispatcher dispatcher = this.kernelConfiguration.eventDispatcher();
+        CreatePostEventListener listener = new CreatePostEventListener();
+        dispatcher.addListener(CreatePostEvent.class, listener);
+        return listener;
     }
 
     @Bean
     public CreatePostCommandHandler createPostCommandHandler() {
-        return new CreatePostCommandHandler(postRepository(), postEventEventDispatcher());
+        return new CreatePostCommandHandler(postRepository(), kernelConfiguration.eventDispatcher());
     }
 
     @Bean
-    public CommandBus commandBus() {
-        final Map<Class<? extends Command>, CommandHandler> commandHandlerMap =
-                Collections.singletonMap(CreatePost.class, new CreatePostCommandHandler(postRepository(), postEventEventDispatcher()));
-        return new SimpleCommandBus(commandHandlerMap);
+    public CommandBus postCommandBus() {
+        final CommandBus commandBus = kernelConfiguration.commandBus();
+        commandBus.addHandler(CreatePost.class, createPostCommandHandler());
+        return commandBus;
     }
 
     @Bean
-    public QueryBus queryBus() {
-        final Map<Class<? extends Query>, QueryHandler> queryHandlerMap =
-                Collections.singletonMap(RetrievePosts.class, new RetrievePostsHandler(postRepository()));
-        return new SimpleQueryBus(queryHandlerMap);
+    public QueryBus postQueryBus() {
+        final QueryBus queryBus = kernelConfiguration.queryBus();
+        queryBus.addHandler(RetrievePosts.class, new RetrievePostsHandler(postRepository()));
+        return queryBus;
     }
 
     @Bean

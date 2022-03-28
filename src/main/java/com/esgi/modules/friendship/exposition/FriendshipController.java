@@ -37,7 +37,7 @@ public class FriendshipController {
 
     @GetMapping(path = "/friends{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<FriendshipResponse> getFriendshipById(UserId id){
-        final Friendship friendship = queryBus.send(new RetrieveFriends(id));
+        final Friendship friendship = (Friendship) queryBus.send(new RetrieveFriends(id));
         FriendshipResponse friendshipResponseResult = new FriendshipResponse(String.valueOf(friendship.getFriendshipId().getValue()), friendship.getUserId1(), friendship.getUserId2());
         return ResponseEntity.ok(friendshipResponseResult);
     }

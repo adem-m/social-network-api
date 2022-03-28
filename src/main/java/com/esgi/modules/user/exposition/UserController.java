@@ -41,14 +41,14 @@ public class UserController {
 
     @GetMapping(path = "/user{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserResponse> getUserById(UserId id){
-        final User user = queryBus.send(new RetrieveUserById(id));
+        final User user = (User) queryBus.send(new RetrieveUserById(id));
         UserResponse userResponseResult = new UserResponse(String.valueOf(user.getId().getValue()), user.getLastname(), user.getFirstname(),new EmailResponse(user.getEmail().getEmail()),user.getPassword());
         return ResponseEntity.ok(userResponseResult);
     }
 
     @GetMapping(path = "/users", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UsersResponse> getAllUsers() {
-        final List<User> users = queryBus.send(new RetrieveUsers());
+        final List<User> users = (List<User>) queryBus.send(new RetrieveUsers());
         UsersResponse usersResponseResult = new UsersResponse(users.stream().map(user -> new UserResponse(String.valueOf(user.getId().getValue()), user.getLastname(), user.getFirstname(),new EmailResponse(user.getEmail().getEmail()),user.getPassword())).collect(Collectors.toList()));
         return ResponseEntity.ok(usersResponseResult);
     }
