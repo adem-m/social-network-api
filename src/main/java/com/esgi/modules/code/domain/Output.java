@@ -1,6 +1,9 @@
 package com.esgi.modules.code.domain;
 
 public final class Output {
+    private final static String EMPTY_OUTPUT = "";
+    private final static long TIMEOUT_DURATION = 0;
+
     private final String value;
     private final Status status;
     private final Duration duration;
@@ -13,6 +16,10 @@ public final class Output {
 
     public static Output success(String value, Duration duration) {
         return new Output(value, Status.SUCCESS, duration);
+    }
+
+    public static Output timeout() {
+        return new Output(EMPTY_OUTPUT, Status.TIMEOUT, new Duration(TIMEOUT_DURATION));
     }
 
     public static Output fail(String value, Duration duration) {

@@ -10,10 +10,11 @@ import java.util.Map;
 
 final public class CodeService {
     private final static int SUCCESS_CODE = 0;
+    private final static int TIMEOUT_CODE = 124;
     private final static String SCRIPTS_DIRECTORY = "/home/ec2-user/";
     private final static Map<Language, Script> LANGUAGE_SCRIPT = Map.of(
-            Language.C, new Script(SCRIPTS_DIRECTORY + Language.C.getScriptName()),
-            Language.PYTHON, new Script(SCRIPTS_DIRECTORY + Language.PYTHON.getScriptName())
+            Language.C, Script.of(SCRIPTS_DIRECTORY + Language.C.getScriptName()),
+            Language.PYTHON, Script.of(SCRIPTS_DIRECTORY + Language.PYTHON.getScriptName())
     );
 
     private final FileService fileService;
@@ -32,7 +33,7 @@ final public class CodeService {
         Duration duration;
         final long startTime = System.nanoTime();
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command(script.command());
+        processBuilder.command(script.getCommand());
         StringBuilder output = new StringBuilder();
         try {
             Process process = processBuilder.start();
@@ -48,6 +49,9 @@ final public class CodeService {
             int exitCode = process.waitFor();
             final long endTime = System.nanoTime();
             duration = new Duration((endTime - startTime) / 1_000_000);
+            if (exitCode == TIMEOUT_CODE) {
+                return Output.timeout();
+            }
             if (exitCode != SUCCESS_CODE) {
                 return Output.fail(output.toString(), duration);
             }
