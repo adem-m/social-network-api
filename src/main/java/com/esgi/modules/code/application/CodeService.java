@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 final public class CodeService {
     private final static int SUCCESS_CODE = 0;
@@ -26,10 +25,10 @@ final public class CodeService {
     public Output execute(Code code) {
         fileService.createFile(code.language().getSourceName(), code.source());
         Script script = LANGUAGE_SCRIPT.get(code.language());
-        return runScript(script);
+        return runScript(script, code.language().getTimeoutCode());
     }
 
-    private Output runScript(Script script) {
+    private Output runScript(Script script, int timeoutCode) {
         Duration duration;
         final long startTime = System.nanoTime();
         ProcessBuilder processBuilder = new ProcessBuilder();
@@ -46,12 +45,10 @@ final public class CodeService {
             while ((line = errorReader.readLine()) != null) {
                 output.append(line).append("\n");
             }
-            boolean isTimeout = process.waitFor(10, TimeUnit.SECONDS);
-            process.destroy();
             int exitCode = process.waitFor();
             final long endTime = System.nanoTime();
             duration = new Duration((endTime - startTime) / 1_000_000);
-            if (isTimeout) {
+            if (exitCode == timeoutCode) {
                 return Output.timeout();
             }
             if (exitCode != SUCCESS_CODE) {
