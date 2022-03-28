@@ -3,15 +3,17 @@ package com.esgi.modules.code.domain;
 import com.esgi.modules.code.application.UnsupportedLanguageException;
 
 public enum Language {
-    C("run_c.sh", "c_src/app.c"),
-    PYTHON("run_python.sh", "python_src/app.py");
+    C("run_c.sh", "c_src/app.c", 124),
+    PYTHON("run_python.sh", "python_src/app.py", 143);
 
     private final String scriptName;
     private final String sourceName;
+    private final int timeoutCode;
 
-    Language(String scriptName, String sourceName) {
+    Language(String scriptName, String sourceName, int timeoutCode) {
         this.scriptName = scriptName;
         this.sourceName = sourceName;
+        this.timeoutCode = timeoutCode;
     }
 
     public String getScriptName() {
@@ -20,6 +22,10 @@ public enum Language {
 
     public String getSourceName() {
         return sourceName;
+    }
+
+    public int getTimeoutCode() {
+        return timeoutCode;
     }
 
     public static Language fromString(String language) {
