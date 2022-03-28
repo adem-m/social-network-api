@@ -4,6 +4,7 @@ import com.esgi.kernel.NoSuchEntityException;
 import com.esgi.modules.friendship.domain.Friendship;
 import com.esgi.modules.friendship.domain.FriendshipId;
 import com.esgi.modules.friendship.domain.FriendshipRepository;
+import com.esgi.modules.user.domain.UserId;
 
 import java.util.List;
 import java.util.Map;
@@ -42,5 +43,15 @@ public class InMemoryFriendshipRepository implements FriendshipRepository {
     @Override
     public List<Friendship> findAll() {
         return List.copyOf(data.values());
+    }
+
+    @Override
+    public boolean existsByFirstUserIdAndSecondUserId(UserId userId1, UserId userId2) {
+        return false;
+    }
+
+    @Override
+    public List<Friendship> findByUserId(UserId userId) {
+        return null;
     }
 }
