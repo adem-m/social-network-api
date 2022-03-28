@@ -37,7 +37,7 @@ public class PostController {
 
     @GetMapping(path = "/post{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PostResponse> getPostById(PostId id){
-        final Post post = queryBus.send(new RetrievePostById(id));
+        final Post post = (Post) queryBus.send(new RetrievePostById(id));
         PostResponse postResponseResult = new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(), post.getUserId(),post.getDate());
         return ResponseEntity.ok(postResponseResult);
     }
