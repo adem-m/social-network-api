@@ -7,14 +7,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 final public class CodeService {
     private final static int SUCCESS_CODE = 0;
-    private final static int TIMEOUT_CODE = 124;
     private final static String SCRIPTS_DIRECTORY = "/home/ec2-user/";
     private final static Map<Language, Script> LANGUAGE_SCRIPT = Map.of(
-            Language.C, Script.of(SCRIPTS_DIRECTORY + Language.C.getScriptName()),
-            Language.PYTHON, Script.of(SCRIPTS_DIRECTORY + Language.PYTHON.getScriptName())
+            Language.C, new Script(SCRIPTS_DIRECTORY + Language.C.getScriptName()),
+            Language.PYTHON, new Script(SCRIPTS_DIRECTORY + Language.PYTHON.getScriptName())
     );
 
     private final FileService fileService;
@@ -33,7 +33,7 @@ final public class CodeService {
         Duration duration;
         final long startTime = System.nanoTime();
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command(script.getCommand());
+        processBuilder.command(script.command());
         StringBuilder output = new StringBuilder();
         try {
             Process process = processBuilder.start();
@@ -46,10 +46,12 @@ final public class CodeService {
             while ((line = errorReader.readLine()) != null) {
                 output.append(line).append("\n");
             }
+            boolean isTimeout = process.waitFor(10, TimeUnit.SECONDS);
+            process.destroy();
             int exitCode = process.waitFor();
             final long endTime = System.nanoTime();
             duration = new Duration((endTime - startTime) / 1_000_000);
-            if (exitCode == TIMEOUT_CODE) {
+            if (isTimeout) {
                 return Output.timeout();
             }
             if (exitCode != SUCCESS_CODE) {
