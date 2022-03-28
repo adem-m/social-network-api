@@ -1,14 +1,19 @@
 package com.esgi.modules.code.application;
 
-import com.esgi.modules.code.domain.*;
-import com.esgi.modules.file.application.FileService;
+import com.esgi.kernel.CommandHandler;
+import com.esgi.kernel.Event;
+import com.esgi.kernel.EventDispatcher;
+import com.esgi.modules.code.domain.Duration;
+import com.esgi.modules.code.domain.Language;
+import com.esgi.modules.code.domain.Output;
+import com.esgi.modules.code.domain.Script;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
 
-final public class CodeService {
+final public class RunCodeCommandHandler implements CommandHandler<RunCode, Output> {
     private final static int SUCCESS_CODE = 0;
     private final static String SCRIPTS_DIRECTORY = "/home/ec2-user/";
     private final static Map<Language, Script> LANGUAGE_SCRIPT = Map.of(
@@ -16,19 +21,16 @@ final public class CodeService {
             Language.PYTHON, new Script(SCRIPTS_DIRECTORY + Language.PYTHON.getScriptName())
     );
 
-    private final FileService fileService;
+    private final EventDispatcher<Event> eventEventDispatcher;
 
-    public CodeService(FileService fileService) {
-        this.fileService = fileService;
+    public RunCodeCommandHandler(EventDispatcher<Event> eventEventDispatcher) {
+        this.eventEventDispatcher = eventEventDispatcher;
     }
 
-    public Output execute(Code code) {
-        fileService.createFile(code.language().getSourceName(), code.source());
-        Script script = LANGUAGE_SCRIPT.get(code.language());
-        return runScript(script, code.language().getTimeoutCode());
-    }
 
-    private Output runScript(Script script, int timeoutCode) {
+    @Override
+    public Output handle(RunCode command) {
+        Script script = LANGUAGE_SCRIPT.get(command.code().language());
         Duration duration;
         final long startTime = System.nanoTime();
         ProcessBuilder processBuilder = new ProcessBuilder();
@@ -48,7 +50,7 @@ final public class CodeService {
             int exitCode = process.waitFor();
             final long endTime = System.nanoTime();
             duration = new Duration((endTime - startTime) / 1_000_000);
-            if (exitCode == timeoutCode) {
+            if (exitCode == command.code().language().getTimeoutCode()) {
                 return Output.timeout();
             }
             if (exitCode != SUCCESS_CODE) {
@@ -58,6 +60,7 @@ final public class CodeService {
         } catch (IOException | InterruptedException e) {
             throw new ScriptRunningException(script);
         }
+        this.eventEventDispatcher.dispatch(new RunCodeEvent(command.code()));
         return Output.success(output.toString(), duration);
     }
 }
