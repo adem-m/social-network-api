@@ -1,10 +1,10 @@
-package com.esgi.modules.friendship.exposition;
+package com.esgi.modules.follow.exposition;
 
 import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.QueryBus;
-import com.esgi.modules.friendship.application.AddFriendship;
-import com.esgi.modules.friendship.application.RetrieveFriends;
-import com.esgi.modules.friendship.domain.Friendship;
+import com.esgi.modules.follow.application.CreateFollow;
+import com.esgi.modules.follow.application.RetrieveFollows;
+import com.esgi.modules.follow.domain.Follow;
 import com.esgi.modules.user.domain.UserId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,18 +28,18 @@ public class FriendshipController {
         this.queryBus = queryBus;
     }
 
-    @PostMapping(path = "/addFriend", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> addFriend(@RequestBody @Valid FriendshipRequest request) {
-        AddFriendship addFriendship = new AddFriendship(request.userId1, request.userId2);
-        commandBus.send(addFriendship);
+    @PostMapping(path = "/follow", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> createFollow(@RequestBody @Valid FollowRequest request) {
+        CreateFollow createFollow = new CreateFollow(request.followerId, request.followedId);
+        commandBus.send(createFollow);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(path = "/friends{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<FriendshipResponse> getFriendshipById(UserId id){
-        final Friendship friendship = (Friendship) queryBus.send(new RetrieveFriends(id));
-        FriendshipResponse friendshipResponseResult = new FriendshipResponse(String.valueOf(friendship.getFriendshipId().getValue()), friendship.getUserId1(), friendship.getUserId2());
-        return ResponseEntity.ok(friendshipResponseResult);
+    @GetMapping(path = "/following", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<FollowResponse> getFollowingByFollowerId(UserId id){
+        final Follow follow = (Follow) queryBus.send(new RetrieveFollows(id));
+        FollowResponse followResponseResult = new FollowResponse(String.valueOf(follow.getFollowId().getValue()), follow.getFollowerId(), follow.getFollowedId());
+        return ResponseEntity.ok(followResponseResult);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

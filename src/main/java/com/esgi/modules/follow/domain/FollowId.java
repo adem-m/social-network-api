@@ -1,14 +1,13 @@
-package com.esgi.modules.friendship.domain;
+package com.esgi.modules.follow.domain;
 
 import com.esgi.kernel.ValueObjectID;
-import com.esgi.modules.post.domain.PostLikeId;
 
 import java.util.Objects;
 
-public final class FriendshipId implements ValueObjectID {
+public final class FollowId implements ValueObjectID {
     private final int value;
 
-    public FriendshipId(int value) {
+    public FollowId(int value) {
         this.value = value;
     }
 
@@ -20,8 +19,8 @@ public final class FriendshipId implements ValueObjectID {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FriendshipId friendshipId = (FriendshipId) o;
-        return value == friendshipId.value;
+        FollowId followId = (FollowId) o;
+        return value == followId.value;
     }
 
     @Override

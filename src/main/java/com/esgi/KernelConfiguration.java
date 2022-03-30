@@ -3,7 +3,7 @@ package com.esgi;
 import com.esgi.kernel.*;
 import com.esgi.modules.code.application.RunCodeEvent;
 import com.esgi.modules.file.application.CreateFileEvent;
-import com.esgi.modules.friendship.application.AddFriendshipEvent;
+import com.esgi.modules.follow.application.CreateFollowEvent;
 import com.esgi.modules.infrastructure.DefaultEventDispatcher;
 import com.esgi.modules.post.application.CreatePostEvent;
 import com.esgi.modules.user.application.CreateUserEvent;
@@ -22,7 +22,7 @@ public class KernelConfiguration {
         DefaultEventDispatcher dispatcher = new DefaultEventDispatcher(listeners);
         dispatcher.registerEvent(RunCodeEvent.class);
         dispatcher.registerEvent(CreateFileEvent.class);
-        dispatcher.registerEvent(AddFriendshipEvent.class);
+        dispatcher.registerEvent(CreateFollowEvent.class);
         dispatcher.registerEvent(CreatePostEvent.class);
         dispatcher.registerEvent(CreateUserEvent.class);
         return dispatcher;
