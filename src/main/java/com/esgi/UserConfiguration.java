@@ -50,7 +50,7 @@ public class UserConfiguration {
     }
 
     @Bean
-    public RetrieveUsersHandler retrieveMembersHandler() {
+    public RetrieveUsersHandler retrieveUsersHandler() {
         return new RetrieveUsersHandler(userRepository());
     }
 }

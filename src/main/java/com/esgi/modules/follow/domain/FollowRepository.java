@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface FollowRepository extends Repository<FollowId, Follow> {
     List<Follow> findAll();
-    List<Follow> findByUserId(UserId userId);
+    List<Follow> findFollowingByUserId(UserId userId);
+    List<Follow> findFollowersByUserId(UserId userId);
 }

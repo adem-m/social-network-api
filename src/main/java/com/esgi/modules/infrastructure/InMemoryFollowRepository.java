@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class InMemoryFollowRepository implements FollowRepository {
+public final class InMemoryFollowRepository implements FollowRepository {
     private final AtomicInteger count = new AtomicInteger(0);
 
     private final Map<FollowId, Follow> data = new ConcurrentHashMap<>();
@@ -47,11 +47,22 @@ public class InMemoryFollowRepository implements FollowRepository {
     }
 
     @Override
-    public List<Follow> findByUserId(UserId followerId) {
+    public List<Follow> findFollowingByUserId(UserId followerId) {
         List<Follow> allFollow = List.copyOf(data.values());
         List<Follow> result = new ArrayList<>();
         for (Follow follow : allFollow) {
             if (follow.getFollowerId() == followerId)
+                result.add(follow);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Follow> findFollowersByUserId(UserId followerId) {
+        List<Follow> allFollow = List.copyOf(data.values());
+        List<Follow> result = new ArrayList<>();
+        for (Follow follow : allFollow) {
+            if (follow.getFollowedId() == followerId)
                 result.add(follow);
         }
         return result;

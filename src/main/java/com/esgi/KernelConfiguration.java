@@ -2,6 +2,7 @@ package com.esgi;
 
 import com.esgi.kernel.*;
 import com.esgi.modules.code.application.RunCodeEvent;
+import com.esgi.modules.comment.application.CreateCommentEvent;
 import com.esgi.modules.file.application.CreateFileEvent;
 import com.esgi.modules.follow.application.CreateFollowEvent;
 import com.esgi.modules.infrastructure.DefaultEventDispatcher;
@@ -25,6 +26,7 @@ public class KernelConfiguration {
         dispatcher.registerEvent(CreateFollowEvent.class);
         dispatcher.registerEvent(CreatePostEvent.class);
         dispatcher.registerEvent(CreateUserEvent.class);
+        dispatcher.registerEvent(CreateCommentEvent.class);
         return dispatcher;
     }
 

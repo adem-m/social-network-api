@@ -16,6 +16,6 @@ public class RetrievePostsHandler implements QueryHandler<RetrievePosts, List<Po
 
     @Override
     public List<Post> handle(RetrievePosts query) {
-        return postRepository.findAll();
+        return postRepository.findPostsByUserId(query.id);
     }
 }

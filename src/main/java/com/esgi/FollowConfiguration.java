@@ -45,12 +45,12 @@ public class FollowConfiguration {
     @Bean
     public QueryBus followQueryBus() {
         final QueryBus queryBus = kernelConfiguration.queryBus();
-        queryBus.addHandler(RetrieveFollows.class, new RetrieveFollowsHandler(followRepository()));
+        queryBus.addHandler(RetrieveFollowing.class, new RetrieveFollowingHandler(followRepository()));
         return queryBus;
     }
 
     @Bean
-    public RetrieveFollowsHandler retrieveFollowsHandler() {
-        return new RetrieveFollowsHandler(followRepository());
+    public RetrieveFollowingHandler retrieveFollowsHandler() {
+        return new RetrieveFollowingHandler(followRepository());
     }
 }

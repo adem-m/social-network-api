@@ -1,14 +1,17 @@
 package com.esgi.modules.infrastructure;
 
 import com.esgi.kernel.NoSuchEntityException;
+import com.esgi.modules.follow.domain.Follow;
 import com.esgi.modules.post.domain.*;
+import com.esgi.modules.user.domain.UserId;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class InMemoryPostLikeRepository implements PostLikeRepository {
+public final class InMemoryPostLikeRepository implements PostLikeRepository {
     private final AtomicInteger count = new AtomicInteger(0);
 
     private final Map<PostLikeId, PostLike> data = new ConcurrentHashMap<>();
@@ -40,5 +43,16 @@ public class InMemoryPostLikeRepository implements PostLikeRepository {
     @Override
     public List<PostLike> findAll() {
         return List.copyOf(data.values());
+    }
+
+    @Override
+    public List<PostLike> findPostsLikedByUserId(UserId id) {
+        List<PostLike> allPostLike = List.copyOf(data.values());
+        List<PostLike> result = new ArrayList<>();
+        for (PostLike postLike : allPostLike) {
+            if (postLike.getUserId() == id)
+                result.add(postLike);
+        }
+        return result;
     }
 }

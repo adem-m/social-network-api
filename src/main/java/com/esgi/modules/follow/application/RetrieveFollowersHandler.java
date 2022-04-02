@@ -6,16 +6,15 @@ import com.esgi.modules.follow.domain.FollowRepository;
 
 import java.util.List;
 
-public class RetrieveFollowsHandler implements QueryHandler<RetrieveFollows, List<Follow>> {
+public class RetrieveFollowersHandler implements QueryHandler<RetrieveFollowing, List<Follow>> {
     private final FollowRepository followRepository;
 
-    public RetrieveFollowsHandler(FollowRepository followRepository){
+    public RetrieveFollowersHandler(FollowRepository followRepository) {
         this.followRepository = followRepository;
     }
 
     @Override
-    public List<Follow> handle(RetrieveFollows query) {
-        return followRepository.findByUserId(query.id);
+    public List<Follow> handle(RetrieveFollowing query) {
+        return followRepository.findFollowersByUserId(query.id);
     }
 }
-

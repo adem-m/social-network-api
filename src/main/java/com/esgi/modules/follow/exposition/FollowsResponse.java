@@ -6,9 +6,9 @@ import java.util.List;
 @SuppressWarnings("all")
 @XmlRootElement
 public class FollowsResponse {
-    public final List<FollowsResponse> follows;
+    public final List<FollowResponse> follows;
 
-    public FollowsResponse(List<FollowsResponse> follows) {
+    public FollowsResponse(List<FollowResponse> follows) {
         this.follows = follows;
     }
 }
