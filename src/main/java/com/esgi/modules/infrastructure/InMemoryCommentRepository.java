@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class InMemoryCommentRepository implements CommentRepository {
+public final class InMemoryCommentRepository implements CommentRepository {
     private final AtomicInteger count = new AtomicInteger(0);
 
     private final Map<CommentId, Comment> data = new ConcurrentHashMap<>();

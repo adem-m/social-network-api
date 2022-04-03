@@ -3,10 +3,12 @@ package com.esgi;
 import com.esgi.kernel.*;
 import com.esgi.modules.code.application.RunCodeEvent;
 import com.esgi.modules.comment.application.CreateCommentEvent;
+import com.esgi.modules.comment.application.LikeCommentEvent;
 import com.esgi.modules.file.application.CreateFileEvent;
 import com.esgi.modules.follow.application.CreateFollowEvent;
 import com.esgi.modules.infrastructure.DefaultEventDispatcher;
 import com.esgi.modules.post.application.CreatePostEvent;
+import com.esgi.modules.post.application.LikePostEvent;
 import com.esgi.modules.user.application.CreateUserEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,10 +25,12 @@ public class KernelConfiguration {
         DefaultEventDispatcher dispatcher = new DefaultEventDispatcher(listeners);
         dispatcher.registerEvent(RunCodeEvent.class);
         dispatcher.registerEvent(CreateFileEvent.class);
+        dispatcher.registerEvent(CreateUserEvent.class);
         dispatcher.registerEvent(CreateFollowEvent.class);
         dispatcher.registerEvent(CreatePostEvent.class);
-        dispatcher.registerEvent(CreateUserEvent.class);
         dispatcher.registerEvent(CreateCommentEvent.class);
+        dispatcher.registerEvent(LikePostEvent.class);
+        dispatcher.registerEvent(LikeCommentEvent.class);
         return dispatcher;
     }
 

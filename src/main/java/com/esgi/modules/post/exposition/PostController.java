@@ -4,15 +4,10 @@ import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.QueryBus;
 import com.esgi.modules.post.application.CreatePost;
 import com.esgi.modules.post.application.RetrievePostById;
-import com.esgi.modules.post.application.RetrievePosts;
+import com.esgi.modules.post.application.RetrievePostsByUserId;
 import com.esgi.modules.post.domain.Post;
 import com.esgi.modules.post.domain.PostId;
-import com.esgi.modules.user.application.RetrieveUsers;
-import com.esgi.modules.user.domain.User;
 import com.esgi.modules.user.domain.UserId;
-import com.esgi.modules.user.exposition.EmailResponse;
-import com.esgi.modules.user.exposition.UserResponse;
-import com.esgi.modules.user.exposition.UsersResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,24 +40,21 @@ public class PostController {
     }
 
     @GetMapping(path = "/post/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PostResponse> getPostById(PostId id){
+    public ResponseEntity<PostResponse> getPostById(@PathVariable PostId id){
         final Post post = (Post) queryBus.send(new RetrievePostById(id));
         PostResponse postResponseResult = new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(), post.getUserId(),post.getDate());
         return ResponseEntity.ok(postResponseResult);
     }
 
-    @GetMapping(path = "/posts", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PostsResponse> getAllPostsByUserId(UserId id) {
-        final List<Post> posts = (List<Post>) queryBus.send(new RetrievePosts(id));
+    @GetMapping(path = "/posts/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PostsResponse> getAllPostsByUserId(@PathVariable UserId id) {
+        final List<Post> posts = (List<Post>) queryBus.send(new RetrievePostsByUserId(id));
         PostsResponse postsResponseResult = new PostsResponse(posts.stream().map(post -> new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(), post.getUserId(), post.getDate())).collect(Collectors.toList()));
         return ResponseEntity.ok(postsResponseResult);
     }
 
-    /*@PostMapping(path = "/post/{id}/edit", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> edit(@RequestBody @Valid PostRequest request) {
-        EditPost editPost = new EditPost(request.content, request.userId, request.date);
-        commandBus.send(editPost);
-        return ResponseEntity.ok().build();
+    /*@PutMapping(path = "/post/{id}/edit", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Void> edit(@PathVariable PostId id, @RequestBody @Valid PostRequest request) {
     }*/
 
     //TODO share a post

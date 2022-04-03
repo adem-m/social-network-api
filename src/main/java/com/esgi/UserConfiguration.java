@@ -1,13 +1,17 @@
 package com.esgi;
 
-import com.esgi.kernel.CommandBus;
-import com.esgi.kernel.EventDispatcher;
-import com.esgi.kernel.QueryBus;
+import com.esgi.kernel.*;
+import com.esgi.modules.infrastructure.DefaultEventDispatcher;
 import com.esgi.modules.infrastructure.InMemoryUserRepository;
 import com.esgi.modules.user.application.*;
 import com.esgi.modules.user.domain.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Configuration
 public class UserConfiguration {

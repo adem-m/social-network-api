@@ -7,9 +7,9 @@ import java.util.List;
 @SuppressWarnings("all")
 @XmlRootElement
 public class CommentsResponse {
-    public final List<CommentResponse> posts;
+    public final List<CommentResponse> comments;
 
-    public CommentsResponse(List<CommentResponse> posts) {
-            this.posts = posts;
+    public CommentsResponse(List<CommentResponse> comments) {
+            this.comments = comments;
         }
 }

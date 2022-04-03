@@ -6,16 +6,16 @@ import com.esgi.modules.post.domain.PostRepository;
 
 import java.util.List;
 
-public class RetrievePostsHandler implements QueryHandler<RetrievePosts, List<Post>> {
+public class RetrievePostsByUserIdHandler implements QueryHandler<RetrievePostsByUserId, List<Post>> {
 
     private final PostRepository postRepository;
 
-    public RetrievePostsHandler(PostRepository postRepository) {
+    public RetrievePostsByUserIdHandler(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
 
     @Override
-    public List<Post> handle(RetrievePosts query) {
+    public List<Post> handle(RetrievePostsByUserId query) {
         return postRepository.findPostsByUserId(query.id);
     }
 }

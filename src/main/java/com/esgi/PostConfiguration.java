@@ -45,13 +45,12 @@ public class PostConfiguration {
     @Bean
     public QueryBus postQueryBus() {
         final QueryBus queryBus = kernelConfiguration.queryBus();
-        queryBus.addHandler(RetrievePosts.class, new RetrievePostsHandler(postRepository()));
+        queryBus.addHandler(RetrievePostsByUserId.class, new RetrievePostsByUserIdHandler(postRepository()));
         return queryBus;
     }
 
     @Bean
-    public RetrievePostsHandler retrievePostsHandler() {
-        return new RetrievePostsHandler(postRepository());
+    public RetrievePostsByUserIdHandler retrievePostsHandler() {
+        return new RetrievePostsByUserIdHandler(postRepository());
     }
-
 }

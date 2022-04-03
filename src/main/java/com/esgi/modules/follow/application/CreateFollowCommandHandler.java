@@ -7,7 +7,7 @@ import com.esgi.modules.follow.domain.Follow;
 import com.esgi.modules.follow.domain.FollowId;
 import com.esgi.modules.follow.domain.FollowRepository;
 
-public class CreateFollowCommandHandler implements CommandHandler<CreateFollow, FollowId> {
+public final class CreateFollowCommandHandler implements CommandHandler<CreateFollow, FollowId> {
     private final FollowRepository followRepository;
     private final EventDispatcher<Event> eventEventDispatcher;
 

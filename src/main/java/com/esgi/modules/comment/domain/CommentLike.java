@@ -21,7 +21,7 @@ public final class CommentLike implements Entity<CommentLikeId> {
         return commentLikeId;
     }
 
-    public CommentLikeId getPostLikeId() {
+    public CommentLikeId getCommentLikeId() {
         return commentLikeId;
     }
 
@@ -29,7 +29,7 @@ public final class CommentLike implements Entity<CommentLikeId> {
         return userId;
     }
 
-    public CommentId getPostId() {
+    public CommentId getCommentId() {
         return commentId;
     }
 

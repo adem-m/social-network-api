@@ -40,24 +40,21 @@ public class CommentController {
     }
 
     @GetMapping(path = "/comment/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<CommentResponse> getCommentById(CommentId id){
+    public ResponseEntity<CommentResponse> getCommentById(@PathVariable CommentId id){
         final Comment comment = (Comment) queryBus.send(new RetrieveCommentById(id));
         CommentResponse commentResponseResult = new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getPostId().getValue()), comment.getContent(), comment.getUserId(), comment.getDate());
         return ResponseEntity.ok(commentResponseResult);
     }
 
-    @GetMapping(path = "/comments", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<CommentsResponse> getAllCommentsByUserId(UserId id) {
+    @GetMapping(path = "/comments/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<CommentsResponse> getAllCommentsByUserId(@PathVariable UserId id) {
         final List<Comment> comments = (List<Comment>) queryBus.send(new RetrieveComments(id));
         CommentsResponse commentsResponseResult = new CommentsResponse(comments.stream().map(comment -> new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getUserId().getValue()), comment.getContent(), comment.getUserId(), comment.getDate())).collect(Collectors.toList()));
         return ResponseEntity.ok(commentsResponseResult);
     }
 
-    /*@PostMapping(path = "/comment/{id}/edit", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> edit(@RequestBody @Valid CommentRequest request) {
-        EditComment editComment = new EditComment(request.postId, request.content, request.userId, request.date);
-        commandBus.send(editComment);
-        return ResponseEntity.ok().build();
+    /*@PutMapping(path = "/comment/{id}/edit", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Void> edit(@PathVariable CommentId id, @RequestBody @Valid CommentRequest request) {
     }*/
 
     //TODO show a the post and the comment (get)

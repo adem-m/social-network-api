@@ -51,8 +51,8 @@ public class FollowController {
         return ResponseEntity.ok(followsResponseResult);
     }*/
 
-    @GetMapping(path = "/following", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UsersResponse> getFollowingByFollowerId(UserId id) {
+    @GetMapping(path = "/following/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<UsersResponse> getFollowingByFollowerId(@PathVariable UserId id) {
         final List<Follow> follows = (List<Follow>) queryBus.send(new RetrieveFollowing(id));
         return getUsersResponseResponseEntity(follows);
     }
@@ -64,8 +64,8 @@ public class FollowController {
         return ResponseEntity.ok(followsResponseResult);
     }*/
 
-    @GetMapping(path = "/followers", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UsersResponse> getFollowersByFollowerId(UserId id) {
+    @GetMapping(path = "/followers/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<UsersResponse> getFollowersByFollowerId(@PathVariable UserId id) {
         final List<Follow> follows = (List<Follow>) queryBus.send(new RetrieveFollowers(id));
         return getUsersResponseResponseEntity(follows);
     }
@@ -79,7 +79,7 @@ public class FollowController {
         return ResponseEntity.ok(usersResponseResult);
     }
 
-    //TODO unfollow an user
+    //TODO unfollow an user (DeleteMapping)
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -92,4 +92,5 @@ public class FollowController {
             errors.put(fieldName, errorMessage);
         });
         return errors;
-    }}
+    }
+}

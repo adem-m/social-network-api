@@ -40,17 +40,14 @@ public class UserController {
     }
 
     @GetMapping(path = "/user/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UserResponse> getUserById(UserId id){
+    public ResponseEntity<UserResponse> getUserById(@PathVariable UserId id){
         final User user = (User) queryBus.send(new RetrieveUserById(id));
         UserResponse userResponseResult = new UserResponse(String.valueOf(user.getId().getValue()), user.getLastname(), user.getFirstname(),new EmailResponse(user.getEmail().getEmail()),user.getPassword());
         return ResponseEntity.ok(userResponseResult);
     }
 
-    /*@PostMapping(path = "/user/{id}/edit", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> edit(@RequestBody @Valid UserRequest request) {
-        EditUser editUser = new EditUser(request.lastname, request.firstname, new Email(request.email.email), request.password);
-        commandBus.send(editUser);
-        return ResponseEntity.ok().build();
+    /*@PostMapping(path = "/user/{id}/edit", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Void> edit(@PathVariable UserId id, @RequestBody @Valid UserRequest request) {
     }*/
 
     @GetMapping(path = "/users", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
@@ -60,8 +57,10 @@ public class UserController {
         return ResponseEntity.ok(usersResponseResult);
     }
 
-    //TODO delete an user
-    //TODO block an user
+    //TODO delete an user (DeleteMapping)
+    //TODO getUserByName (GetMapping)
+
+    //TODO block an user ?
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

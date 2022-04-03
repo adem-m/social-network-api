@@ -7,7 +7,7 @@ import com.esgi.modules.comment.domain.Comment;
 import com.esgi.modules.comment.domain.CommentId;
 import com.esgi.modules.comment.domain.CommentRepository;
 
-public class CreateCommentCommandHandler implements CommandHandler<CreateComment, CommentId> {
+public final class CreateCommentCommandHandler implements CommandHandler<CreateComment, CommentId> {
     private final CommentRepository commentRepository;
     private final EventDispatcher<Event> eventEventDispatcher;
 
