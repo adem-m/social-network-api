@@ -7,10 +7,8 @@ import javax.validation.constraints.NotNull;
 
 public class FollowRequest {
     @NotNull
-    @NotBlank
     public UserId followerId;
 
     @NotNull
-    @NotBlank
     public UserId followedId;
 }

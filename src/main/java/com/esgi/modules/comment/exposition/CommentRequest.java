@@ -9,18 +9,14 @@ import java.util.Date;
 
 public class CommentRequest {
     @NotNull
-    @NotBlank
     public PostId postId;
 
     @NotNull
-    @NotBlank
     public String content;
 
     @NotNull
-    @NotBlank
     public UserId userId;
 
     @NotNull
-    @NotBlank
     public Date date;
 }

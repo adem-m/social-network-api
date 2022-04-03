@@ -12,10 +12,8 @@ public class PostRequest {
     public String content;
 
     @NotNull
-    @NotBlank
     public UserId userId;
 
     @NotNull
-    @NotBlank
     public Date date;
 }

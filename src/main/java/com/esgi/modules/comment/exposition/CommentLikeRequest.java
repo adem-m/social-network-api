@@ -8,10 +8,8 @@ import javax.validation.constraints.NotNull;
 
 public class CommentLikeRequest {
     @NotNull
-    @NotBlank
     public UserId userId;
 
     @NotNull
-    @NotBlank
     public CommentId commentId;
 }
