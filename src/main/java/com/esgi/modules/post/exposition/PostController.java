@@ -59,6 +59,7 @@ public class PostController {
 
     //TODO share a post
     //TODO delete a post
+    //TODO getAllByFollowingOrderByDate
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

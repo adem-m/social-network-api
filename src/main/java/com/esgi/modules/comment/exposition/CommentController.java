@@ -7,6 +7,7 @@ import com.esgi.modules.comment.application.RetrieveCommentById;
 import com.esgi.modules.comment.application.RetrieveComments;
 import com.esgi.modules.comment.domain.Comment;
 import com.esgi.modules.comment.domain.CommentId;
+import com.esgi.modules.post.domain.PostId;
 import com.esgi.modules.user.domain.UserId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -52,6 +53,13 @@ public class CommentController {
         CommentsResponse commentsResponseResult = new CommentsResponse(comments.stream().map(comment -> new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getUserId().getValue()), comment.getContent(), comment.getUserId(), comment.getDate())).collect(Collectors.toList()));
         return ResponseEntity.ok(commentsResponseResult);
     }
+
+    /*@GetMapping(path = "/comments/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<CommentsResponse> getAllCommentsByPostId(@PathVariable PostId id) {
+        final List<Comment> comments = (List<Comment>) queryBus.send(new RetrieveCommentsByPostId(id));
+        CommentsResponse commentsResponseResult = new CommentsResponse(comments.stream().map(comment -> new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getUserId().getValue()), comment.getContent(), comment.getUserId(), comment.getDate())).collect(Collectors.toList()));
+        return ResponseEntity.ok(commentsResponseResult);
+    }*/
 
     /*@PutMapping(path = "/comment/{id}/edit", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> edit(@PathVariable CommentId id, @RequestBody @Valid CommentRequest request) {

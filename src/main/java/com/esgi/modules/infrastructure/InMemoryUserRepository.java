@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public final class InMemoryUserRepository implements UserRepository {
     private final AtomicInteger count = new AtomicInteger(0);
@@ -42,5 +43,11 @@ public final class InMemoryUserRepository implements UserRepository {
     @Override
     public List<User> findAll() {
         return List.copyOf(data.values());
+    }
+
+    @Override
+    public List<User> findByName(String name) {
+        return List.copyOf(data.values().stream()
+                .filter(user -> (user.getFirstname() + " " + user.getLastname()).equals(name)).collect(Collectors.toList()));
     }
 }
