@@ -5,7 +5,7 @@ import com.esgi.modules.user.domain.Email;
 
 import java.util.Objects;
 
-public class UpdateUser implements Command {
+public final class UpdateUser implements Command {
     public final int userId;
     public Email email;
 

@@ -7,8 +7,8 @@ import javax.validation.constraints.NotNull;
 
 public class FollowRequest {
     @NotNull
-    public UserId followerId;
+    public int followerId;
 
     @NotNull
-    public UserId followedId;
+    public int followedId;
 }

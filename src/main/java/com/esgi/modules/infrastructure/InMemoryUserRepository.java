@@ -1,6 +1,7 @@
 package com.esgi.modules.infrastructure;
 
 import com.esgi.kernel.NoSuchEntityException;
+import com.esgi.modules.user.domain.Email;
 import com.esgi.modules.user.domain.User;
 import com.esgi.modules.user.domain.UserId;
 import com.esgi.modules.user.domain.UserRepository;
@@ -49,5 +50,13 @@ public final class InMemoryUserRepository implements UserRepository {
     public List<User> findByName(String name) {
         return List.copyOf(data.values().stream()
                 .filter(user -> (user.getFirstname() + " " + user.getLastname()).equals(name)).collect(Collectors.toList()));
+    }
+
+    @Override
+    public User findByEmail(String email){
+        if (data.values().stream().noneMatch(user -> user.getEmail().getEmail().equals(email))){
+            return null;
+        }
+        return data.values().stream().filter(user -> user.getEmail().getEmail().equals(email)).collect(Collectors.toList()).get(0);
     }
 }

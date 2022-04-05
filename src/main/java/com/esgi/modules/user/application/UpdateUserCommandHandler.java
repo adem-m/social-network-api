@@ -6,7 +6,7 @@ import com.esgi.kernel.EventDispatcher;
 import com.esgi.modules.user.domain.UserId;
 import com.esgi.modules.user.domain.UserRepository;
 
-public class UpdateUserCommandHandler implements CommandHandler<UpdateUser, UserId> {
+public final class UpdateUserCommandHandler implements CommandHandler<UpdateUser, UserId> {
     private final UserRepository userRepository;
     private final EventDispatcher<Event> eventEventDispatcher;
 

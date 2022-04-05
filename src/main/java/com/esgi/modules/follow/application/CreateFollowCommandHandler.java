@@ -19,8 +19,7 @@ public final class CreateFollowCommandHandler implements CommandHandler<CreateFo
     @Override
     public FollowId handle(CreateFollow createFollow) {
         final FollowId followId = followRepository.nextIdentity();
-        Follow follow;
-        follow = new Follow(followId, createFollow.followerId, createFollow.followedId);
+        Follow follow = new Follow(followId, createFollow.followerId, createFollow.followedId);
         followRepository.add(follow);
         eventEventDispatcher.dispatch(new CreateFollowEvent(followId));
         return followId;

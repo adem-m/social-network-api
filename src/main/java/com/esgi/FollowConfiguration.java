@@ -43,14 +43,58 @@ public class FollowConfiguration {
     }
 
     @Bean
-    public QueryBus followQueryBus() {
+    public UnfollowEventListener unfollowEventListener() {
+        EventDispatcher dispatcher = this.kernelConfiguration.eventDispatcher();
+        UnfollowEventListener listener = new UnfollowEventListener();
+        dispatcher.addListener(UnfollowEvent.class, listener);
+        return listener;
+    }
+
+    @Bean
+    public UnfollowCommandHandler unfollowCommandHandler() {
+        return new UnfollowCommandHandler(followRepository(), kernelConfiguration.eventDispatcher());
+    }
+
+    @Bean
+    public CommandBus unfollowCommandBus() {
+        final CommandBus commandBus = kernelConfiguration.commandBus();
+        commandBus.addHandler(Unfollow.class, unfollowCommandHandler());
+        return commandBus;
+    }
+
+    @Bean
+    public QueryBus followingQueryBus() {
         final QueryBus queryBus = kernelConfiguration.queryBus();
         queryBus.addHandler(RetrieveFollowing.class, new RetrieveFollowingHandler(followRepository()));
         return queryBus;
     }
 
     @Bean
-    public RetrieveFollowingHandler retrieveFollowsHandler() {
+    public RetrieveFollowingHandler retrieveFollowingHandler() {
         return new RetrieveFollowingHandler(followRepository());
+    }
+
+    @Bean
+    public QueryBus followersQueryBus() {
+        final QueryBus queryBus = kernelConfiguration.queryBus();
+        queryBus.addHandler(RetrieveFollowers.class, new RetrieveFollowersHandler(followRepository()));
+        return queryBus;
+    }
+
+    @Bean
+    public RetrieveFollowersHandler retrieveFollowersHandler() {
+        return new RetrieveFollowersHandler(followRepository());
+    }
+
+    @Bean
+    public QueryBus followsQueryBus() {
+        final QueryBus queryBus = kernelConfiguration.queryBus();
+        queryBus.addHandler(RetrieveFollows.class, new RetrieveFollowsHandler(followRepository()));
+        return queryBus;
+    }
+
+    @Bean
+    public RetrieveFollowsHandler retrieveFollowsHandler() {
+        return new RetrieveFollowsHandler(followRepository());
     }
 }

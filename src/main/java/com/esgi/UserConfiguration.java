@@ -41,15 +41,31 @@ public class UserConfiguration {
     }
 
     @Bean
-    public UpdateUserCommandHandler editUserCommandHandler() {
+    public UpdateUserEventListener updateUserEventListener() {
+        EventDispatcher dispatcher = this.kernelConfiguration.eventDispatcher();
+        UpdateUserEventListener listener = new UpdateUserEventListener();
+        dispatcher.addListener(UpdateUserEvent.class, listener);
+        return listener;
+    }
+
+    @Bean
+    public UpdateUserCommandHandler updateUserCommandHandler() {
         return new UpdateUserCommandHandler(userRepository(), kernelConfiguration.eventDispatcher());
     }
 
     @Bean
-    public CommandBus editUserCommandBus() {
+    public CommandBus updateUserCommandBus() {
         final CommandBus commandBus = kernelConfiguration.commandBus();
-        commandBus.addHandler(UpdateUser.class, editUserCommandHandler());
+        commandBus.addHandler(UpdateUser.class, updateUserCommandHandler());
         return commandBus;
+    }
+
+    @Bean
+    public DeleteUserEventListener deleteUserEventListener() {
+        EventDispatcher dispatcher = this.kernelConfiguration.eventDispatcher();
+        DeleteUserEventListener listener = new DeleteUserEventListener();
+        dispatcher.addListener(DeleteUserEvent.class, listener);
+        return listener;
     }
 
     @Bean

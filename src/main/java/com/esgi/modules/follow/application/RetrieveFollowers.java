@@ -1,12 +1,11 @@
 package com.esgi.modules.follow.application;
 
 import com.esgi.kernel.Query;
-import com.esgi.modules.user.domain.UserId;
 
 public class RetrieveFollowers implements Query {
-    UserId id;
+    int id;
 
-    public RetrieveFollowers(UserId id) {
+    public RetrieveFollowers(int id) {
         this.id = id;
     }
 }

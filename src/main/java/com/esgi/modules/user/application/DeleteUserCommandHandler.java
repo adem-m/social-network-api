@@ -6,7 +6,7 @@ import com.esgi.kernel.EventDispatcher;
 import com.esgi.modules.user.domain.UserId;
 import com.esgi.modules.user.domain.UserRepository;
 
-public class DeleteUserCommandHandler implements CommandHandler<DeleteUser, UserId> {
+public final class DeleteUserCommandHandler implements CommandHandler<DeleteUser, UserId> {
     private final UserRepository userRepository;
     private final EventDispatcher<Event> eventEventDispatcher;
 

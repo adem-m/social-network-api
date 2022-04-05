@@ -4,9 +4,9 @@ import com.esgi.kernel.Query;
 import com.esgi.modules.user.domain.UserId;
 
 public class RetrieveUserById implements Query {
-    public final UserId id;
+    public final int id;
 
-    public RetrieveUserById(UserId id){
+    public RetrieveUserById(int id){
         this.id = id;
     }
 }

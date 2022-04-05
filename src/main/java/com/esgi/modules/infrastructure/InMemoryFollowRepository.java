@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public final class InMemoryFollowRepository implements FollowRepository {
     private final AtomicInteger count = new AtomicInteger(0);
@@ -47,24 +48,14 @@ public final class InMemoryFollowRepository implements FollowRepository {
     }
 
     @Override
-    public List<Follow> findFollowingByUserId(UserId followerId) {
-        List<Follow> allFollow = List.copyOf(data.values());
-        List<Follow> result = new ArrayList<>();
-        for (Follow follow : allFollow) {
-            if (follow.getFollowerId() == followerId)
-                result.add(follow);
-        }
-        return result;
+    public List<Follow> findFollowingByUserId(UserId userId) {
+        return List.copyOf(data.values().stream()
+                .filter(follow -> follow.getFollowedId().equals(userId)).collect(Collectors.toList()));
     }
 
     @Override
-    public List<Follow> findFollowersByUserId(UserId followerId) {
-        List<Follow> allFollow = List.copyOf(data.values());
-        List<Follow> result = new ArrayList<>();
-        for (Follow follow : allFollow) {
-            if (follow.getFollowedId() == followerId)
-                result.add(follow);
-        }
-        return result;
+    public List<Follow> findFollowersByUserId(UserId userId) {
+        return List.copyOf(data.values().stream()
+                .filter(follow -> follow.getFollowerId().equals(userId)).collect(Collectors.toList()));
     }
 }

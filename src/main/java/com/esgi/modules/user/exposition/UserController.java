@@ -5,7 +5,6 @@ import com.esgi.kernel.QueryBus;
 import com.esgi.modules.user.application.*;
 import com.esgi.modules.user.domain.Email;
 import com.esgi.modules.user.domain.User;
-import com.esgi.modules.user.domain.UserId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,8 +38,7 @@ public class UserController {
 
     @GetMapping(path = "/user/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserResponse> getUserById(@PathVariable int id){
-        final UserId userId = new UserId(id);
-        final User user = (User) queryBus.send(new RetrieveUserById(userId));
+        final User user = (User) queryBus.send(new RetrieveUserById(id));
         UserResponse userResponseResult = new UserResponse(String.valueOf(user.getId().getValue()), user.getLastname(), user.getFirstname(),new EmailResponse(user.getEmail().getEmail()),user.getPassword());
         return ResponseEntity.ok(userResponseResult);
     }
@@ -63,7 +61,7 @@ public class UserController {
     public ResponseEntity<UserResponse> updateUser(@PathVariable int id, @RequestBody @Valid UserRequest request) {
         UpdateUser updateUser = new UpdateUser(id, new Email(request.email.email));
         commandBus.send(updateUser);
-        final User user = (User) queryBus.send(new RetrieveUserById(new UserId(updateUser.userId)));
+        final User user = (User) queryBus.send(new RetrieveUserById(updateUser.userId));
         UserResponse userResponseResult = new UserResponse(String.valueOf(user.getId().getValue()), user.getLastname(), user.getFirstname(),new EmailResponse(user.getEmail().getEmail()),user.getPassword());
         return ResponseEntity.ok(userResponseResult);
     }
