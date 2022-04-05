@@ -36,14 +36,66 @@ public class PostConfiguration {
     }
 
     @Bean
-    public CommandBus postCommandBus() {
+    public CommandBus createPostCommandBus() {
         final CommandBus commandBus = kernelConfiguration.commandBus();
         commandBus.addHandler(CreatePost.class, createPostCommandHandler());
         return commandBus;
     }
 
     @Bean
+    public EditPostEventListener editPostEventListener() {
+        EventDispatcher dispatcher = this.kernelConfiguration.eventDispatcher();
+        EditPostEventListener listener = new EditPostEventListener();
+        dispatcher.addListener(EditPostEvent.class, listener);
+        return listener;
+    }
+
+    @Bean
+    public EditPostCommandHandler editPostCommandHandler() {
+        return new EditPostCommandHandler(postRepository(), kernelConfiguration.eventDispatcher());
+    }
+
+    @Bean
+    public CommandBus postCommandBus() {
+        final CommandBus commandBus = kernelConfiguration.commandBus();
+        commandBus.addHandler(EditPost.class, editPostCommandHandler());
+        return commandBus;
+    }
+
+    @Bean
+    public DeletePostEventListener deletePostEventListener() {
+        EventDispatcher dispatcher = this.kernelConfiguration.eventDispatcher();
+        DeletePostEventListener listener = new DeletePostEventListener();
+        dispatcher.addListener(DeletePostEvent.class, listener);
+        return listener;
+    }
+
+    @Bean
+    public DeletePostCommandHandler deletePostCommandHandler() {
+        return new DeletePostCommandHandler(postRepository(), kernelConfiguration.eventDispatcher());
+    }
+
+    @Bean
+    public CommandBus deletePostCommandBus() {
+        final CommandBus commandBus = kernelConfiguration.commandBus();
+        commandBus.addHandler(DeletePost.class, deletePostCommandHandler());
+        return commandBus;
+    }
+
+    @Bean
     public QueryBus postQueryBus() {
+        final QueryBus queryBus = kernelConfiguration.queryBus();
+        queryBus.addHandler(RetrievePostById.class, new RetrievePostByIdHandler(postRepository()));
+        return queryBus;
+    }
+
+    @Bean
+    public RetrievePostByIdHandler retrievePostHandler() {
+        return new RetrievePostByIdHandler(postRepository());
+    }
+
+    @Bean
+    public QueryBus postsQueryBus() {
         final QueryBus queryBus = kernelConfiguration.queryBus();
         queryBus.addHandler(RetrievePostsByUserId.class, new RetrievePostsByUserIdHandler(postRepository()));
         return queryBus;

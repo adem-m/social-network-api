@@ -2,6 +2,7 @@ package com.esgi.modules.post.exposition;
 
 import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.QueryBus;
+import com.esgi.modules.follow.application.Unfollow;
 import com.esgi.modules.post.application.*;
 import com.esgi.modules.post.domain.Post;
 import com.esgi.modules.post.domain.PostLike;
@@ -38,17 +39,24 @@ public class PostLikeController {
     }
 
     @GetMapping(path = "/likedPosts/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PostsResponse> getAllPostsLikedByUserId(@PathVariable UserId id) {
+    public ResponseEntity<PostsResponse> getAllPostsLikedByUserId(@PathVariable int id) {
         final List<PostLike> likedPosts = (List<PostLike>) queryBus.send(new RetrieveLikedPostsByUserId(id));
         PostsResponse postsResponseResult = new PostsResponse(new ArrayList<>());
         for (PostLike postLike : likedPosts) {
-            final Post post = (Post) queryBus.send(new RetrievePostById(postLike.getPostId()));
+            final Post post = (Post) queryBus.send(new RetrievePostById(postLike.getPostId().getValue()));
             postsResponseResult.posts.add(new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(), post.getUserId(),post.getDate()));
         }
         return ResponseEntity.ok(postsResponseResult);
     }
 
-    //TODO unlike a post (DeleteMapping)
+    @DeleteMapping(path= "/unlike/{id}")
+    public Map<String, Boolean> unlike(@PathVariable int id) {
+        UnlikePost unlikePost = new UnlikePost(id);
+        commandBus.send(unlikePost);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("unlike", Boolean.TRUE);
+        return response;
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

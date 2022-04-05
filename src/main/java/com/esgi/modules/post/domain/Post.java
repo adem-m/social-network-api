@@ -10,7 +10,7 @@ public final class Post implements Entity<PostId> {
     private final PostId id;
     private String content;
     private final UserId userId;
-    private final Date date;
+    private Date date;
 
     public Post(PostId id, String content, UserId userId) {
         this.id = id;

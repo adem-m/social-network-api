@@ -58,4 +58,13 @@ public final class InMemoryFollowRepository implements FollowRepository {
         return List.copyOf(data.values().stream()
                 .filter(follow -> follow.getFollowerId().equals(userId)).collect(Collectors.toList()));
     }
+
+    @Override
+    public Follow findFollowBetweenTwoUser(UserId followerId, UserId followedId) {
+        if(data.values().stream().noneMatch(follow -> follow.getFollowerId().equals(followerId) && follow.getFollowedId().equals(followedId))){
+            return null;
+        }
+        return data.values().stream()
+                .filter(follow -> follow.getFollowerId().equals(followerId) && follow.getFollowedId().equals(followedId)).collect(Collectors.toList()).get(0);
+    }
 }

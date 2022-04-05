@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public final class InMemoryCommentLikeRepository implements CommentLikeRepository {
     private final AtomicInteger count = new AtomicInteger(0);
@@ -48,12 +49,7 @@ public final class InMemoryCommentLikeRepository implements CommentLikeRepositor
 
     @Override
     public List<CommentLike> findCommentsLikedByUserId(UserId id) {
-        List<CommentLike> allCommentLike = List.copyOf(data.values());
-        List<CommentLike> result = new ArrayList<>();
-        for (CommentLike commentLike : allCommentLike) {
-            if (commentLike.getUserId() == id)
-                result.add(commentLike);
-        }
-        return result;
+        return List.copyOf(data.values().stream()
+                .filter(commentLike -> commentLike.getUserId().equals(id)).collect(Collectors.toList()));
     }
 }

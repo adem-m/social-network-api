@@ -13,11 +13,9 @@ import java.util.Objects;
 public final class CreatePost implements Command {
     public String content;
     public final UserId creatorId;
-    public final Date date;
 
-    public CreatePost(String content, UserId creatorId, Date date) {
+    public CreatePost(String content, UserId creatorId) {
         this.content = Objects.requireNonNull(content);
         this.creatorId = Objects.requireNonNull(creatorId);
-        this.date = Objects.requireNonNull(date);
     }
 }

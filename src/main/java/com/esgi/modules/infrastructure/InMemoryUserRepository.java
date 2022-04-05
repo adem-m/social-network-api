@@ -57,6 +57,7 @@ public final class InMemoryUserRepository implements UserRepository {
         if (data.values().stream().noneMatch(user -> user.getEmail().getEmail().equals(email))){
             return null;
         }
-        return data.values().stream().filter(user -> user.getEmail().getEmail().equals(email)).collect(Collectors.toList()).get(0);
+        return data.values().stream()
+                .filter(user -> user.getEmail().getEmail().equals(email)).collect(Collectors.toList()).get(0);
     }
 }

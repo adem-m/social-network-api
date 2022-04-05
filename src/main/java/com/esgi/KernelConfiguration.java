@@ -8,8 +8,7 @@ import com.esgi.modules.file.application.CreateFileEvent;
 import com.esgi.modules.follow.application.CreateFollowEvent;
 import com.esgi.modules.follow.application.UnfollowEvent;
 import com.esgi.modules.infrastructure.DefaultEventDispatcher;
-import com.esgi.modules.post.application.CreatePostEvent;
-import com.esgi.modules.post.application.LikePostEvent;
+import com.esgi.modules.post.application.*;
 import com.esgi.modules.user.application.CreateUserEvent;
 import com.esgi.modules.user.application.DeleteUserEvent;
 import com.esgi.modules.user.application.UpdateUserEvent;
@@ -28,14 +27,22 @@ public class KernelConfiguration {
         DefaultEventDispatcher dispatcher = new DefaultEventDispatcher(listeners);
         dispatcher.registerEvent(RunCodeEvent.class);
         dispatcher.registerEvent(CreateFileEvent.class);
+
         dispatcher.registerEvent(CreateUserEvent.class);
         dispatcher.registerEvent(UpdateUserEvent.class);
         dispatcher.registerEvent(DeleteUserEvent.class);
+
         dispatcher.registerEvent(CreateFollowEvent.class);
         dispatcher.registerEvent(UnfollowEvent.class);
+
         dispatcher.registerEvent(CreatePostEvent.class);
-        dispatcher.registerEvent(CreateCommentEvent.class);
+        dispatcher.registerEvent(EditPostEvent.class);
+        dispatcher.registerEvent(DeletePostEvent.class);
         dispatcher.registerEvent(LikePostEvent.class);
+        dispatcher.registerEvent(UnlikePostEvent.class);
+
+
+        dispatcher.registerEvent(CreateCommentEvent.class);
         dispatcher.registerEvent(LikeCommentEvent.class);
         return dispatcher;
     }

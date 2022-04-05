@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public final class InMemoryPostLikeRepository implements PostLikeRepository {
     private final AtomicInteger count = new AtomicInteger(0);
@@ -47,12 +48,7 @@ public final class InMemoryPostLikeRepository implements PostLikeRepository {
 
     @Override
     public List<PostLike> findPostsLikedByUserId(UserId id) {
-        List<PostLike> allPostLike = List.copyOf(data.values());
-        List<PostLike> result = new ArrayList<>();
-        for (PostLike postLike : allPostLike) {
-            if (postLike.getUserId() == id)
-                result.add(postLike);
-        }
-        return result;
+        return List.copyOf(data.values().stream()
+                .filter(postLike -> postLike.getUserId().equals(id)).collect(Collectors.toList()));
     }
 }

@@ -9,4 +9,5 @@ public interface FollowRepository extends Repository<FollowId, Follow> {
     List<Follow> findAll();
     List<Follow> findFollowingByUserId(UserId userId);
     List<Follow> findFollowersByUserId(UserId userId);
+    Follow findFollowBetweenTwoUser(UserId followerId, UserId followedId);
 }

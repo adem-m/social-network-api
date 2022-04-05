@@ -43,6 +43,26 @@ public class PostLikeConfiguration {
     }
 
     @Bean
+    public UnlikePostEventListener unlikePostEventListener() {
+        EventDispatcher dispatcher = this.kernelConfiguration.eventDispatcher();
+        UnlikePostEventListener listener = new UnlikePostEventListener();
+        dispatcher.addListener(UnlikePostEvent.class, listener);
+        return listener;
+    }
+
+    @Bean
+    public UnlikePostCommandHandler unlikePostCommandHandler() {
+        return new UnlikePostCommandHandler(postLikeRepository(), kernelConfiguration.eventDispatcher());
+    }
+
+    @Bean
+    public CommandBus unlikePostCommandBus() {
+        final CommandBus commandBus = kernelConfiguration.commandBus();
+        commandBus.addHandler(UnlikePost.class, unlikePostCommandHandler());
+        return commandBus;
+    }
+
+    @Bean
     public QueryBus likePostQueryBus() {
         final QueryBus queryBus = kernelConfiguration.queryBus();
         queryBus.addHandler(RetrieveLikedPostsByUserId.class, new RetrieveLikedPostsByUserIdHandler(postLikeRepository()));

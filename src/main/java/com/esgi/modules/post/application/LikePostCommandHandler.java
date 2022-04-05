@@ -5,6 +5,8 @@ import com.esgi.kernel.Event;
 import com.esgi.kernel.EventDispatcher;
 import com.esgi.modules.post.domain.*;
 
+import javax.persistence.EntityExistsException;
+
 public final class LikePostCommandHandler implements CommandHandler<LikePost, PostLikeId> {
     private final PostLikeRepository postLikeRepository;
     private final EventDispatcher<Event> eventEventDispatcher;

@@ -13,7 +13,4 @@ public class PostRequest {
 
     @NotNull
     public UserId userId;
-
-    @NotNull
-    public Date date;
 }

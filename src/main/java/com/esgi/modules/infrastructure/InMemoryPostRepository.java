@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public final class InMemoryPostRepository implements PostRepository {
     private final AtomicInteger count = new AtomicInteger(0);
@@ -49,13 +50,8 @@ public final class InMemoryPostRepository implements PostRepository {
 
     @Override
     public List<Post> findPostsByUserId(UserId id) {
-        List<Post> allPost = List.copyOf(data.values());
-        List<Post> result = new ArrayList<>();
-        for (Post post : allPost) {
-            if (post.getUserId() == id)
-                result.add(post);
-        }
-        return result;
+        return List.copyOf(data.values().stream()
+                .filter(post -> post.getUserId().equals(id)).collect(Collectors.toList()));
     }
 }
 

@@ -4,9 +4,9 @@ import com.esgi.kernel.Query;
 import com.esgi.modules.post.domain.PostId;
 
 public class RetrievePostById implements Query {
-    PostId id;
+    int id;
 
-    public RetrievePostById(PostId id){
+    public RetrievePostById(int id){
         this.id = id;
     }
 }
