@@ -4,9 +4,7 @@ import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.QueryBus;
 import com.esgi.modules.follow.application.*;
 import com.esgi.modules.follow.domain.Follow;
-import com.esgi.modules.user.application.DeleteUser;
 import com.esgi.modules.user.application.RetrieveUserById;
-import com.esgi.modules.user.application.RetrieveUsers;
 import com.esgi.modules.user.domain.User;
 import com.esgi.modules.user.domain.UserId;
 import com.esgi.modules.user.exposition.EmailResponse;
@@ -39,7 +37,7 @@ public class FollowController {
 
     @PostMapping(path = "/follow", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createFollow(@RequestBody @Valid FollowRequest request) {
-        CreateFollow createFollow = new CreateFollow(new UserId(request.followerId), new UserId(request.followedId));
+        CreateFollow createFollow = new CreateFollow(request.followerId,  request.followedId);
         commandBus.send(createFollow);
         return ResponseEntity.ok().build();
     }

@@ -6,7 +6,6 @@ import com.esgi.kernel.EventDispatcher;
 import com.esgi.modules.follow.domain.Follow;
 import com.esgi.modules.follow.domain.FollowId;
 import com.esgi.modules.follow.domain.FollowRepository;
-import com.esgi.modules.user.application.RetrieveUserById;
 
 import javax.persistence.EntityExistsException;
 

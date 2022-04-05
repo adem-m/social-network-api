@@ -1,11 +1,9 @@
 package com.esgi.modules.infrastructure;
 
 import com.esgi.kernel.NoSuchEntityException;
-import com.esgi.modules.follow.domain.Follow;
 import com.esgi.modules.post.domain.*;
 import com.esgi.modules.user.domain.UserId;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

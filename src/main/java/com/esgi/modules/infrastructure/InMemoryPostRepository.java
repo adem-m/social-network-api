@@ -3,11 +3,9 @@ package com.esgi.modules.infrastructure;
 import com.esgi.kernel.NoSuchEntityException;
 import com.esgi.modules.post.domain.Post;
 import com.esgi.modules.post.domain.PostId;
-import com.esgi.modules.post.domain.PostLike;
 import com.esgi.modules.post.domain.PostRepository;
 import com.esgi.modules.user.domain.UserId;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -6,7 +6,6 @@ import com.esgi.modules.comment.domain.CommentLikeId;
 import com.esgi.modules.comment.domain.CommentLikeRepository;
 import com.esgi.modules.user.domain.UserId;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

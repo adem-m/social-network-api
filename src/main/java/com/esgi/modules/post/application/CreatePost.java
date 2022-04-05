@@ -3,7 +3,6 @@ package com.esgi.modules.post.application;
 import com.esgi.kernel.Command;
 import com.esgi.modules.user.domain.UserId;
 
-import java.util.Date;
 import java.util.Objects;
 
 /**

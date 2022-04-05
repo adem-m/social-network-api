@@ -6,9 +6,6 @@ import com.esgi.kernel.QueryBus;
 import com.esgi.modules.comment.application.*;
 import com.esgi.modules.comment.domain.CommentLikeRepository;
 import com.esgi.modules.infrastructure.InMemoryCommentLikeRepository;
-import com.esgi.modules.infrastructure.InMemoryPostLikeRepository;
-import com.esgi.modules.post.application.*;
-import com.esgi.modules.post.domain.PostLikeRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -42,6 +39,26 @@ public class CommentLikeConfiguration {
     public CommandBus likeCommentCommandBus() {
         final CommandBus commandBus = kernelConfiguration.commandBus();
         commandBus.addHandler(LikeComment.class, likeCommentCommandHandler());
+        return commandBus;
+    }
+
+    @Bean
+    public UnlikeCommentEventListener unlikeCommentEventListener() {
+        EventDispatcher dispatcher = this.kernelConfiguration.eventDispatcher();
+        UnlikeCommentEventListener listener = new UnlikeCommentEventListener();
+        dispatcher.addListener(UnlikeCommentEvent.class, listener);
+        return listener;
+    }
+
+    @Bean
+    public UnlikeCommentCommandHandler unlikeCommentCommandHandler() {
+        return new UnlikeCommentCommandHandler(commentLikeRepository(), kernelConfiguration.eventDispatcher());
+    }
+
+    @Bean
+    public CommandBus unlikeCommentCommandBus() {
+        final CommandBus commandBus = kernelConfiguration.commandBus();
+        commandBus.addHandler(UnlikeComment.class, unlikeCommentCommandHandler());
         return commandBus;
     }
 

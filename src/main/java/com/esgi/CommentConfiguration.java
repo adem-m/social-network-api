@@ -6,7 +6,6 @@ import com.esgi.kernel.QueryBus;
 import com.esgi.modules.comment.application.*;
 import com.esgi.modules.comment.domain.CommentRepository;
 import com.esgi.modules.infrastructure.InMemoryCommentRepository;
-import com.esgi.modules.post.application.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

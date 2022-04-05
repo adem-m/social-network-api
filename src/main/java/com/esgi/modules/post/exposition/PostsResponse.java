@@ -1,6 +1,5 @@
 package com.esgi.modules.post.exposition;
 
-
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 

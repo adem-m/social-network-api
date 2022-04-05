@@ -2,11 +2,9 @@ package com.esgi.modules.post.exposition;
 
 import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.QueryBus;
-import com.esgi.modules.follow.application.Unfollow;
 import com.esgi.modules.post.application.*;
 import com.esgi.modules.post.domain.Post;
 import com.esgi.modules.post.domain.PostLike;
-import com.esgi.modules.user.domain.UserId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

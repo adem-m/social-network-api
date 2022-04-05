@@ -1,7 +1,6 @@
 package com.esgi.modules.infrastructure;
 
 import com.esgi.kernel.NoSuchEntityException;
-import com.esgi.modules.user.domain.Email;
 import com.esgi.modules.user.domain.User;
 import com.esgi.modules.user.domain.UserId;
 import com.esgi.modules.user.domain.UserRepository;

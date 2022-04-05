@@ -4,7 +4,6 @@ import com.esgi.kernel.QueryHandler;
 import com.esgi.modules.post.domain.Post;
 import com.esgi.modules.post.domain.PostId;
 import com.esgi.modules.post.domain.PostRepository;
-import com.esgi.modules.user.domain.UserId;
 
 public class RetrievePostByIdHandler implements QueryHandler<RetrievePostById, Post> {
     private final PostRepository postRepository;
