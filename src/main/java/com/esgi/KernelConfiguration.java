@@ -3,6 +3,8 @@ package com.esgi;
 import com.esgi.kernel.*;
 import com.esgi.modules.code.application.RunCodeEvent;
 import com.esgi.modules.comment.application.CreateCommentEvent;
+import com.esgi.modules.comment.application.DeleteCommentEvent;
+import com.esgi.modules.comment.application.EditCommentEvent;
 import com.esgi.modules.comment.application.LikeCommentEvent;
 import com.esgi.modules.file.application.CreateFileEvent;
 import com.esgi.modules.follow.application.CreateFollowEvent;
@@ -43,6 +45,8 @@ public class KernelConfiguration {
 
 
         dispatcher.registerEvent(CreateCommentEvent.class);
+        dispatcher.registerEvent(EditCommentEvent.class);
+        dispatcher.registerEvent(DeleteCommentEvent.class);
         dispatcher.registerEvent(LikeCommentEvent.class);
         return dispatcher;
     }

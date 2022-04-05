@@ -15,12 +15,10 @@ public final class CreateComment implements Command {
     public PostId postId;
     public String content;
     public final UserId creatorId;
-    public final Date date;
 
-    public CreateComment(PostId postId, String content, UserId creatorId, Date date) {
+    public CreateComment(PostId postId, String content, UserId creatorId) {
         this.postId = postId;
         this.content = Objects.requireNonNull(content);
         this.creatorId = Objects.requireNonNull(creatorId);
-        this.date = Objects.requireNonNull(date);
     }
 }

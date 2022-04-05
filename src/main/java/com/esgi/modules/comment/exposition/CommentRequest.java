@@ -16,7 +16,4 @@ public class CommentRequest {
 
     @NotNull
     public UserId userId;
-
-    @NotNull
-    public Date date;
 }

@@ -4,6 +4,7 @@ import com.esgi.kernel.NoSuchEntityException;
 import com.esgi.modules.comment.domain.Comment;
 import com.esgi.modules.comment.domain.CommentId;
 import com.esgi.modules.comment.domain.CommentRepository;
+import com.esgi.modules.post.domain.PostId;
 import com.esgi.modules.user.domain.UserId;
 
 import java.util.ArrayList;
@@ -48,7 +49,13 @@ public final class InMemoryCommentRepository implements CommentRepository {
     }
 
     @Override
-    public List<Comment> findCommentsByUserId(UserId id) {
+    public List<Comment> findByPostId(PostId id) {
+        return List.copyOf(data.values().stream()
+                .filter(comment -> comment.getPostId().equals(id)).collect(Collectors.toList()));
+    }
+
+    @Override
+    public List<Comment> findByUserId(UserId id) {
         return List.copyOf(data.values().stream()
                 .filter(comment -> comment.getUserId().equals(id)).collect(Collectors.toList()));
     }

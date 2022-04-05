@@ -4,9 +4,9 @@ import com.esgi.kernel.Query;
 import com.esgi.modules.user.domain.UserId;
 
 public class RetrieveComments implements Query {
-    UserId id;
+    int id;
 
-    public RetrieveComments(UserId id){
+    public RetrieveComments(int id){
         this.id = id;
     }
 }
