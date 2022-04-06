@@ -56,16 +56,15 @@ final public class RunCodeCommandHandler implements CommandHandler<RunCode, Outp
     }
 
     private void appendLines(StringBuilder output, BufferedReader reader) {
-        int outputLines = 0;
+        int outputSize = 0;
         String line;
         try {
             while ((line = reader.readLine()) != null) {
                 output.append(line).append("\n");
-                outputLines++;
-                if (outputLines > MAX_OUTPUT_SIZE) return;
+                outputSize++;
+                if (outputSize > MAX_OUTPUT_SIZE) return;
             }
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
+        } catch (Throwable ignored) {
         }
     }
 }
