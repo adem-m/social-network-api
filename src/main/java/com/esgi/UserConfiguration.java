@@ -81,6 +81,31 @@ public class UserConfiguration {
     }
 
     @Bean
+    public QueryBus userIdQueryBus() {
+        final QueryBus queryBus = kernelConfiguration.queryBus();
+        queryBus.addHandler(RetrieveUserById.class, new RetrieveUserByIdHandler(userRepository()));
+        return queryBus;
+    }
+
+    @Bean
+    public RetrieveUserByIdHandler retrieveUserByIdHandler() {
+        return new RetrieveUserByIdHandler(userRepository());
+    }
+
+    @Bean
+    public QueryBus userEmailQueryBus() {
+        final QueryBus queryBus = kernelConfiguration.queryBus();
+        queryBus.addHandler(RetrieveUserByEmail.class, new RetrieveUserByEmailHandler(userRepository()));
+        return queryBus;
+    }
+
+    @Bean
+    public RetrieveUserByEmailHandler retrieveUserByEmailHandler() {
+        return new RetrieveUserByEmailHandler(userRepository());
+    }
+
+
+    @Bean
     public QueryBus usersQueryBus() {
         final QueryBus queryBus = kernelConfiguration.queryBus();
         queryBus.addHandler(RetrieveUsers.class, new RetrieveUsersHandler(userRepository()));
@@ -90,18 +115,6 @@ public class UserConfiguration {
     @Bean
     public RetrieveUsersHandler retrieveUsersHandler() {
         return new RetrieveUsersHandler(userRepository());
-    }
-
-    @Bean
-    public QueryBus userQueryBus() {
-        final QueryBus queryBus = kernelConfiguration.queryBus();
-        queryBus.addHandler(RetrieveUserById.class, new RetrieveUserByIdHandler(userRepository()));
-        return queryBus;
-    }
-
-    @Bean
-    public RetrieveUserByIdHandler retrieveUserByIdHandler() {
-        return new RetrieveUserByIdHandler(userRepository());
     }
 
     @Bean

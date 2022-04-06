@@ -36,9 +36,16 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(path = "/user/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/user/id={id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserResponse> getUserById(@PathVariable int id){
         final User user = (User) queryBus.send(new RetrieveUserById(id));
+        UserResponse userResponseResult = new UserResponse(String.valueOf(user.getId().getValue()), user.getLastname(), user.getFirstname(),new EmailResponse(user.getEmail().getEmail()),user.getPassword());
+        return ResponseEntity.ok(userResponseResult);
+    }
+
+    @GetMapping(path = "/user/email={email}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String email){
+        final User user = (User) queryBus.send(new RetrieveUserByEmail(email));
         UserResponse userResponseResult = new UserResponse(String.valueOf(user.getId().getValue()), user.getLastname(), user.getFirstname(),new EmailResponse(user.getEmail().getEmail()),user.getPassword());
         return ResponseEntity.ok(userResponseResult);
     }

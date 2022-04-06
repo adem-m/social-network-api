@@ -14,7 +14,7 @@ public final class NoSuchEntityException extends RuntimeException {
     }
 
     public static NoSuchEntityException withId(UserId id) {
-        return new NoSuchEntityException(String.format("No Member found with ID %d.", id.getValue()));
+        return new NoSuchEntityException(String.format("No User found with ID %d.", id.getValue()));
     }
 
     public static NoSuchEntityException withId(PostId id) {
@@ -35,5 +35,9 @@ public final class NoSuchEntityException extends RuntimeException {
 
     public static NoSuchEntityException withId(CommentLikeId id) {
         return new NoSuchEntityException(String.format("No CommentLike found with ID %d.", id.getValue()));
+    }
+
+    public static NoSuchEntityException withId(String email) {
+        return new NoSuchEntityException(String.format("No User found with Email %s.", email));
     }
 }
