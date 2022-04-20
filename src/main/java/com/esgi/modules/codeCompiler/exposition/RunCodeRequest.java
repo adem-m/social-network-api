@@ -1,4 +1,4 @@
-package com.esgi.modules.code.exposition;
+package com.esgi.modules.codeCompiler.exposition;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

@@ -2,6 +2,9 @@ package com.esgi.modules.post.exposition;
 
 import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.QueryBus;
+import com.esgi.modules.code.application.RetrieveCodeByPostId;
+import com.esgi.modules.code.domain.Code;
+import com.esgi.modules.code.exposition.CodeResponse;
 import com.esgi.modules.post.application.*;
 import com.esgi.modules.post.domain.Post;
 import org.springframework.http.HttpStatus;
@@ -12,10 +15,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 @RestController
@@ -30,7 +33,7 @@ public class    PostController {
 
     @PostMapping(path = "/post", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> create(@RequestBody @Valid PostRequest request) {
-        CreatePost createPost = new CreatePost(request.content, request.userId);
+        CreatePost createPost = new CreatePost(request.content, request.code, request.userId);
         commandBus.send(createPost);
         return ResponseEntity.ok().build();
     }
@@ -38,14 +41,21 @@ public class    PostController {
     @GetMapping(path = "/post/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PostResponse> getPostById(@PathVariable int id){
         final Post post = (Post) queryBus.send(new RetrievePostById(id));
-        PostResponse postResponseResult = new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(), post.getUserId(),post.getDate());
+        final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
+        PostResponse postResponseResult = new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(),
+                new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId(), code.getSource(), code.getLanguage()), String.valueOf(post.getUserId()),post.getDate());
         return ResponseEntity.ok(postResponseResult);
     }
 
     @GetMapping(path = "/posts/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PostsResponse> getAllPostsByUserId(@PathVariable int id) {
         final List<Post> posts = (List<Post>) queryBus.send(new RetrievePostsByUserId(id));
-        PostsResponse postsResponseResult = new PostsResponse(posts.stream().map(post -> new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(), post.getUserId(), post.getDate())).collect(Collectors.toList()));
+        PostsResponse postsResponseResult = new PostsResponse(new ArrayList<>());
+        for (Post post : posts) {
+            final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
+            postsResponseResult.posts.add(new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(),
+                    new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId(), code.getSource(), code.getLanguage()), String.valueOf(post.getUserId()), post.getDate()));
+        }
         return ResponseEntity.ok(postsResponseResult);
     }
 
@@ -54,7 +64,9 @@ public class    PostController {
         EditPost editPost = new EditPost(id, request.content);
         commandBus.send(editPost);
         final Post post = (Post) queryBus.send(new RetrievePostById(editPost.postId));
-        PostResponse postResponseResult = new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(), post.getUserId(), post.getDate());
+        final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
+        PostResponse postResponseResult = new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(),
+                new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId(), code.getSource(), code.getLanguage()), String.valueOf(post.getUserId()), post.getDate());
         return ResponseEntity.ok(postResponseResult);
     }
 

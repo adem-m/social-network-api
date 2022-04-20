@@ -1,14 +1,11 @@
 package com.esgi.modules.comment.exposition;
 
-import com.esgi.modules.comment.domain.CommentId;
-import com.esgi.modules.user.domain.UserId;
-
 import javax.validation.constraints.NotNull;
 
 public class CommentLikeRequest {
     @NotNull
-    public UserId userId;
+    public String userId;
 
     @NotNull
-    public CommentId commentId;
+    public String commentId;
 }

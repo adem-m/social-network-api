@@ -1,14 +1,11 @@
 package com.esgi.modules.comment.exposition;
 
-import com.esgi.modules.comment.domain.CommentId;
-import com.esgi.modules.user.domain.UserId;
-
 public class CommentLikeResponse {
     public String id;
-    public UserId userId;
-    public CommentId commentId;
+    public String userId;
+    public String commentId;
 
-    public CommentLikeResponse(String id, UserId userId, CommentId commentId){
+    public CommentLikeResponse(String id, String userId, String commentId){
         this.id = id;
         this.userId = userId;
         this.commentId = commentId;

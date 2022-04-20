@@ -1,6 +1,6 @@
-package com.esgi.modules.code.application;
+package com.esgi.modules.codeCompiler.application;
 
-import com.esgi.modules.code.domain.Script;
+import com.esgi.modules.codeCompiler.domain.Script;
 
 public class ScriptRunningException extends UnsupportedOperationException {
     public ScriptRunningException(Script script) {

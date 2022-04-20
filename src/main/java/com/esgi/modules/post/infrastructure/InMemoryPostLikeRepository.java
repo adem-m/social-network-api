@@ -1,4 +1,4 @@
-package com.esgi.modules.infrastructure;
+package com.esgi.modules.post.infrastructure;
 
 import com.esgi.kernel.NoSuchEntityException;
 import com.esgi.modules.post.domain.*;
@@ -48,5 +48,14 @@ public final class InMemoryPostLikeRepository implements PostLikeRepository {
     public List<PostLike> findPostsLikedByUserId(UserId id) {
         return List.copyOf(data.values().stream()
                 .filter(postLike -> postLike.getUserId().equals(id)).collect(Collectors.toList()));
+    }
+
+    @Override
+    public PostLike findLikeByUserIdAndPostId(UserId userId, PostId postId) {
+        if(data.values().stream().noneMatch(postLike -> postLike.getUserId().equals(userId) && postLike.getPostId().equals(postId))){
+            return null;
+        }
+        return data.values().stream()
+                .filter(postLike -> postLike.getUserId().equals(userId) && postLike.getPostId().equals(postId)).collect(Collectors.toList()).get(0);
     }
 }

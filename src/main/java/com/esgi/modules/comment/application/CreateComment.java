@@ -11,12 +11,12 @@ import java.util.Objects;
  */
 @SuppressWarnings("all")
 public final class CreateComment implements Command {
-    public PostId postId;
+    public String postId;
     public String content;
-    public final UserId creatorId;
+    public final String creatorId;
 
-    public CreateComment(PostId postId, String content, UserId creatorId) {
-        this.postId = postId;
+    public CreateComment(String postId, String content, String creatorId) {
+        this.postId = Objects.requireNonNull(postId);
         this.content = Objects.requireNonNull(content);
         this.creatorId = Objects.requireNonNull(creatorId);
     }

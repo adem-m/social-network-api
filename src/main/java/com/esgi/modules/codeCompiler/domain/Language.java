@@ -1,6 +1,6 @@
-package com.esgi.modules.code.domain;
+package com.esgi.modules.codeCompiler.domain;
 
-import com.esgi.modules.code.application.UnsupportedLanguageException;
+import com.esgi.modules.codeCompiler.application.UnsupportedLanguageException;
 
 public enum Language {
     C("run_c.sh", "c_src/app.c", 124),

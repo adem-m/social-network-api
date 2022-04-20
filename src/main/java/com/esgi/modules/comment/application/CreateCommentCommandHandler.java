@@ -6,6 +6,8 @@ import com.esgi.kernel.EventDispatcher;
 import com.esgi.modules.comment.domain.Comment;
 import com.esgi.modules.comment.domain.CommentId;
 import com.esgi.modules.comment.domain.CommentRepository;
+import com.esgi.modules.post.domain.PostId;
+import com.esgi.modules.user.domain.UserId;
 
 public final class CreateCommentCommandHandler implements CommandHandler<CreateComment, CommentId> {
     private final CommentRepository commentRepository;
@@ -18,8 +20,9 @@ public final class CreateCommentCommandHandler implements CommandHandler<CreateC
 
     public CommentId handle(CreateComment createComment) {
         final CommentId commentId = commentRepository.nextIdentity();
-        Comment comment;
-        comment = new Comment(commentId, createComment.postId, createComment.content, createComment.creatorId);
+        final PostId postId = new PostId(Integer.parseInt(createComment.postId));
+        final UserId creatorId = new UserId(Integer.parseInt(createComment.creatorId));
+        Comment comment = new Comment(commentId, postId, createComment.content, creatorId);
         commentRepository.add(comment);
         eventEventDispatcher.dispatch(new CreateCommentEvent(commentId));
         return commentId;

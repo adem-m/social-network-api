@@ -15,5 +15,6 @@ public class UserRequest {
     @NotNull
     public EmailRequest email;
 
+    @NotNull
     public String password;
 }

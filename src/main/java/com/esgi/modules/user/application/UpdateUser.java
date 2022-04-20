@@ -8,9 +8,11 @@ import java.util.Objects;
 public final class UpdateUser implements Command {
     public final int userId;
     public Email email;
+    public String password;
 
-    public UpdateUser(int userId, Email email) {
+    public UpdateUser(int userId, Email email, String password) {
         this.userId = userId;
-        this.email = Objects.requireNonNull(email);
+        this.email = email;
+        this.password = password;
     }
 }

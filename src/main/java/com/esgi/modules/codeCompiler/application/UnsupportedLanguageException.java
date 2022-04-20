@@ -1,4 +1,4 @@
-package com.esgi.modules.code.application;
+package com.esgi.modules.codeCompiler.application;
 
 final public class UnsupportedLanguageException extends UnsupportedOperationException {
     public UnsupportedLanguageException(String language) {

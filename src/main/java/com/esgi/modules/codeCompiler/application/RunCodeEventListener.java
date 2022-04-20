@@ -1,4 +1,4 @@
-package com.esgi.modules.code.application;
+package com.esgi.modules.codeCompiler.application;
 
 import com.esgi.kernel.EventListener;
 

@@ -9,10 +9,10 @@ import com.esgi.modules.user.domain.UserId;
  */
 @SuppressWarnings("all")
 public final class LikePost implements Command {
-    public final UserId userId;
-    public final PostId postId;
+    public final String userId;
+    public final String postId;
 
-    public LikePost(UserId userId, PostId postId){
+    public LikePost(String userId, String postId){
         this.userId = userId;
         this.postId = postId;
     }

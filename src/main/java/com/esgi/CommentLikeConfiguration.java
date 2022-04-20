@@ -5,7 +5,7 @@ import com.esgi.kernel.EventDispatcher;
 import com.esgi.kernel.QueryBus;
 import com.esgi.modules.comment.application.*;
 import com.esgi.modules.comment.domain.CommentLikeRepository;
-import com.esgi.modules.infrastructure.InMemoryCommentLikeRepository;
+import com.esgi.modules.comment.infrastructure.InMemoryCommentLikeRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

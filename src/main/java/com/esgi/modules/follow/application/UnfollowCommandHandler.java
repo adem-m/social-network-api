@@ -5,6 +5,7 @@ import com.esgi.kernel.Event;
 import com.esgi.kernel.EventDispatcher;
 import com.esgi.modules.follow.domain.FollowId;
 import com.esgi.modules.follow.domain.FollowRepository;
+import com.esgi.modules.user.domain.UserId;
 
 public final class UnfollowCommandHandler implements CommandHandler<Unfollow, FollowId> {
     private final FollowRepository followRepository;
@@ -16,7 +17,9 @@ public final class UnfollowCommandHandler implements CommandHandler<Unfollow, Fo
     }
 
     public FollowId handle(Unfollow unfollow) {
-        final FollowId followId = new FollowId(unfollow.userId);
+        final UserId unfollowerId = new UserId(Integer.parseInt(unfollow.unfollowerId));
+        final UserId unfollowedId = new UserId(Integer.parseInt(unfollow.unfollowedId));
+        final FollowId followId = followRepository.findFollowBetweenTwoUser(unfollowerId, unfollowedId).getFollowId();
         followRepository.delete(followId);
         eventEventDispatcher.dispatch(new UnfollowEvent(followId));
         return followId;

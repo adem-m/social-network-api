@@ -65,8 +65,8 @@ public class UserController {
     }
 
     @PutMapping(path = "/user/{id}/update", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UserResponse> updateUser(@PathVariable int id, @RequestBody @Valid UserRequest request) {
-        UpdateUser updateUser = new UpdateUser(id, new Email(request.email.email));
+    public ResponseEntity<UserResponse> updateUser(@PathVariable int id, @RequestBody @Valid UpdateUserRequest request) {
+        UpdateUser updateUser = new UpdateUser(id, new Email(request.email.email), request.password);
         commandBus.send(updateUser);
         final User user = (User) queryBus.send(new RetrieveUserById(updateUser.userId));
         UserResponse userResponseResult = new UserResponse(String.valueOf(user.getId().getValue()), user.getLastname(), user.getFirstname(),new EmailResponse(user.getEmail().getEmail()),user.getPassword());

@@ -6,7 +6,6 @@ import com.esgi.modules.follow.application.*;
 import com.esgi.modules.follow.domain.Follow;
 import com.esgi.modules.user.application.RetrieveUserById;
 import com.esgi.modules.user.domain.User;
-import com.esgi.modules.user.domain.UserId;
 import com.esgi.modules.user.exposition.EmailResponse;
 import com.esgi.modules.user.exposition.UserResponse;
 import com.esgi.modules.user.exposition.UsersResponse;
@@ -42,25 +41,11 @@ public class FollowController {
         return ResponseEntity.ok().build();
     }
 
-    /*@GetMapping(path = "/following/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<FollowsResponse> getFollowingByFollowerId(@PathVariable int id){
-        final List<Follow> follows = (List<Follow>) queryBus.send(new RetrieveFollowing(id));
-        FollowsResponse followsResponseResult = new FollowsResponse(follows.stream().map(follow -> new FollowResponse(String.valueOf(follow.getFollowId().getValue()), follow.getFollowerId(), follow.getFollowedId())).collect(Collectors.toList()));
-        return ResponseEntity.ok(followsResponseResult);
-    }*/
-
     @GetMapping(path = "/following/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UsersResponse> getFollowingByFollowerId(@PathVariable int id) {
         final List<Follow> follows = (List<Follow>) queryBus.send(new RetrieveFollowing(id));
         return getUsersResponseResponseEntity(follows);
     }
-
-    /*@GetMapping(path = "/followers/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<FollowsResponse> getFollowersByFollowedId(@PathVariable int id){
-        final List<Follow> follows = (List<Follow>) queryBus.send(new RetrieveFollowers(id));
-        FollowsResponse followsResponseResult = new FollowsResponse(follows.stream().map(follow -> new FollowResponse(String.valueOf(follow.getFollowId().getValue()), follow.getFollowerId(), follow.getFollowedId())).collect(Collectors.toList()));
-        return ResponseEntity.ok(followsResponseResult);
-    }*/
 
     @GetMapping(path = "/followers/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UsersResponse> getFollowersByFollowerId(@PathVariable int id) {
@@ -80,13 +65,13 @@ public class FollowController {
     @GetMapping(path = "/follows", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<FollowsResponse> getAllFollows() {
         final List<Follow> follows = (List<Follow>) queryBus.send(new RetrieveFollows());
-        FollowsResponse followsResponseResult = new FollowsResponse(follows.stream().map(follow -> new FollowResponse(String.valueOf(follow.getFollowId().getValue()), follow.getFollowerId(), follow.getFollowedId())).collect(Collectors.toList()));
+        FollowsResponse followsResponseResult = new FollowsResponse(follows.stream().map(follow -> new FollowResponse(String.valueOf(follow.getFollowId().getValue()), String.valueOf(follow.getFollowerId()), String.valueOf(follow.getFollowedId()))).collect(Collectors.toList()));
         return ResponseEntity.ok(followsResponseResult);
     }
 
-    @DeleteMapping(path= "/unfollow/{id}")
-    public Map<String, Boolean> unfollow(@PathVariable int id) {
-        Unfollow unfollow = new Unfollow(id);
+    @DeleteMapping(path= "/unfollow", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Boolean> unfollow(@RequestBody @Valid FollowRequest request) {
+        Unfollow unfollow = new Unfollow(request.followerId, request.followedId);
         commandBus.send(unfollow);
         Map<String, Boolean> response = new HashMap<>();
         response.put("unfollowed", Boolean.TRUE);

@@ -5,7 +5,7 @@ import com.esgi.kernel.EventDispatcher;
 import com.esgi.kernel.QueryBus;
 import com.esgi.modules.follow.application.*;
 import com.esgi.modules.follow.domain.FollowRepository;
-import com.esgi.modules.infrastructure.InMemoryFollowRepository;
+import com.esgi.modules.follow.infrastructure.InMemoryFollowRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -38,21 +38,21 @@ public class CommentController {
     @GetMapping(path = "/comment/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<CommentResponse> getCommentById(@PathVariable int id){
         final Comment comment = (Comment) queryBus.send(new RetrieveCommentById(id));
-        CommentResponse commentResponseResult = new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getPostId().getValue()), comment.getContent(), comment.getUserId(), comment.getDate());
+        CommentResponse commentResponseResult = new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getPostId().getValue()), comment.getContent(), String.valueOf(comment.getUserId()), comment.getDate());
         return ResponseEntity.ok(commentResponseResult);
     }
 
     @GetMapping(path = "/comments/user={id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<CommentsResponse> getCommentsByUserId(@PathVariable int id) {
         final List<Comment> comments = (List<Comment>) queryBus.send(new RetrieveComments(id));
-        CommentsResponse commentsResponseResult = new CommentsResponse(comments.stream().map(comment -> new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getUserId().getValue()), comment.getContent(), comment.getUserId(), comment.getDate())).collect(Collectors.toList()));
+        CommentsResponse commentsResponseResult = new CommentsResponse(comments.stream().map(comment -> new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getUserId().getValue()), comment.getContent(), String.valueOf(comment.getUserId()), comment.getDate())).collect(Collectors.toList()));
         return ResponseEntity.ok(commentsResponseResult);
     }
 
     @GetMapping(path = "/comments/post={id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<CommentsResponse> getCommentsByPostId(@PathVariable int id) {
         final List<Comment> comments = (List<Comment>) queryBus.send(new RetrieveCommentsByPostId(id));
-        CommentsResponse commentsResponseResult = new CommentsResponse(comments.stream().map(comment -> new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getUserId().getValue()), comment.getContent(), comment.getUserId(), comment.getDate())).collect(Collectors.toList()));
+        CommentsResponse commentsResponseResult = new CommentsResponse(comments.stream().map(comment -> new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getUserId().getValue()), comment.getContent(), String.valueOf(comment.getUserId()), comment.getDate())).collect(Collectors.toList()));
         return ResponseEntity.ok(commentsResponseResult);
     }
 
@@ -61,7 +61,7 @@ public class CommentController {
         EditComment editComment = new EditComment(id, request.content);
         commandBus.send(editComment);
         final Comment comment = (Comment) queryBus.send(new RetrieveCommentById(editComment.commentId));
-        CommentResponse commentResponseResult = new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getPostId().getValue()), comment.getContent(), comment.getUserId(), comment.getDate());
+        CommentResponse commentResponseResult = new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getPostId().getValue()), comment.getContent(), String.valueOf(comment.getUserId()), comment.getDate());
         return ResponseEntity.ok(commentResponseResult);
     }
 

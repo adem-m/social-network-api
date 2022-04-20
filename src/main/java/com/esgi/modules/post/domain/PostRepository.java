@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface PostRepository extends Repository<PostId, Post> {
     List<Post> findAll();
-
     List<Post> findPostsByUserId(UserId id);
 }

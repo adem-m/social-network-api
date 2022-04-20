@@ -1,4 +1,4 @@
-package com.esgi.modules.infrastructure;
+package com.esgi.kernel;
 
 import com.esgi.kernel.Event;
 import com.esgi.kernel.EventDispatcher;

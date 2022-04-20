@@ -1,4 +1,4 @@
-package com.esgi.modules.infrastructure;
+package com.esgi.modules.post.infrastructure;
 
 import com.esgi.kernel.NoSuchEntityException;
 import com.esgi.modules.post.domain.Post;

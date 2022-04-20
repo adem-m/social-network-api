@@ -1,5 +1,6 @@
 package com.esgi.kernel;
 
+import com.esgi.modules.code.domain.CodeId;
 import com.esgi.modules.comment.domain.CommentId;
 import com.esgi.modules.comment.domain.CommentLikeId;
 import com.esgi.modules.follow.domain.FollowId;
@@ -23,6 +24,10 @@ public final class NoSuchEntityException extends RuntimeException {
 
     public static NoSuchEntityException withId(PostLikeId id) {
         return new NoSuchEntityException(String.format("No PostLike found with ID %d.", id.getValue()));
+    }
+
+    public static NoSuchEntityException withId(CodeId id) {
+        return new NoSuchEntityException(String.format("No Code found with ID %d.", id.getValue()));
     }
 
     public static NoSuchEntityException withId(FollowId id) {

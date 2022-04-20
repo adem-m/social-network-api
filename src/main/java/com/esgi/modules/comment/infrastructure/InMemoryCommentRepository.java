@@ -1,4 +1,4 @@
-package com.esgi.modules.infrastructure;
+package com.esgi.modules.comment.infrastructure;
 
 import com.esgi.kernel.NoSuchEntityException;
 import com.esgi.modules.comment.domain.Comment;

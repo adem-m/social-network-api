@@ -1,7 +1,7 @@
 package com.esgi;
 
 import com.esgi.kernel.*;
-import com.esgi.modules.infrastructure.InMemoryUserRepository;
+import com.esgi.modules.user.infrastructure.InMemoryUserRepository;
 import com.esgi.modules.user.application.*;
 import com.esgi.modules.user.domain.UserRepository;
 import org.springframework.context.annotation.Bean;

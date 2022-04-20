@@ -1,18 +1,20 @@
 package com.esgi.modules.post.exposition;
 
-import com.esgi.modules.user.domain.UserId;
+import com.esgi.modules.code.exposition.CodeResponse;
 
 import java.util.Date;
 
 public class PostResponse {
     public String id;
     public String content;
-    public UserId userId;
+    public CodeResponse code;
+    public String userId;
     public Date date;
 
-    public PostResponse(String id, String content, UserId userId, Date date){
+    public PostResponse(String id, String content, CodeResponse code, String userId, Date date){
         this.id = id;
         this.content = content;
+        this.code = code;
         this.userId = userId;
         this.date = date;
     }
@@ -22,6 +24,7 @@ public class PostResponse {
         return "PostDTO{" +
                 "id=" + id +
                 ", content='" + content + '\'' +
+                ", code='" + code + '\'' +
                 ", creatorId='" + userId + '\'' +
                 ", date=" + date + '\'' +
                 '}';

@@ -4,6 +4,7 @@ import com.esgi.kernel.CommandHandler;
 import com.esgi.kernel.Event;
 import com.esgi.kernel.EventDispatcher;
 import com.esgi.modules.post.domain.*;
+import com.esgi.modules.user.domain.UserId;
 
 public final class LikePostCommandHandler implements CommandHandler<LikePost, PostLikeId> {
     private final PostLikeRepository postLikeRepository;
@@ -16,8 +17,9 @@ public final class LikePostCommandHandler implements CommandHandler<LikePost, Po
 
     public PostLikeId handle(LikePost likePost) {
         final PostLikeId postLikeId = postLikeRepository.nextIdentity();
-        PostLike postLike;
-        postLike = new PostLike(postLikeId, likePost.userId, likePost.postId);
+        final UserId userId = new UserId(Integer.parseInt(likePost.userId));
+        final PostId postId = new PostId(Integer.parseInt(likePost.postId));
+        PostLike postLike = new PostLike(postLikeId, userId, postId);
         postLikeRepository.add(postLike);
         eventEventDispatcher.dispatch(new LikePostEvent(postLikeId));
         return postLikeId;

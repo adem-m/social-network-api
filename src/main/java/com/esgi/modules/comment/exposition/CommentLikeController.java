@@ -45,14 +45,14 @@ public class CommentLikeController {
         CommentsResponse commentsResponseResult = new CommentsResponse(new ArrayList<>());
         for (CommentLike commentLike : likedComments) {
             final Comment comment = (Comment) queryBus.send(new RetrieveCommentById(commentLike.getCommentId().getValue()));
-            commentsResponseResult.comments.add(new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getPostId().getValue()), comment.getContent(), comment.getUserId(), comment.getDate()));
+            commentsResponseResult.comments.add(new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getPostId().getValue()), comment.getContent(), String.valueOf(comment.getUserId()), comment.getDate()));
         }
         return ResponseEntity.ok(commentsResponseResult);
     }
 
-    @DeleteMapping(path= "/unlikeComment/{id}")
-    public Map<String, Boolean> unlikeComment(@PathVariable int id) {
-        UnlikeComment unlikeComment = new UnlikeComment(id);
+    @DeleteMapping(path= "/unlikeComment", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Boolean> unlikeComment(@RequestBody @Valid CommentLikeRequest request) {
+        UnlikeComment unlikeComment = new UnlikeComment(request.userId, request.commentId);
         commandBus.send(unlikeComment);
         Map<String, Boolean> response = new HashMap<>();
         response.put("unlikeComment", Boolean.TRUE);

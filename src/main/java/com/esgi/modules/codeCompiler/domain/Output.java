@@ -1,4 +1,4 @@
-package com.esgi.modules.code.domain;
+package com.esgi.modules.codeCompiler.domain;
 
 public final class Output {
     private final static String EMPTY_OUTPUT = "";

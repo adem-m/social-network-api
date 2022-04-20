@@ -2,6 +2,9 @@ package com.esgi.modules.post.exposition;
 
 import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.QueryBus;
+import com.esgi.modules.code.application.RetrieveCodeByPostId;
+import com.esgi.modules.code.domain.Code;
+import com.esgi.modules.code.exposition.CodeResponse;
 import com.esgi.modules.post.application.*;
 import com.esgi.modules.post.domain.Post;
 import com.esgi.modules.post.domain.PostLike;
@@ -42,14 +45,16 @@ public class PostLikeController {
         PostsResponse postsResponseResult = new PostsResponse(new ArrayList<>());
         for (PostLike postLike : likedPosts) {
             final Post post = (Post) queryBus.send(new RetrievePostById(postLike.getPostId().getValue()));
-            postsResponseResult.posts.add(new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(), post.getUserId(),post.getDate()));
+            final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
+            postsResponseResult.posts.add(new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(),
+                    new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId(), code.getSource(), code.getLanguage()), String.valueOf(post.getUserId()),post.getDate()));
         }
         return ResponseEntity.ok(postsResponseResult);
     }
 
-    @DeleteMapping(path= "/unlike/{id}")
-    public Map<String, Boolean> unlike(@PathVariable int id) {
-        UnlikePost unlikePost = new UnlikePost(id);
+    @DeleteMapping(path= "/unlikePost", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Boolean> unlike(@RequestBody @Valid PostLikeRequest request) {
+        UnlikePost unlikePost = new UnlikePost(request.userId, request.postId);
         commandBus.send(unlikePost);
         Map<String, Boolean> response = new HashMap<>();
         response.put("unlike", Boolean.TRUE);

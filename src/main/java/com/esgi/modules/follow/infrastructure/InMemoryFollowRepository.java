@@ -1,4 +1,4 @@
-package com.esgi.modules.infrastructure;
+package com.esgi.modules.follow.infrastructure;
 
 import com.esgi.kernel.NoSuchEntityException;
 import com.esgi.modules.follow.domain.Follow;

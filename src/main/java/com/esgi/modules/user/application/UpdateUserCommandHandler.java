@@ -18,7 +18,10 @@ public final class UpdateUserCommandHandler implements CommandHandler<UpdateUser
     public UserId handle(UpdateUser updateUser) {
         var userId = new UserId(updateUser.userId);
         var user = userRepository.findById(userId);
-        user.changeEmail(updateUser.email);
+        if(!user.getEmail().getEmail().equals(updateUser.email.getEmail()) && !updateUser.email.getEmail().equals(""))
+            user.changeEmail(updateUser.email);
+        if(!user.getPassword().equals(updateUser.password) && !updateUser.password.equals(""))
+            user.changePassword(updateUser.password);
         userRepository.add(user);
         eventEventDispatcher.dispatch(new UpdateUserEvent(userId));
         return userId;

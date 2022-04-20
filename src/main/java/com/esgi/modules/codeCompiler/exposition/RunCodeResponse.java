@@ -1,4 +1,4 @@
-package com.esgi.modules.code.exposition;
+package com.esgi.modules.codeCompiler.exposition;
 
 public final class RunCodeResponse {
     public String value;

@@ -1,12 +1,9 @@
-package com.esgi.modules.code.application;
+package com.esgi.modules.codeCompiler.application;
 
 import com.esgi.kernel.CommandHandler;
 import com.esgi.kernel.Event;
 import com.esgi.kernel.EventDispatcher;
-import com.esgi.modules.code.domain.Duration;
-import com.esgi.modules.code.domain.Language;
-import com.esgi.modules.code.domain.Output;
-import com.esgi.modules.code.domain.Script;
+import com.esgi.modules.codeCompiler.domain.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;

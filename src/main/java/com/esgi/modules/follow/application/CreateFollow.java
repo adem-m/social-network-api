@@ -8,10 +8,10 @@ import com.esgi.modules.user.domain.UserId;
  */
 @SuppressWarnings("all")
 public final class CreateFollow implements Command {
-    public UserId followerId;
-    public UserId followedId;
+    public String followerId;
+    public String followedId;
 
-    public CreateFollow(UserId followerId, UserId followedId){
+    public CreateFollow(String followerId, String followedId){
         this.followerId = followerId;
         this.followedId = followedId;
     }

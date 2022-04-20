@@ -1,6 +1,7 @@
-package com.esgi.modules.infrastructure;
+package com.esgi.modules.comment.infrastructure;
 
 import com.esgi.kernel.NoSuchEntityException;
+import com.esgi.modules.comment.domain.CommentId;
 import com.esgi.modules.comment.domain.CommentLike;
 import com.esgi.modules.comment.domain.CommentLikeId;
 import com.esgi.modules.comment.domain.CommentLikeRepository;
@@ -50,5 +51,15 @@ public final class InMemoryCommentLikeRepository implements CommentLikeRepositor
     public List<CommentLike> findCommentsLikedByUserId(UserId id) {
         return List.copyOf(data.values().stream()
                 .filter(commentLike -> commentLike.getUserId().equals(id)).collect(Collectors.toList()));
+    }
+
+    @Override
+    public CommentLike findLikeByUserIdAndPostId(UserId userId, CommentId commentId) {
+        if(data.values().stream().noneMatch(commentLike -> commentLike.getUserId().equals(userId) && commentLike.getCommentId().equals(commentId))){
+            return null;
+        }
+        return data.values().stream()
+                .filter(commentLike -> commentLike.getUserId().equals(userId) && commentLike.getCommentId().equals(commentId)).collect(Collectors.toList()).get(0);
+
     }
 }
