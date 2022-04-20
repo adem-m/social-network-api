@@ -19,7 +19,7 @@ public final class InMemoryPostRepository implements PostRepository {
 
     @Override
     public PostId nextIdentity() {
-        return new PostId(count.incrementAndGet());
+        return new PostId(String.valueOf(count.incrementAndGet()));
     }
 
     @Override

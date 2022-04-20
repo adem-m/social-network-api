@@ -20,8 +20,8 @@ public final class LikeCommentCommandHandler implements CommandHandler<LikeComme
 
     public CommentLikeId handle(LikeComment likeComment) {
         final CommentLikeId commentLikeId = commentLikeRepository.nextIdentity();
-        final UserId userId = new UserId(Integer.parseInt(likeComment.userId));
-        final CommentId commentId = new CommentId(Integer.parseInt(likeComment.commentId));
+        final UserId userId = new UserId(likeComment.userId);
+        final CommentId commentId = new CommentId(likeComment.commentId);
         CommentLike commentLike = new CommentLike(commentLikeId, userId, commentId);
         commentLikeRepository.add(commentLike);
         eventEventDispatcher.dispatch(new LikeCommentEvent(commentLikeId));

@@ -8,8 +8,6 @@ import com.esgi.modules.user.domain.User;
 import com.esgi.modules.user.domain.UserId;
 import com.esgi.modules.user.domain.UserRepository;
 
-import javax.persistence.EntityExistsException;
-
 public final class CreateUserCommandHandler implements CommandHandler<CreateUser, UserId> {
     private final UserRepository userRepository;
     private final EventDispatcher<Event> eventEventDispatcher;
@@ -27,6 +25,6 @@ public final class CreateUserCommandHandler implements CommandHandler<CreateUser
             eventEventDispatcher.dispatch(new CreateUserEvent(userId));
             return userId;
         }
-        throw new EntityExistsException("User with email " + createUser.email.getEmail() + " already exists");
+        throw new IllegalStateException("User with email " + createUser.email.getEmail() + " already exists");
     }
 }

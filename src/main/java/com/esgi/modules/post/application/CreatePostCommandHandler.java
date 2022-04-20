@@ -26,7 +26,7 @@ public final class CreatePostCommandHandler implements CommandHandler<CreatePost
 
     public PostId handle(CreatePost createPost) {
         final PostId postId = postRepository.nextIdentity();
-        final UserId creatorId = new UserId(Integer.parseInt(createPost.creatorId));
+        final UserId creatorId = new UserId(createPost.creatorId);
         Post post = new Post(postId, createPost.content, creatorId);
         if(!Objects.equals(createPost.code.source, "")) {
             CreateCode createCode = new CreateCode(postId, createPost.code.source, createPost.code.language);

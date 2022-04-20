@@ -3,9 +3,9 @@ package com.esgi.modules.post.application;
 import com.esgi.kernel.Query;
 
 public class RetrievePostById implements Query {
-    int id;
+    String id;
 
-    public RetrievePostById(int id){
+    public RetrievePostById(String id){
         this.id = id;
     }
 }

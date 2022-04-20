@@ -3,9 +3,9 @@ package com.esgi.modules.post.application;
 import com.esgi.kernel.Query;
 
 public class RetrieveLikedPostsByUserId implements Query {
-    int id;
+    String id;
 
-    public RetrieveLikedPostsByUserId(int id){
+    public RetrieveLikedPostsByUserId(String id){
         this.id = id;
     }
 }

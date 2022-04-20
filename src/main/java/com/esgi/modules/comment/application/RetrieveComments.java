@@ -3,9 +3,9 @@ package com.esgi.modules.comment.application;
 import com.esgi.kernel.Query;
 
 public class RetrieveComments implements Query {
-    int id;
+    String id;
 
-    public RetrieveComments(int id){
+    public RetrieveComments(String id){
         this.id = id;
     }
 }

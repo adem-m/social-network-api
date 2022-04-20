@@ -3,9 +3,9 @@ package com.esgi.modules.follow.application;
 import com.esgi.kernel.Query;
 
 public class RetrieveFollowing implements Query {
-    int id;
+    String id;
 
-    public RetrieveFollowing(int id){
+    public RetrieveFollowing(String id){
         this.id = id;
     }
 }

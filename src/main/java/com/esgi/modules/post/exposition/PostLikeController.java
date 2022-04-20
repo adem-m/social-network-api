@@ -6,6 +6,10 @@ import com.esgi.modules.code.application.RetrieveCodeByPostId;
 import com.esgi.modules.code.domain.Code;
 import com.esgi.modules.code.exposition.CodeResponse;
 import com.esgi.modules.post.application.*;
+import com.esgi.modules.post.application.LikePost;
+import com.esgi.modules.post.application.RetrieveLikedPostsByUserId;
+import com.esgi.modules.post.application.RetrievePostById;
+import com.esgi.modules.post.application.UnlikePost;
 import com.esgi.modules.post.domain.Post;
 import com.esgi.modules.post.domain.PostLike;
 import org.springframework.http.HttpStatus;
@@ -39,8 +43,8 @@ public class PostLikeController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(path = "/likedPosts/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PostsResponse> getAllPostsLikedByUserId(@PathVariable int id) {
+    @GetMapping(path = "/likedPosts/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PostsResponse> getAllPostsLikedByUserId(@PathVariable String id) {
         final List<PostLike> likedPosts = (List<PostLike>) queryBus.send(new RetrieveLikedPostsByUserId(id));
         PostsResponse postsResponseResult = new PostsResponse(new ArrayList<>());
         for (PostLike postLike : likedPosts) {

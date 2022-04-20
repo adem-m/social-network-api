@@ -39,13 +39,13 @@ public class CommentLikeController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(path = "/likedComments/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<CommentsResponse> getCommentsLikedByUserId(@PathVariable int id) {
+    @GetMapping(path = "/likedComments/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<CommentsResponse> getCommentsLikedByUserId(@PathVariable String id) {
         final List<CommentLike> likedComments = (List<CommentLike>) queryBus.send(new RetrieveLikedCommentsByUserId(id));
         CommentsResponse commentsResponseResult = new CommentsResponse(new ArrayList<>());
         for (CommentLike commentLike : likedComments) {
             final Comment comment = (Comment) queryBus.send(new RetrieveCommentById(commentLike.getCommentId().getValue()));
-            commentsResponseResult.comments.add(new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getPostId().getValue()), comment.getContent(), String.valueOf(comment.getUserId()), comment.getDate()));
+            commentsResponseResult.comments.add(new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getPostId().getValue()), comment.getContent(), comment.getUserId().getValue(), comment.getDate()));
         }
         return ResponseEntity.ok(commentsResponseResult);
     }

@@ -19,7 +19,7 @@ public final class InMemoryFollowRepository implements FollowRepository {
 
     @Override
     public FollowId nextIdentity() {
-        return new FollowId(count.incrementAndGet());
+        return new FollowId(String.valueOf(count.incrementAndGet()));
     }
 
     @Override
@@ -60,7 +60,7 @@ public final class InMemoryFollowRepository implements FollowRepository {
 
     @Override
     public Follow findFollowBetweenTwoUser(UserId followerId, UserId followedId) {
-        if(data.values().stream().noneMatch(follow -> follow.getFollowerId().equals(followerId) && follow.getFollowedId().equals(followedId))){
+        if (data.values().stream().noneMatch(follow -> follow.getFollowerId().equals(followerId) && follow.getFollowedId().equals(followedId))) {
             return null;
         }
         return data.values().stream()

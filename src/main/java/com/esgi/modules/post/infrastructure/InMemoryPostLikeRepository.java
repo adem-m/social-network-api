@@ -1,7 +1,10 @@
 package com.esgi.modules.post.infrastructure;
 
 import com.esgi.kernel.NoSuchEntityException;
-import com.esgi.modules.post.domain.*;
+import com.esgi.modules.post.domain.PostId;
+import com.esgi.modules.post.domain.PostLike;
+import com.esgi.modules.post.domain.PostLikeId;
+import com.esgi.modules.post.domain.PostLikeRepository;
 import com.esgi.modules.user.domain.UserId;
 
 import java.util.List;
@@ -17,7 +20,7 @@ public final class InMemoryPostLikeRepository implements PostLikeRepository {
 
     @Override
     public PostLikeId nextIdentity() {
-        return new PostLikeId(count.incrementAndGet());
+        return new PostLikeId(String.valueOf(count.incrementAndGet()));
     }
 
     @Override

@@ -17,8 +17,8 @@ public final class LikePostCommandHandler implements CommandHandler<LikePost, Po
 
     public PostLikeId handle(LikePost likePost) {
         final PostLikeId postLikeId = postLikeRepository.nextIdentity();
-        final UserId userId = new UserId(Integer.parseInt(likePost.userId));
-        final PostId postId = new PostId(Integer.parseInt(likePost.postId));
+        final UserId userId = new UserId(likePost.userId);
+        final PostId postId = new PostId(likePost.postId);
         PostLike postLike = new PostLike(postLikeId, userId, postId);
         postLikeRepository.add(postLike);
         eventEventDispatcher.dispatch(new LikePostEvent(postLikeId));

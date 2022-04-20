@@ -4,6 +4,8 @@ import com.esgi.kernel.*;
 import com.esgi.modules.user.infrastructure.InMemoryUserRepository;
 import com.esgi.modules.user.application.*;
 import com.esgi.modules.user.domain.UserRepository;
+import com.esgi.modules.user.infrastructure.SpringDataUserRepository;
+import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,7 +19,7 @@ public class UserConfiguration {
 
     @Bean
     public UserRepository userRepository() {
-        return new InMemoryUserRepository();
+        return new SpringDataUserRepository();
     }
 
     @Bean

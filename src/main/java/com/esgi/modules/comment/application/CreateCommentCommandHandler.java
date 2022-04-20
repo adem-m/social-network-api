@@ -20,8 +20,8 @@ public final class CreateCommentCommandHandler implements CommandHandler<CreateC
 
     public CommentId handle(CreateComment createComment) {
         final CommentId commentId = commentRepository.nextIdentity();
-        final PostId postId = new PostId(Integer.parseInt(createComment.postId));
-        final UserId creatorId = new UserId(Integer.parseInt(createComment.creatorId));
+        final PostId postId = new PostId(createComment.postId);
+        final UserId creatorId = new UserId(createComment.creatorId);
         Comment comment = new Comment(commentId, postId, createComment.content, creatorId);
         commentRepository.add(comment);
         eventEventDispatcher.dispatch(new CreateCommentEvent(commentId));

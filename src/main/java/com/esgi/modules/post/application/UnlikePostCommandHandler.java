@@ -18,8 +18,8 @@ public final class UnlikePostCommandHandler implements CommandHandler<UnlikePost
     }
 
     public PostLikeId handle(UnlikePost unlikePost) {
-        final UserId userId = new UserId(Integer.parseInt(unlikePost.userId));
-        final PostId postId = new PostId(Integer.parseInt(unlikePost.postId));
+        final UserId userId = new UserId(unlikePost.userId);
+        final PostId postId = new PostId(unlikePost.postId);
         final PostLikeId postLikeId = postLikeRepository.findLikeByUserIdAndPostId(userId, postId).getPostLikeId();
         postLikeRepository.delete(postLikeId);
         eventEventDispatcher.dispatch(new UnlikePostEvent(postLikeId));

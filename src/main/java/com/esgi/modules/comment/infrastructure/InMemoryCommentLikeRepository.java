@@ -20,7 +20,7 @@ public final class InMemoryCommentLikeRepository implements CommentLikeRepositor
 
     @Override
     public CommentLikeId nextIdentity() {
-        return new CommentLikeId(count.incrementAndGet());
+        return new CommentLikeId(String.valueOf(count.incrementAndGet()));
     }
 
     @Override

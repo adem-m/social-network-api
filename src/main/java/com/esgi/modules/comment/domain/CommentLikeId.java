@@ -5,13 +5,13 @@ import com.esgi.kernel.ValueObjectID;
 import java.util.Objects;
 
 public final class CommentLikeId implements ValueObjectID {
-    private final int value;
+    private final String value;
 
-    public CommentLikeId(int value) {
+    public CommentLikeId(String value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 

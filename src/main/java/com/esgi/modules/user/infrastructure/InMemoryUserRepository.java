@@ -18,7 +18,7 @@ public final class InMemoryUserRepository implements UserRepository {
 
     @Override
     public UserId nextIdentity() {
-        return new UserId(count.incrementAndGet());
+        return new UserId(String.valueOf(count.incrementAndGet()));
     }
 
     @Override
@@ -52,8 +52,8 @@ public final class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public User findByEmail(String email){
-        if (data.values().stream().noneMatch(user -> user.getEmail().getEmail().equals(email))){
+    public User findByEmail(String email) {
+        if (data.values().stream().noneMatch(user -> user.getEmail().getEmail().equals(email))) {
             return null;
         }
         return data.values().stream()
