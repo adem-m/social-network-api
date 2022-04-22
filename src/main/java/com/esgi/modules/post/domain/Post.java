@@ -1,7 +1,6 @@
 package com.esgi.modules.post.domain;
 
 import com.esgi.kernel.Entity;
-import com.esgi.modules.code.domain.CodeId;
 import com.esgi.modules.user.domain.UserId;
 
 import java.util.Date;
@@ -11,13 +10,13 @@ public final class Post implements Entity<PostId> {
     private final PostId id;
     private String content;
     private final UserId userId;
-    private Date date;
+    private final Date date;
 
-    public Post(PostId id, String content, UserId userId) {
+    public Post(PostId id, String content, UserId userId, Date creationDate) {
         this.id = id;
         this.content = content;
         this.userId = userId;
-        this.date = new Date();
+        this.date = creationDate;
     }
 
     @Override

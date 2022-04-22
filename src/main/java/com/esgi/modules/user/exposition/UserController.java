@@ -67,7 +67,7 @@ public class UserController {
         return ResponseEntity.ok(usersResponseResult);
     }
 
-    @PutMapping(path = "/{id}/update", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserResponse> updateUser(@PathVariable String id, @RequestBody @Valid UpdateUserRequest request) {
         UpdateUser updateUser = new UpdateUser(id, new Email(request.email), request.password);
         commandBus.send(updateUser);
@@ -77,12 +77,10 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public Map<String, Boolean> deleteUser(@PathVariable String id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
         DeleteUser deleteUser = new DeleteUser(id);
         commandBus.send(deleteUser);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
+        return ResponseEntity.noContent().build();
     }
 
     //TODO getUserByToken

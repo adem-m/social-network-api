@@ -40,9 +40,7 @@ public class SpringDataUserRepository implements UserRepository {
 
     @Override
     public void delete(UserId id) {
-        jpaUserRepository.delete(
-                jpaUserRepository.findById(id.getValue())
-                        .orElseThrow(() -> NoSuchEntityException.withId(id)));
+        jpaUserRepository.deleteById(id.getValue());
     }
 
     @Override
