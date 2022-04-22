@@ -7,6 +7,7 @@ import com.esgi.modules.user.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -51,7 +52,7 @@ public class SpringDataUserRepository implements UserRepository {
 
     @Override
     public List<User> findByName(String name) {
-        return null;
+        return jpaUserRepository.findByName(name).stream().map(userMapper::toModel).collect(Collectors.toList());
     }
 
     @Override
@@ -64,4 +65,7 @@ public class SpringDataUserRepository implements UserRepository {
 @Repository
 interface JpaUserRepository extends JpaRepository<UserEntity, String> {
     UserEntity findByEmail(String email);
+
+    @Query("SELECT u FROM UserEntity u WHERE u.firstname LIKE %:name% OR u.lastname LIKE %:name%")
+    List<UserEntity> findByName(@Param("name") String name);
 }
