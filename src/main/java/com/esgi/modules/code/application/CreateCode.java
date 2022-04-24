@@ -1,8 +1,6 @@
 package com.esgi.modules.code.application;
 
 import com.esgi.kernel.Command;
-import com.esgi.modules.code.domain.CodeId;
-import com.esgi.modules.codeCompiler.domain.Language;
 import com.esgi.modules.post.domain.PostId;
 
 import java.util.Objects;

@@ -3,7 +3,6 @@ package com.esgi;
 import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.EventDispatcher;
 import com.esgi.kernel.QueryBus;
-import com.esgi.modules.post.infrastructure.InMemoryPostRepository;
 import com.esgi.modules.post.application.*;
 import com.esgi.modules.post.domain.PostRepository;
 import com.esgi.modules.post.infrastructure.SpringDataPostRepository;

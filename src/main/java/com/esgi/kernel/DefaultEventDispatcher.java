@@ -1,13 +1,12 @@
 package com.esgi.kernel;
 
-import com.esgi.kernel.Event;
-import com.esgi.kernel.EventDispatcher;
-import com.esgi.kernel.EventListener;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public final class DefaultEventDispatcher<E extends Event> implements EventDispatcher<E> {
     private final Map<Class<E>, List<EventListener<E>>> eventListeners;
 
@@ -28,7 +27,7 @@ public final class DefaultEventDispatcher<E extends Event> implements EventDispa
     public void dispatch(E event) {
         final List<EventListener<E>> eventListeners = this.eventListeners.get(event.getClass());
         if (eventListeners != null) {
-            System.out.println("Dispatched " + event.getClass().getSimpleName() + " event.");
+            log.info("Dispatched {} event.", event.getClass().getSimpleName());
             eventListeners.forEach(e -> e.listenTo(event));
         }
     }

@@ -3,7 +3,6 @@ package com.esgi.modules.code.application;
 import com.esgi.kernel.QueryHandler;
 import com.esgi.modules.code.domain.Code;
 import com.esgi.modules.code.domain.CodeRepository;
-import com.esgi.modules.post.domain.PostId;
 
 public class RetrieveCodeByPostIdHandler implements QueryHandler<RetrieveCodeByPostId, Code> {
     private final CodeRepository codeRepository;

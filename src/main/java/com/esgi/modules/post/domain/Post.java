@@ -1,7 +1,6 @@
 package com.esgi.modules.post.domain;
 
 import com.esgi.kernel.Entity;
-import com.esgi.modules.code.domain.CodeId;
 import com.esgi.modules.user.domain.UserId;
 
 import java.util.Date;

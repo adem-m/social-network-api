@@ -1,8 +1,6 @@
 package com.esgi.modules.post.application;
 
 import com.esgi.kernel.Command;
-import com.esgi.modules.post.domain.PostId;
-import com.esgi.modules.user.domain.UserId;
 
 /**
  * Command object

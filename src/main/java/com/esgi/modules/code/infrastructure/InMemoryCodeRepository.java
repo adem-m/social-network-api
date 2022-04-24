@@ -4,7 +4,6 @@ import com.esgi.kernel.NoSuchEntityException;
 import com.esgi.modules.code.domain.Code;
 import com.esgi.modules.code.domain.CodeId;
 import com.esgi.modules.code.domain.CodeRepository;
-import com.esgi.modules.post.domain.PostId;
 
 import java.util.List;
 import java.util.Map;

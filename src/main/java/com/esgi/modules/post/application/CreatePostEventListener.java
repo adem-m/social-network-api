@@ -1,10 +1,12 @@
 package com.esgi.modules.post.application;
 
 import com.esgi.kernel.EventListener;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class CreatePostEventListener implements EventListener<CreatePostEvent> {
     @Override
     public void listenTo(CreatePostEvent event) {
-        System.out.println("listening CreatePostEvent.");
+        log.info("listening CreatePostEvent.");
     }
 }

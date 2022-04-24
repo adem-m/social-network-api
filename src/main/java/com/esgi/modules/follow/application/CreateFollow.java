@@ -1,7 +1,6 @@
 package com.esgi.modules.follow.application;
 
 import com.esgi.kernel.Command;
-import com.esgi.modules.user.domain.UserId;
 
 /**
  * Command object
