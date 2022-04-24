@@ -1,5 +1,6 @@
 package com.esgi.modules.post.application;
 
+import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.CommandHandler;
 import com.esgi.kernel.Event;
 import com.esgi.kernel.EventDispatcher;
@@ -15,10 +16,12 @@ import java.util.Objects;
 public final class CreatePostCommandHandler implements CommandHandler<CreatePost, PostId> {
     private final PostRepository postRepository;
     private final EventDispatcher<Event> eventEventDispatcher;
+    private final CommandBus commandBus;
 
-    public CreatePostCommandHandler(PostRepository postRepository, EventDispatcher<Event> eventEventDispatcher) {
+    public CreatePostCommandHandler(PostRepository postRepository, EventDispatcher<Event> eventEventDispatcher, CommandBus commandBus) {
         this.postRepository = postRepository;
         this.eventEventDispatcher = eventEventDispatcher;
+        this.commandBus = commandBus;
     }
 
     public PostId handle(CreatePost createPost) {
@@ -27,7 +30,7 @@ public final class CreatePostCommandHandler implements CommandHandler<CreatePost
         Post post = new Post(postId, createPost.content, creatorId, new Date());
         if(!Objects.equals(createPost.code.source, "")) {
             CreateCode createCode = new CreateCode(postId, createPost.code.source, createPost.code.language);
-            createPost.commandBus.send(createCode);
+            commandBus.send(createCode);
         }
         postRepository.add(post);
         eventEventDispatcher.dispatch(new CreatePostEvent(postId));

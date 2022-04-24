@@ -14,12 +14,10 @@ public final class CreatePost implements Command {
     public String content;
     public CodeRequest code;
     public final String creatorId;
-    public final CommandBus commandBus;
 
-    public CreatePost(String content, CodeRequest code, String creatorId, CommandBus commandBus) {
+    public CreatePost(String content, CodeRequest code, String creatorId) {
         this.content = content;
         this.code = code;
         this.creatorId = Objects.requireNonNull(creatorId);
-        this.commandBus = commandBus;
     }
 }

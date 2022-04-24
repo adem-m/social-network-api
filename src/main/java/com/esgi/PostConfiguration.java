@@ -32,7 +32,7 @@ public class PostConfiguration {
 
     @Bean
     public CreatePostCommandHandler createPostCommandHandler() {
-        return new CreatePostCommandHandler(postRepository(), kernelConfiguration.eventDispatcher());
+        return new CreatePostCommandHandler(postRepository(), kernelConfiguration.eventDispatcher(), kernelConfiguration.commandBus());
     }
 
     @Bean
