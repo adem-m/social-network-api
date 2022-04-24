@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/posts")
+@RequestMapping(value = "/posts", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class PostController {
     private final CommandBus commandBus;
     private final QueryBus queryBus;
@@ -37,7 +37,7 @@ public class PostController {
     public ResponseEntity<Void> create(@RequestBody @Valid PostRequest request) {
         CreatePost createPost = new CreatePost(request.content, request.code, request.userId);
         PostId postId = (PostId) commandBus.send(createPost);
-        return ResponseEntity.created(URI.create("/post/" + postId.getValue())).build();
+        return ResponseEntity.created(URI.create("/posts/" + postId.getValue())).build();
     }
 
     @GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -55,7 +55,7 @@ public class PostController {
         PostsResponse postsResponseResult = new PostsResponse(new ArrayList<>());
         for (Post post : posts) {
             final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
-            postsResponseResult.posts.add(new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(),
+            postsResponseResult.posts.add(new PostResponse(post.getId().getValue(), post.getContent(),
                     new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId().getValue(), code.getSource(), code.getLanguage()), String.valueOf(post.getUserId()), post.getDate()));
         }
         return ResponseEntity.ok(postsResponseResult);

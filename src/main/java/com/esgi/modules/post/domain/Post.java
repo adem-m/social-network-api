@@ -62,8 +62,8 @@ public final class Post implements Entity<PostId> {
         return "Post{" +
                 "id=" + id +
                 ", content='" + content + '\'' +
-                ", creatorId='" + userId + '\'' +
-                ", date='" + date + '\'' +
+                ", userId=" + userId +
+                ", date=" + date +
                 '}';
     }
 }
