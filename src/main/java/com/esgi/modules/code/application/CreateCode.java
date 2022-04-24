@@ -14,9 +14,9 @@ import java.util.Objects;
 public final class CreateCode implements Command {
     public final PostId postId;
     public String source;
-    public Language language;
+    public String language;
 
-    public CreateCode(PostId postId, String source, Language language) {
+    public CreateCode(PostId postId, String source, String language) {
         this.postId = Objects.requireNonNull(postId);
         this.source = Objects.requireNonNull(source);
         this.language = Objects.requireNonNull(language);

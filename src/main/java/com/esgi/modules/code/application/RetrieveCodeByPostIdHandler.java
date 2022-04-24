@@ -14,7 +14,6 @@ public class RetrieveCodeByPostIdHandler implements QueryHandler<RetrieveCodeByP
 
     @Override
     public Code handle(RetrieveCodeByPostId query) {
-        PostId postId = new PostId(query.id);
-        return codeRepository.findByPostId(postId);
+        return codeRepository.findByPostId(query.id);
     }
 }

@@ -7,6 +7,7 @@ import com.esgi.modules.code.domain.Code;
 import com.esgi.modules.code.exposition.CodeResponse;
 import com.esgi.modules.post.application.*;
 import com.esgi.modules.post.domain.Post;
+import com.esgi.modules.post.domain.PostId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +16,14 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("unused")
 @RestController
+@RequestMapping("/posts")
 public class PostController {
     private final CommandBus commandBus;
     private final QueryBus queryBus;
@@ -31,52 +33,50 @@ public class PostController {
         this.queryBus = queryBus;
     }
 
-    @PostMapping(path = "/post", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> create(@RequestBody @Valid PostRequest request) {
-        CreatePost createPost = new CreatePost(request.content, request.code, request.userId);
-        commandBus.send(createPost);
-        return ResponseEntity.ok().build();
+        CreatePost createPost = new CreatePost(request.content, request.code, request.userId, commandBus);
+        PostId postId = (PostId) commandBus.send(createPost);
+        return ResponseEntity.created(URI.create("/posts/id=" + postId.getValue())).build();
     }
 
-    @GetMapping(path = "/post/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PostResponse> getPostById(@PathVariable String id) {
         final Post post = (Post) queryBus.send(new RetrievePostById(id));
-        final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
+        final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(String.valueOf(post.getId().getValue())));
         PostResponse postResponseResult = new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(),
-                new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId(), code.getSource(), code.getLanguage()), post.getUserId().getValue(), post.getDate());
+                new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId().getValue(), code.getSource(), code.getLanguage()), post.getUserId().getValue(), post.getDate());
         return ResponseEntity.ok(postResponseResult);
     }
 
-    @GetMapping(path = "/posts/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/user={id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PostsResponse> getAllPostsByUserId(@PathVariable String id) {
         final List<Post> posts = (List<Post>) queryBus.send(new RetrievePostsByUserId(id));
         PostsResponse postsResponseResult = new PostsResponse(new ArrayList<>());
         for (Post post : posts) {
             final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
             postsResponseResult.posts.add(new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(),
-                    new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId(), code.getSource(), code.getLanguage()), String.valueOf(post.getUserId()), post.getDate()));
+                    new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId().getValue(), code.getSource(), code.getLanguage()), String.valueOf(post.getUserId()), post.getDate()));
         }
         return ResponseEntity.ok(postsResponseResult);
     }
 
-    @PutMapping(path = "/post/{id}/edit", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PostResponse> edit(@PathVariable String id, @RequestBody @Valid PostRequest request) {
         EditPost editPost = new EditPost(id, request.content);
         commandBus.send(editPost);
         final Post post = (Post) queryBus.send(new RetrievePostById(editPost.postId));
         final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
         PostResponse postResponseResult = new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(),
-                new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId(), code.getSource(), code.getLanguage()), String.valueOf(post.getUserId()), post.getDate());
+                new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId().getValue(), code.getSource(), code.getLanguage()), String.valueOf(post.getUserId()), post.getDate());
         return ResponseEntity.ok(postResponseResult);
     }
 
-    @DeleteMapping(path = "/post/{id}")
-    public Map<String, Boolean> deletePost(@PathVariable String id) {
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> deletePost(@PathVariable String id) {
         DeletePost deletePost = new DeletePost(id);
         commandBus.send(deletePost);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
+        return ResponseEntity.noContent().build();
     }
 
     //TODO share a post

@@ -1,7 +1,6 @@
 package com.esgi.modules.code.domain;
 
 import com.esgi.kernel.Entity;
-import com.esgi.modules.codeCompiler.domain.Language;
 import com.esgi.modules.post.domain.PostId;
 
 import java.util.Objects;
@@ -10,9 +9,9 @@ public final class Code implements Entity<CodeId> {
     private final CodeId codeId;
     private final PostId postId;
     private String source;
-    private final Language language;
+    private final String language;
 
-    public Code(CodeId codeId, PostId postId, String source, Language language){
+    public Code(CodeId codeId, PostId postId, String source, String language){
         this.codeId = Objects.requireNonNull(codeId);
         this.postId = Objects.requireNonNull(postId);
         this.source = Objects.requireNonNull(source);
@@ -36,7 +35,7 @@ public final class Code implements Entity<CodeId> {
         return source;
     }
 
-    public Language getLanguage() {
+    public String getLanguage() {
         return language;
     }
 

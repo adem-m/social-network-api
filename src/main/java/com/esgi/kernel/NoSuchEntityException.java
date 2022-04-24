@@ -15,31 +15,31 @@ public final class NoSuchEntityException extends RuntimeException {
     }
 
     public static NoSuchEntityException withId(UserId id) {
-        return new NoSuchEntityException(String.format("No User found with ID %d.", id.getValue()));
+        return new NoSuchEntityException(String.format("No User found with ID %s.", id.getValue()));
     }
 
     public static NoSuchEntityException withId(PostId id) {
-        return new NoSuchEntityException(String.format("No Post found with ID %d.", id.getValue()));
+        return new NoSuchEntityException(String.format("No Post found with ID %s.", id.getValue()));
     }
 
     public static NoSuchEntityException withId(PostLikeId id) {
-        return new NoSuchEntityException(String.format("No PostLike found with ID %d.", id.getValue()));
+        return new NoSuchEntityException(String.format("No PostLike found with ID %s.", id.getValue()));
     }
 
     public static NoSuchEntityException withId(CodeId id) {
-        return new NoSuchEntityException(String.format("No Code found with ID %d.", id.getValue()));
+        return new NoSuchEntityException(String.format("No Code found with ID %s.", id.getValue()));
     }
 
     public static NoSuchEntityException withId(FollowId id) {
-        return new NoSuchEntityException(String.format("No Follow found with ID %d.", id.getValue()));
+        return new NoSuchEntityException(String.format("No Follow found with ID %s.", id.getValue()));
     }
 
     public static NoSuchEntityException withId(CommentId id) {
-        return new NoSuchEntityException(String.format("No Comment found with ID %d.", id.getValue()));
+        return new NoSuchEntityException(String.format("No Comment found with ID %s.", id.getValue()));
     }
 
     public static NoSuchEntityException withId(CommentLikeId id) {
-        return new NoSuchEntityException(String.format("No CommentLike found with ID %d.", id.getValue()));
+        return new NoSuchEntityException(String.format("No CommentLike found with ID %s.", id.getValue()));
     }
 
     public static NoSuchEntityException withId(String email) {

@@ -8,5 +8,5 @@ import java.util.List;
 public interface CodeRepository extends Repository<CodeId, Code> {
     List<Code> findAll();
 
-    Code findByPostId(PostId id);
+    Code findByPostId(String id);
 }

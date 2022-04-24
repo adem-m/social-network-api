@@ -4,9 +4,9 @@ import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.QueryBus;
 import com.esgi.modules.follow.application.*;
 import com.esgi.modules.follow.domain.Follow;
+import com.esgi.modules.follow.domain.FollowId;
 import com.esgi.modules.user.application.RetrieveUserById;
 import com.esgi.modules.user.domain.User;
-import com.esgi.modules.user.exposition.EmailResponse;
 import com.esgi.modules.user.exposition.UserResponse;
 import com.esgi.modules.user.exposition.UsersResponse;
 import org.springframework.http.HttpStatus;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,8 +38,8 @@ public class FollowController {
     @PostMapping(path = "/follow", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createFollow(@RequestBody @Valid FollowRequest request) {
         CreateFollow createFollow = new CreateFollow(request.followerId, request.followedId);
-        commandBus.send(createFollow);
-        return ResponseEntity.ok().build();
+        FollowId followId = (FollowId) commandBus.send(createFollow);
+        return ResponseEntity.created(URI.create("/follows/id=" + followId.getValue())).build();
     }
 
     @GetMapping(path = "/following/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -57,7 +58,13 @@ public class FollowController {
         UsersResponse usersResponseResult = new UsersResponse(new ArrayList<>());
         for (Follow follow : follows) {
             final User user = (User) queryBus.send(new RetrieveUserById(follow.getFollowedId().getValue()));
-            usersResponseResult.members.add(new UserResponse(String.valueOf(user.getId().getValue()), user.getLastname(), user.getFirstname(), new EmailResponse(user.getEmail().getEmail()), user.getPassword()));
+            usersResponseResult.members.add(
+                    new UserResponse(
+                            String.valueOf(user.getId().getValue()),
+                            user.getLastname(),
+                            user.getFirstname(),
+                            user.getEmail().getEmail(),
+                            user.getPassword()));
         }
         return ResponseEntity.ok(usersResponseResult);
     }
@@ -75,12 +82,10 @@ public class FollowController {
     }
 
     @DeleteMapping(path = "/unfollow", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Boolean> unfollow(@RequestBody @Valid FollowRequest request) {
+    public ResponseEntity<Void> unfollow(@RequestBody @Valid FollowRequest request) {
         Unfollow unfollow = new Unfollow(request.followerId, request.followedId);
         commandBus.send(unfollow);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("unfollowed", Boolean.TRUE);
-        return response;
+        return ResponseEntity.noContent().build();
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
