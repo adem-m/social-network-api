@@ -34,7 +34,11 @@ public class UserController {
 
     @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> register(@RequestBody @Valid UserRequest request) {
-        CreateUser createUser = new CreateUser(request.lastname, request.firstname, new Email(request.email), request.password);
+        CreateUser createUser = new CreateUser(
+                request.lastname,
+                request.firstname,
+                new Email(request.email),
+                request.password);
         UserId userId = (UserId) commandBus.send(createUser);
         return ResponseEntity.created(URI.create("/users/id=" + userId.getValue())).build();
     }
@@ -42,28 +46,54 @@ public class UserController {
     @GetMapping(path = "/id={id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserResponse> getUserById(@PathVariable String id) {
         final User user = (User) queryBus.send(new RetrieveUserById(id));
-        UserResponse userResponseResult = new UserResponse(String.valueOf(user.getId().getValue()), user.getLastname(), user.getFirstname(), new EmailResponse(user.getEmail().getEmail()), user.getPassword());
+        UserResponse userResponseResult =
+                new UserResponse(
+                        String.valueOf(user.getId().getValue()),
+                        user.getLastname(),
+                        user.getFirstname(),
+                        user.getEmail().getEmail(),
+                        user.getPassword());
         return ResponseEntity.ok(userResponseResult);
     }
 
     @GetMapping(path = "/email={email}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String email) {
         final User user = (User) queryBus.send(new RetrieveUserByEmail(email));
-        UserResponse userResponseResult = new UserResponse(String.valueOf(user.getId().getValue()), user.getLastname(), user.getFirstname(), new EmailResponse(user.getEmail().getEmail()), user.getPassword());
+        UserResponse userResponseResult =
+                new UserResponse(
+                        String.valueOf(user.getId().getValue()),
+                        user.getLastname(),
+                        user.getFirstname(),
+                        user.getEmail().getEmail(),
+                        user.getPassword());
         return ResponseEntity.ok(userResponseResult);
     }
 
     @GetMapping(path = "/{name}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UsersResponse> getUserByName(@PathVariable String name) {
         final List<User> users = (List<User>) queryBus.send(new RetrieveUsersByName(name));
-        UsersResponse usersResponseResult = new UsersResponse(users.stream().map(user -> new UserResponse(String.valueOf(user.getId().getValue()), user.getLastname(), user.getFirstname(), new EmailResponse(user.getEmail().getEmail()), user.getPassword())).collect(Collectors.toList()));
+        UsersResponse usersResponseResult =
+                new UsersResponse(users.stream().map(user ->
+                        new UserResponse(
+                                String.valueOf(user.getId().getValue()),
+                                user.getLastname(),
+                                user.getFirstname(),
+                                user.getEmail().getEmail(),
+                                user.getPassword())).collect(Collectors.toList()));
         return ResponseEntity.ok(usersResponseResult);
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UsersResponse> getAllUsers() {
         final List<User> users = (List<User>) queryBus.send(new RetrieveUsers());
-        UsersResponse usersResponseResult = new UsersResponse(users.stream().map(user -> new UserResponse(String.valueOf(user.getId().getValue()), user.getLastname(), user.getFirstname(), new EmailResponse(user.getEmail().getEmail()), user.getPassword())).collect(Collectors.toList()));
+        UsersResponse usersResponseResult =
+                new UsersResponse(users.stream().map(user ->
+                        new UserResponse(
+                                String.valueOf(user.getId().getValue()),
+                                user.getLastname(),
+                                user.getFirstname(),
+                                user.getEmail().getEmail(),
+                                user.getPassword())).collect(Collectors.toList()));
         return ResponseEntity.ok(usersResponseResult);
     }
 
@@ -72,7 +102,13 @@ public class UserController {
         UpdateUser updateUser = new UpdateUser(id, new Email(request.email), request.password);
         commandBus.send(updateUser);
         final User user = (User) queryBus.send(new RetrieveUserById(updateUser.userId));
-        UserResponse userResponseResult = new UserResponse(String.valueOf(user.getId().getValue()), user.getLastname(), user.getFirstname(), new EmailResponse(user.getEmail().getEmail()), user.getPassword());
+        UserResponse userResponseResult =
+                new UserResponse(
+                        String.valueOf(user.getId().getValue()),
+                        user.getLastname(),
+                        user.getFirstname(),
+                        user.getEmail().getEmail(),
+                        user.getPassword());
         return ResponseEntity.ok(userResponseResult);
     }
 

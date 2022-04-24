@@ -1,5 +1,6 @@
 package com.esgi.modules.user.application;
 
+import com.esgi.kernel.AlreadyExistsException;
 import com.esgi.kernel.CommandHandler;
 import com.esgi.kernel.Event;
 import com.esgi.kernel.EventDispatcher;
@@ -25,6 +26,6 @@ public final class CreateUserCommandHandler implements CommandHandler<CreateUser
             eventEventDispatcher.dispatch(new CreateUserEvent(userId));
             return userId;
         }
-        throw new IllegalStateException("User with email " + createUser.email.getEmail() + " already exists");
+        throw AlreadyExistsException.withEmail(createUser.email);
     }
 }

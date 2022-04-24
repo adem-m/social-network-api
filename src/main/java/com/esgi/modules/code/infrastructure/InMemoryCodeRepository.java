@@ -4,7 +4,6 @@ import com.esgi.kernel.NoSuchEntityException;
 import com.esgi.modules.code.domain.Code;
 import com.esgi.modules.code.domain.CodeId;
 import com.esgi.modules.code.domain.CodeRepository;
-import com.esgi.modules.post.domain.PostId;
 
 import java.util.List;
 import java.util.Map;
@@ -47,10 +46,10 @@ public final class InMemoryCodeRepository implements CodeRepository {
     }
 
     @Override
-    public Code findByPostId(PostId id) {
-        if (data.values().stream().noneMatch(code -> code.getPostId().equals(id))){
+    public Code findByPostId(String id) {
+        if (data.values().stream().noneMatch(code -> code.getPostId().getValue().equals(id))){
             return null;
         }
-        return data.values().stream().filter(code -> code.getPostId().equals(id)).collect(Collectors.toList()).get(0);
+        return data.values().stream().filter(code -> code.getPostId().getValue().equals(id)).collect(Collectors.toList()).get(0);
     }
 }

@@ -8,6 +8,7 @@ import com.esgi.modules.comment.application.RetrieveLikedCommentsByUserId;
 import com.esgi.modules.comment.application.UnlikeComment;
 import com.esgi.modules.comment.domain.Comment;
 import com.esgi.modules.comment.domain.CommentLike;
+import com.esgi.modules.comment.domain.CommentLikeId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.Map;
 
 @SuppressWarnings("unused")
 @RestController
+@RequestMapping("/likeComments")
 public class CommentLikeController {
     private final CommandBus commandBus;
     private final QueryBus queryBus;
@@ -32,14 +35,14 @@ public class CommentLikeController {
         this.queryBus = queryBus;
     }
 
-    @PostMapping(path = "/likeComment", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> likeComment(@RequestBody @Valid CommentLikeRequest request) {
         LikeComment likeComment = new LikeComment(request.userId, request.commentId);
-        commandBus.send(likeComment);
-        return ResponseEntity.ok().build();
+        CommentLikeId commentLikeId = (CommentLikeId) commandBus.send(likeComment);
+        return ResponseEntity.created(URI.create("/likeComments/id=" + commentLikeId.getValue())).build();
     }
 
-    @GetMapping(path = "/likedComments/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<CommentsResponse> getCommentsLikedByUserId(@PathVariable String id) {
         final List<CommentLike> likedComments = (List<CommentLike>) queryBus.send(new RetrieveLikedCommentsByUserId(id));
         CommentsResponse commentsResponseResult = new CommentsResponse(new ArrayList<>());
@@ -50,13 +53,11 @@ public class CommentLikeController {
         return ResponseEntity.ok(commentsResponseResult);
     }
 
-    @DeleteMapping(path= "/unlikeComment", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Boolean> unlikeComment(@RequestBody @Valid CommentLikeRequest request) {
+    @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> unlikeComment(@RequestBody @Valid CommentLikeRequest request) {
         UnlikeComment unlikeComment = new UnlikeComment(request.userId, request.commentId);
         commandBus.send(unlikeComment);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("unlikeComment", Boolean.TRUE);
-        return response;
+        return ResponseEntity.noContent().build();
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

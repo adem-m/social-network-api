@@ -3,7 +3,10 @@ package com.esgi.modules.post.application;
 import com.esgi.kernel.CommandHandler;
 import com.esgi.kernel.Event;
 import com.esgi.kernel.EventDispatcher;
-import com.esgi.modules.post.domain.*;
+import com.esgi.modules.post.domain.PostId;
+import com.esgi.modules.post.domain.PostLike;
+import com.esgi.modules.post.domain.PostLikeId;
+import com.esgi.modules.post.domain.PostLikeRepository;
 import com.esgi.modules.user.domain.UserId;
 
 public final class LikePostCommandHandler implements CommandHandler<LikePost, PostLikeId> {

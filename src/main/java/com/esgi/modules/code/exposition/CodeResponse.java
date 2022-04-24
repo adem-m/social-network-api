@@ -1,15 +1,12 @@
 package com.esgi.modules.code.exposition;
 
-import com.esgi.modules.codeCompiler.domain.Language;
-import com.esgi.modules.post.domain.PostId;
-
 public class CodeResponse {
     public String id;
-    public PostId postId;
+    public String postId;
     public String source;
-    public Language language;
+    public String language;
 
-    public CodeResponse(String id, PostId postId, String source, Language language){
+    public CodeResponse(String id, String postId, String source, String language){
         this.id = id;
         this.postId = postId;
         this.source = source;

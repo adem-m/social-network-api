@@ -4,10 +4,10 @@ public class UserResponse {
     public String id;
     public String lastname;
     public String firstname;
-    public EmailResponse email;
+    public String email;
     public String password;
 
-    public UserResponse(String id, String lastname, String firstname, EmailResponse email, String password) {
+    public UserResponse(String id, String lastname, String firstname, String email, String password) {
         this.id = id;
         this.lastname = lastname;
         this.firstname = firstname;

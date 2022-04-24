@@ -3,8 +3,6 @@ package com.esgi.modules.user.application;
 import com.esgi.kernel.Command;
 import com.esgi.modules.user.domain.Email;
 
-import java.util.Objects;
-
 public final class UpdateUser implements Command {
     public final String userId;
     public Email email;

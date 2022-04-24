@@ -45,7 +45,7 @@ public class PostController {
         final Post post = (Post) queryBus.send(new RetrievePostById(id));
         final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
         PostResponse postResponseResult = new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(),
-                new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId(), code.getSource(), code.getLanguage()), post.getUserId().getValue(), post.getDate());
+                new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId().getValue(), code.getSource(), code.getLanguage()), post.getUserId().getValue(), post.getDate());
         return ResponseEntity.ok(postResponseResult);
     }
 
@@ -56,7 +56,7 @@ public class PostController {
         for (Post post : posts) {
             final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
             postsResponseResult.posts.add(new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(),
-                    new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId(), code.getSource(), code.getLanguage()), String.valueOf(post.getUserId()), post.getDate()));
+                    new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId().getValue(), code.getSource(), code.getLanguage()), String.valueOf(post.getUserId()), post.getDate()));
         }
         return ResponseEntity.ok(postsResponseResult);
     }
@@ -68,7 +68,7 @@ public class PostController {
         final Post post = (Post) queryBus.send(new RetrievePostById(editPost.postId));
         final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
         PostResponse postResponseResult = new PostResponse(String.valueOf(post.getId().getValue()), post.getContent(),
-                new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId(), code.getSource(), code.getLanguage()), String.valueOf(post.getUserId()), post.getDate());
+                new CodeResponse(String.valueOf(code.getCodeId().getValue()), code.getPostId().getValue(), code.getSource(), code.getLanguage()), String.valueOf(post.getUserId()), post.getDate());
         return ResponseEntity.ok(postResponseResult);
     }
 
