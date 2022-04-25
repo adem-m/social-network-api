@@ -31,7 +31,7 @@ public final class CommentLikeId implements ValueObjectID {
     @Override
     public String toString() {
         return "CommentLikeId{" +
-                "value=" + value +
+                "value='" + value + '\'' +
                 '}';
     }
 }

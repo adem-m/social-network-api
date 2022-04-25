@@ -21,6 +21,7 @@ public final class CreateFollowCommandHandler implements CommandHandler<CreateFo
     public FollowId handle(CreateFollow createFollow) {
         final UserId followerId = new UserId(createFollow.followerId);
         final UserId followedId = new UserId(createFollow.followedId);
+        // Voir avec le front si followerId doit etre different de followedId
         if(followRepository.findFollowBetweenTwoUser(followerId, followedId) == null) {
             final FollowId followId = followRepository.nextIdentity();
             Follow follow = new Follow(followId, followerId, followedId);

@@ -49,8 +49,9 @@ public final class CommentLike implements Entity<CommentLikeId> {
     @Override
     public String toString() {
         return "CommentLike{" +
-                ", userId='" + userId + '\'' +
-                ", postId='" + commentId + '\'' +
+                "commentLikeId=" + commentLikeId +
+                ", userId=" + userId +
+                ", commentId=" + commentId +
                 '}';
     }
 }

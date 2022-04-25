@@ -30,8 +30,8 @@ public final class FollowId implements ValueObjectID {
 
     @Override
     public String toString() {
-        return "FriendshipId{" +
-                "value=" + value +
+        return "FollowId{" +
+                "value='" + value + '\'' +
                 '}';
     }
 }

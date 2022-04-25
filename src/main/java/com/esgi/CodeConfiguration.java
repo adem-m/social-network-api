@@ -5,7 +5,7 @@ import com.esgi.kernel.EventDispatcher;
 import com.esgi.kernel.QueryBus;
 import com.esgi.modules.code.application.*;
 import com.esgi.modules.code.domain.CodeRepository;
-import com.esgi.modules.code.infrastructure.InMemoryCodeRepository;
+import com.esgi.modules.code.infrastructure.SpringDataCodeRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,7 +19,7 @@ public class CodeConfiguration {
 
     @Bean
     public CodeRepository codeRepository() {
-        return new InMemoryCodeRepository();
+        return new SpringDataCodeRepository();
     }
 
     @Bean

@@ -59,10 +59,10 @@ public final class Code implements Entity<CodeId> {
     @Override
     public String toString() {
         return "Code{" +
-                "id=" + codeId +
-                ", postId='" + postId + '\'' +
+                "codeId=" + codeId +
+                ", postId=" + postId +
                 ", source='" + source + '\'' +
-                ", language='" + language +
+                ", language='" + language + '\'' +
                 '}';
     }
 }

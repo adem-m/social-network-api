@@ -54,7 +54,7 @@ public final class InMemoryCommentLikeRepository implements CommentLikeRepositor
     }
 
     @Override
-    public CommentLike findLikeByUserIdAndPostId(UserId userId, CommentId commentId) {
+    public CommentLike findLikeByUserIdAndCommentId(UserId userId, CommentId commentId) {
         if(data.values().stream().noneMatch(commentLike -> commentLike.getUserId().equals(userId) && commentLike.getCommentId().equals(commentId))){
             return null;
         }

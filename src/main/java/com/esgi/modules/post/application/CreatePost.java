@@ -1,7 +1,6 @@
 package com.esgi.modules.post.application;
 
 import com.esgi.kernel.Command;
-import com.esgi.kernel.CommandBus;
 import com.esgi.modules.code.exposition.CodeRequest;
 
 import java.util.Objects;

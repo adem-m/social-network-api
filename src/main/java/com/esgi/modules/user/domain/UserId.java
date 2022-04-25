@@ -31,7 +31,7 @@ public final class UserId implements ValueObjectID {
     @Override
     public String toString() {
         return "UserId{" +
-                "value=" + value +
+                "value='" + value + '\'' +
                 '}';
     }
 }

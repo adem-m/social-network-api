@@ -71,7 +71,7 @@ public final class User implements Entity<UserId> {
                 "id=" + id +
                 ", lastname='" + lastname + '\'' +
                 ", firstname='" + firstname + '\'' +
-                ", email='" + email + '\'' +
+                ", email=" + email +
                 ", password='" + password + '\'' +
                 '}';
     }

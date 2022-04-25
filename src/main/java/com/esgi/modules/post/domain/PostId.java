@@ -31,7 +31,7 @@ public final class PostId implements ValueObjectID {
     @Override
     public String toString() {
         return "PostId{" +
-                "value=" + value +
+                "value='" + value + '\'' +
                 '}';
     }
 }

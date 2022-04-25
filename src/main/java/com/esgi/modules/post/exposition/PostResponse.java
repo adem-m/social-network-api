@@ -2,6 +2,7 @@ package com.esgi.modules.post.exposition;
 
 import com.esgi.modules.code.exposition.CodeResponse;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class PostResponse {
@@ -9,9 +10,9 @@ public class PostResponse {
     public String content;
     public CodeResponse code;
     public String userId;
-    public Date date;
+    public LocalDateTime date;
 
-    public PostResponse(String id, String content, CodeResponse code, String userId, Date date){
+    public PostResponse(String id, String content, CodeResponse code, String userId, LocalDateTime date){
         this.id = id;
         this.content = content;
         this.code = code;

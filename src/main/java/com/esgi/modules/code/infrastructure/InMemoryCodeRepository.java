@@ -18,7 +18,7 @@ public final class InMemoryCodeRepository implements CodeRepository {
 
     @Override
     public CodeId nextIdentity() {
-        return new CodeId(count.incrementAndGet());
+        return new CodeId(String.valueOf(count.incrementAndGet()));
     }
 
     @Override

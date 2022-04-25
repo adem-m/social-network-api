@@ -9,19 +9,14 @@ import com.esgi.modules.comment.application.UnlikeComment;
 import com.esgi.modules.comment.domain.Comment;
 import com.esgi.modules.comment.domain.CommentLike;
 import com.esgi.modules.comment.domain.CommentLikeId;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @SuppressWarnings("unused")
 @RestController
@@ -39,6 +34,8 @@ public class CommentLikeController {
     public ResponseEntity<Void> likeComment(@RequestBody @Valid CommentLikeRequest request) {
         LikeComment likeComment = new LikeComment(request.userId, request.commentId);
         CommentLikeId commentLikeId = (CommentLikeId) commandBus.send(likeComment);
+        if(commentLikeId == null)
+            return ResponseEntity.noContent().build();
         return ResponseEntity.created(URI.create("/likeComments/id=" + commentLikeId.getValue())).build();
     }
 
@@ -58,18 +55,5 @@ public class CommentLikeController {
         UnlikeComment unlikeComment = new UnlikeComment(request.userId, request.commentId);
         commandBus.send(unlikeComment);
         return ResponseEntity.noContent().build();
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach(error -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
     }
 }

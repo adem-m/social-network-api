@@ -31,7 +31,7 @@ public final class PostLikeId implements ValueObjectID {
     @Override
     public String toString() {
         return "PostLikeId{" +
-                "value=" + value +
+                "value='" + value + '\'' +
                 '}';
     }
 }

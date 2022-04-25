@@ -4,7 +4,7 @@ import com.esgi.kernel.Entity;
 import com.esgi.modules.post.domain.PostId;
 import com.esgi.modules.user.domain.UserId;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public final class Comment implements Entity<CommentId> {
@@ -12,14 +12,14 @@ public final class Comment implements Entity<CommentId> {
     private final PostId postId;
     private String content;
     private final UserId userId;
-    private final Date date;
+    private final LocalDateTime creationDate;
 
-    public Comment(CommentId commentId, PostId postId, String content, UserId userId) {
+    public Comment(CommentId commentId, PostId postId, String content, UserId userId, LocalDateTime creationDate) {
         this.commentId = commentId;
         this.postId = postId;
         this.content = content;
         this.userId = userId;
-        this.date = new Date();
+        this.creationDate = creationDate;
     }
 
     @Override
@@ -43,8 +43,8 @@ public final class Comment implements Entity<CommentId> {
         return userId;
     }
 
-    public Date getDate() {
-        return date;
+    public LocalDateTime getDate() {
+        return creationDate;
     }
 
     public void changeContent(String newContent) {
@@ -56,22 +56,26 @@ public final class Comment implements Entity<CommentId> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Comment comment = (Comment) o;
-        return Objects.equals(commentId, comment.commentId) && Objects.equals(postId, comment.postId) && Objects.equals(content, comment.content) && Objects.equals(userId, comment.userId) && Objects.equals(date, comment.date);
+        return Objects.equals(commentId, comment.commentId) &&
+                Objects.equals(postId, comment.postId) &&
+                Objects.equals(content, comment.content) &&
+                Objects.equals(userId, comment.userId) &&
+                Objects.equals(creationDate, comment.creationDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(commentId, postId, content, userId, date);
+        return Objects.hash(commentId, postId, content, userId, creationDate);
     }
 
     @Override
     public String toString() {
-        return "Post{" +
-                "id=" + commentId + '\'' +
-                ", PostId=" + postId + '\'' +
+        return "Comment{" +
+                "commentId=" + commentId +
+                ", postId=" + postId +
                 ", content='" + content + '\'' +
-                ", creatorId='" + userId + '\'' +
-                ", date='" + date + '\'' +
+                ", userId=" + userId +
+                ", date=" + creationDate +
                 '}';
     }
 }

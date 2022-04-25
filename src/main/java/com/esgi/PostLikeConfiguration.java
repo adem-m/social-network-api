@@ -3,9 +3,9 @@ package com.esgi;
 import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.EventDispatcher;
 import com.esgi.kernel.QueryBus;
-import com.esgi.modules.post.infrastructure.InMemoryPostLikeRepository;
 import com.esgi.modules.post.application.*;
 import com.esgi.modules.post.domain.PostLikeRepository;
+import com.esgi.modules.post.infrastructure.SpringDataPostLikeRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,7 +19,7 @@ public class PostLikeConfiguration {
 
     @Bean
     public PostLikeRepository postLikeRepository() {
-        return new InMemoryPostLikeRepository();
+        return new SpringDataPostLikeRepository();
     }
 
     @Bean
@@ -32,7 +32,7 @@ public class PostLikeConfiguration {
 
     @Bean
     public LikePostCommandHandler likePostCommandHandler() {
-        return new LikePostCommandHandler(postLikeRepository(), kernelConfiguration.eventDispatcher());
+        return new LikePostCommandHandler(postLikeRepository(), kernelConfiguration.eventDispatcher(), kernelConfiguration.commandBus());
     }
 
     @Bean

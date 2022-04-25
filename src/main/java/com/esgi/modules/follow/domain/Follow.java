@@ -30,4 +30,13 @@ public final class Follow implements Entity<FollowId>{
     public UserId getFollowedId() {
         return followedId;
     }
+
+    @Override
+    public String toString() {
+        return "Follow{" +
+                "followId=" + followId +
+                ", followerId=" + followerId +
+                ", followedId=" + followedId +
+                '}';
+    }
 }

@@ -20,7 +20,7 @@ public final class UnlikeCommentCommandHandler implements CommandHandler<UnlikeC
     public CommentLikeId handle(UnlikeComment UnlikeComment) {
         final UserId userId = new UserId(UnlikeComment.userId);
         final CommentId commentId = new CommentId(UnlikeComment.commentId);
-        final CommentLikeId commentLikeId = commentLikeRepository.findLikeByUserIdAndPostId(userId, commentId).getCommentLikeId();
+        final CommentLikeId commentLikeId = commentLikeRepository.findLikeByUserIdAndCommentId(userId, commentId).getCommentLikeId();
         commentLikeRepository.delete(commentLikeId);
         eventEventDispatcher.dispatch(new UnlikeCommentEvent(commentLikeId));
         return commentLikeId;

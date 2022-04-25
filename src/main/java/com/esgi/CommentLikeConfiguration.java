@@ -5,7 +5,7 @@ import com.esgi.kernel.EventDispatcher;
 import com.esgi.kernel.QueryBus;
 import com.esgi.modules.comment.application.*;
 import com.esgi.modules.comment.domain.CommentLikeRepository;
-import com.esgi.modules.comment.infrastructure.InMemoryCommentLikeRepository;
+import com.esgi.modules.comment.infrastructure.SpringDataCommentLikeRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,7 +19,7 @@ public class CommentLikeConfiguration {
 
     @Bean
     public CommentLikeRepository commentLikeRepository() {
-        return new InMemoryCommentLikeRepository();
+        return new SpringDataCommentLikeRepository();
     }
 
     @Bean
@@ -32,7 +32,9 @@ public class CommentLikeConfiguration {
 
     @Bean
     public LikeCommentCommandHandler likeCommentCommandHandler() {
-        return new LikeCommentCommandHandler(commentLikeRepository(), kernelConfiguration.eventDispatcher());
+        return new LikeCommentCommandHandler(commentLikeRepository(),
+                kernelConfiguration.eventDispatcher(),
+                kernelConfiguration.commandBus());
     }
 
     @Bean

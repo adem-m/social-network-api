@@ -5,7 +5,7 @@ import com.esgi.kernel.EventDispatcher;
 import com.esgi.kernel.QueryBus;
 import com.esgi.modules.comment.application.*;
 import com.esgi.modules.comment.domain.CommentRepository;
-import com.esgi.modules.comment.infrastructure.InMemoryCommentRepository;
+import com.esgi.modules.comment.infrastructure.SpringDataCommentRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,7 +19,7 @@ public class CommentConfiguration {
 
     @Bean
     public CommentRepository commentRepository() {
-        return new InMemoryCommentRepository();
+        return new SpringDataCommentRepository();
     }
 
     @Bean

@@ -1,6 +1,7 @@
 package com.esgi.modules.post.infrastructure;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -10,9 +11,8 @@ public class PostEntity {
     @Column(nullable = false)
     private String id;
 
-    @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
     private String content;
 
@@ -22,7 +22,7 @@ public class PostEntity {
     public PostEntity() {
     }
 
-    public PostEntity(String id, Date creationDate, String content, String creatorId) {
+    public PostEntity(String id, LocalDateTime creationDate, String content, String creatorId) {
         this.id = id;
         this.creationDate = creationDate;
         this.content = content;
@@ -33,7 +33,7 @@ public class PostEntity {
         return id;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 

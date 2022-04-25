@@ -1,15 +1,15 @@
 package com.esgi.modules.comment.exposition;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class CommentResponse {
     public String commentId;
     public String postId;
     public String content;
     public String userId;
-    public Date date;
+    public LocalDateTime date;
 
-    public CommentResponse(String commentId, String postId, String content, String userId, Date date){
+    public CommentResponse(String commentId, String postId, String content, String userId, LocalDateTime date){
         this.commentId = commentId;
         this.postId = postId;
         this.content = content;
