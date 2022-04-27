@@ -51,5 +51,10 @@ public final class InMemoryPostRepository implements PostRepository {
         return List.copyOf(data.values().stream()
                 .filter(post -> post.getUserId().equals(id)).collect(Collectors.toList()));
     }
+
+    @Override
+    public List<Post> findFeedByUserId(UserId userId) {
+        return null;
+    }
 }
 

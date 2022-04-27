@@ -10,7 +10,7 @@ public final class Post implements Entity<PostId> {
     private final PostId id;
     private String content;
     private final UserId userId;
-    private final LocalDateTime date;
+    private LocalDateTime date;
 
     public Post(PostId id, String content, UserId userId, LocalDateTime creationDate) {
         this.id = id;
@@ -41,7 +41,11 @@ public final class Post implements Entity<PostId> {
     }
 
     public void changeContent(String newContent) {
-        this.content = Objects.requireNonNull(newContent);
+        this.content = newContent;
+    }
+
+    public void changeLocalDateTime(LocalDateTime date) {
+        this.date = date;
     }
 
     @Override

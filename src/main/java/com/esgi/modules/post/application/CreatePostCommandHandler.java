@@ -11,8 +11,6 @@ import com.esgi.modules.post.domain.PostRepository;
 import com.esgi.modules.user.domain.UserId;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Objects;
 
 public final class CreatePostCommandHandler implements CommandHandler<CreatePost, PostId> {
     private final PostRepository postRepository;
@@ -28,9 +26,8 @@ public final class CreatePostCommandHandler implements CommandHandler<CreatePost
     public PostId handle(CreatePost createPost) {
         final PostId postId = postRepository.nextIdentity();
         final UserId creatorId = new UserId(createPost.creatorId);
-        //Doit ton verifier si le creatorId recu par la request existe ?
         Post post = new Post(postId, createPost.content, creatorId, LocalDateTime.now());
-        if(!Objects.equals(createPost.code.source, "")) {
+        if(createPost.code != null) {
             CreateCode createCode = new CreateCode(postId, createPost.code.source, createPost.code.language);
             commandBus.send(createCode);
         }

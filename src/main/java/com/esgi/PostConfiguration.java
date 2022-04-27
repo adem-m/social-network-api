@@ -32,7 +32,9 @@ public class PostConfiguration {
 
     @Bean
     public CreatePostCommandHandler createPostCommandHandler() {
-        return new CreatePostCommandHandler(postRepository(), kernelConfiguration.eventDispatcher(), kernelConfiguration.commandBus());
+        return new CreatePostCommandHandler(postRepository(),
+                kernelConfiguration.eventDispatcher(),
+                kernelConfiguration.commandBus());
     }
 
     @Bean
@@ -52,7 +54,9 @@ public class PostConfiguration {
 
     @Bean
     public EditPostCommandHandler editPostCommandHandler() {
-        return new EditPostCommandHandler(postRepository(), kernelConfiguration.eventDispatcher());
+        return new EditPostCommandHandler(postRepository(),
+                kernelConfiguration.eventDispatcher(),
+                kernelConfiguration.queryBus());
     }
 
     @Bean
@@ -104,5 +108,17 @@ public class PostConfiguration {
     @Bean
     public RetrievePostsByUserIdHandler retrievePostsHandler() {
         return new RetrievePostsByUserIdHandler(postRepository());
+    }
+
+    @Bean
+    public QueryBus feedQueryBus() {
+        final QueryBus queryBus = kernelConfiguration.queryBus();
+        queryBus.addHandler(RetrieveFeedByUserId.class, new RetrieveFeedByUserIdHandler(postRepository()));
+        return queryBus;
+    }
+
+    @Bean
+    public RetrieveFeedByUserIdHandler retrieveFeedByUserIdHandler() {
+        return new RetrieveFeedByUserIdHandler(postRepository());
     }
 }

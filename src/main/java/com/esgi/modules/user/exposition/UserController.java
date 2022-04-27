@@ -46,8 +46,7 @@ public class UserController {
                         String.valueOf(user.getId().getValue()),
                         user.getLastname(),
                         user.getFirstname(),
-                        user.getEmail().getEmail(),
-                        user.getPassword());
+                        user.getEmail().getEmail());
         return ResponseEntity.ok(userResponseResult);
     }
 
@@ -59,8 +58,7 @@ public class UserController {
                         String.valueOf(user.getId().getValue()),
                         user.getLastname(),
                         user.getFirstname(),
-                        user.getEmail().getEmail(),
-                        user.getPassword());
+                        user.getEmail().getEmail());
         return ResponseEntity.ok(userResponseResult);
     }
 
@@ -73,8 +71,7 @@ public class UserController {
                                 String.valueOf(user.getId().getValue()),
                                 user.getLastname(),
                                 user.getFirstname(),
-                                user.getEmail().getEmail(),
-                                user.getPassword())).collect(Collectors.toList()));
+                                user.getEmail().getEmail())).collect(Collectors.toList()));
         return ResponseEntity.ok(usersResponseResult);
     }
 
@@ -87,8 +84,7 @@ public class UserController {
                                 String.valueOf(user.getId().getValue()),
                                 user.getLastname(),
                                 user.getFirstname(),
-                                user.getEmail().getEmail(),
-                                user.getPassword())).collect(Collectors.toList()));
+                                user.getEmail().getEmail())).collect(Collectors.toList()));
         return ResponseEntity.ok(usersResponseResult);
     }
 
@@ -102,8 +98,7 @@ public class UserController {
                         String.valueOf(user.getId().getValue()),
                         user.getLastname(),
                         user.getFirstname(),
-                        user.getEmail().getEmail(),
-                        user.getPassword());
+                        user.getEmail().getEmail());
         return ResponseEntity.ok(userResponseResult);
     }
 

@@ -7,6 +7,8 @@ import com.esgi.modules.post.domain.PostRepository;
 import com.esgi.modules.user.domain.UserId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -48,9 +50,17 @@ public class SpringDataPostRepository implements PostRepository {
     }
 
     @Override
-    public List<Post> findPostsByUserId(UserId id) {
+    public List<Post> findPostsByUserId(UserId userId) {
         return jpaPostRepository
-                .findAllByCreatorId(id.getValue())
+                .findAllByCreatorId(userId.getValue())
+                .stream().map(postMapper::toModel)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Post> findFeedByUserId(UserId userId) {
+        return jpaPostRepository
+                .findFeedByUserId(userId.getValue())
                 .stream().map(postMapper::toModel)
                 .collect(Collectors.toList());
     }
@@ -59,4 +69,6 @@ public class SpringDataPostRepository implements PostRepository {
 @Repository
 interface JpaPostRepository extends JpaRepository<PostEntity, String> {
     List<PostEntity> findAllByCreatorId(String id);
+    @Query("SELECT p FROM PostEntity p, FollowEntity f WHERE p.creatorId = f.followedId AND f.followerId = :id ORDER BY p.creationDate DESC")
+    List<PostEntity> findFeedByUserId(@Param("id") String id);
 }

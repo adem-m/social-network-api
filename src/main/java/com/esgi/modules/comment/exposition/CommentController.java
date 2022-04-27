@@ -92,6 +92,6 @@ public class CommentController {
         return ResponseEntity.noContent().build();
     }
 
-    //TODO show a the post and his comment (get)
+    //TODO show a the post and his comment ?
     //TODO share a comment ?
 }

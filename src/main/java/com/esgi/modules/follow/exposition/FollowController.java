@@ -58,8 +58,7 @@ public class FollowController {
                             String.valueOf(user.getId().getValue()),
                             user.getLastname(),
                             user.getFirstname(),
-                            user.getEmail().getEmail(),
-                            user.getPassword()));
+                            user.getEmail().getEmail()));
         }
         return ResponseEntity.ok(usersResponseResult);
     }

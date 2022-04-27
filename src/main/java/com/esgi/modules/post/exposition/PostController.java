@@ -55,6 +55,16 @@ public class PostController {
     @GetMapping(path = "/user={id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PostsResponse> getAllPostsByUserId(@PathVariable String id) {
         final List<Post> posts = (List<Post>) queryBus.send(new RetrievePostsByUserId(id));
+        return getPostsResponseResponseEntity(posts);
+    }
+
+    @GetMapping(path = "/feed/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PostsResponse> getFeed(@PathVariable String id) {
+        final List<Post> posts = (List<Post>) queryBus.send(new RetrieveFeedByUserId(id));
+        return getPostsResponseResponseEntity(posts);
+    }
+
+    private ResponseEntity<PostsResponse> getPostsResponseResponseEntity(List<Post> posts) {
         PostsResponse postsResponseResult = new PostsResponse(new ArrayList<>());
         for (Post post : posts) {
             final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
@@ -74,7 +84,7 @@ public class PostController {
 
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PostResponse> edit(@PathVariable String id, @RequestBody @Valid EditPostRequest request) {
-        EditPost editPost = new EditPost(id, request.content);
+        EditPost editPost = new EditPost(id, request.content, request.code);
         commandBus.send(editPost);
         final Post post = (Post) queryBus.send(new RetrievePostById(editPost.postId));
         final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
@@ -98,6 +108,5 @@ public class PostController {
         return ResponseEntity.noContent().build();
     }
 
-    //TODO share a post
-    //TODO getAllByFollowingOrderByDate
+    //TODO share a post ?
 }
