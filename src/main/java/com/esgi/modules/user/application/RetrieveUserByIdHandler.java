@@ -2,6 +2,7 @@ package com.esgi.modules.user.application;
 
 import com.esgi.kernel.QueryHandler;
 import com.esgi.modules.user.domain.User;
+import com.esgi.modules.user.domain.UserId;
 import com.esgi.modules.user.domain.UserRepository;
 
 public class RetrieveUserByIdHandler implements QueryHandler<RetrieveUserById, User> {
@@ -14,6 +15,7 @@ public class RetrieveUserByIdHandler implements QueryHandler<RetrieveUserById, U
 
     @Override
     public User handle(RetrieveUserById query) {
-        return userRepository.findById(query.id);
+        UserId userId = new UserId(query.id);
+        return userRepository.findById(userId);
     }
 }

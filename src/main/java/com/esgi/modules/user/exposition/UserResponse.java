@@ -4,15 +4,13 @@ public class UserResponse {
     public String id;
     public String lastname;
     public String firstname;
-    public EmailResponse email;
-    public String password;
+    public String email;
 
-    public UserResponse(String id, String lastname, String firstname, EmailResponse email, String password) {
+    public UserResponse(String id, String lastname, String firstname, String email) {
         this.id = id;
         this.lastname = lastname;
         this.firstname = firstname;
         this.email = email;
-        this.password = password;
     }
 
     @Override
@@ -22,7 +20,6 @@ public class UserResponse {
                 ", lastname='" + lastname + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", email=" + email + '\'' +
-                ", password=" + password + '\'' +
                 '}';
     }
 }

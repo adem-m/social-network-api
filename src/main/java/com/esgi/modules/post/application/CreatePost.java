@@ -1,9 +1,8 @@
 package com.esgi.modules.post.application;
 
 import com.esgi.kernel.Command;
-import com.esgi.modules.user.domain.UserId;
+import com.esgi.modules.code.exposition.CodeRequest;
 
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -12,12 +11,12 @@ import java.util.Objects;
 @SuppressWarnings("all")
 public final class CreatePost implements Command {
     public String content;
-    public final UserId creatorId;
-    public final Date date;
+    public CodeRequest code;
+    public final String creatorId;
 
-    public CreatePost(String content, UserId creatorId, Date date) {
-        this.content = Objects.requireNonNull(content);
+    public CreatePost(String content, CodeRequest code, String creatorId) {
+        this.content = content;
+        this.code = code;
         this.creatorId = Objects.requireNonNull(creatorId);
-        this.date = Objects.requireNonNull(date);
     }
 }
