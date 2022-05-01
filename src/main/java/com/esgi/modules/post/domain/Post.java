@@ -3,20 +3,20 @@ package com.esgi.modules.post.domain;
 import com.esgi.kernel.Entity;
 import com.esgi.modules.user.domain.UserId;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public final class Post implements Entity<PostId> {
     private final PostId id;
     private String content;
     private final UserId userId;
-    private final Date date;
+    private LocalDateTime date;
 
-    public Post(PostId id, String content, UserId userId) {
+    public Post(PostId id, String content, UserId userId, LocalDateTime creationDate) {
         this.id = id;
         this.content = content;
         this.userId = userId;
-        this.date = new Date();
+        this.date = creationDate;
     }
 
     @Override
@@ -36,12 +36,16 @@ public final class Post implements Entity<PostId> {
         return userId;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
     public void changeContent(String newContent) {
-        this.content = Objects.requireNonNull(newContent);
+        this.content = newContent;
+    }
+
+    public void changeLocalDateTime(LocalDateTime date) {
+        this.date = date;
     }
 
     @Override
@@ -62,8 +66,8 @@ public final class Post implements Entity<PostId> {
         return "Post{" +
                 "id=" + id +
                 ", content='" + content + '\'' +
-                ", creatorId='" + userId + '\'' +
-                ", date='" + date + '\'' +
+                ", userId=" + userId +
+                ", date=" + date +
                 '}';
     }
 }

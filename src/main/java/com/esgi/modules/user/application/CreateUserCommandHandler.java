@@ -1,5 +1,6 @@
 package com.esgi.modules.user.application;
 
+import com.esgi.kernel.AlreadyExistsException;
 import com.esgi.kernel.CommandHandler;
 import com.esgi.kernel.Event;
 import com.esgi.kernel.EventDispatcher;
@@ -18,11 +19,18 @@ public final class CreateUserCommandHandler implements CommandHandler<CreateUser
     }
 
     public UserId handle(CreateUser createUser) {
-        final UserId userId = userRepository.nextIdentity();
-        User user;
-        user = new User(userId, createUser.lastname, createUser.firstname, new Email(createUser.email.getEmail()), createUser.password);
-        userRepository.add(user);
-        eventEventDispatcher.dispatch(new CreateUserEvent(userId));
-        return userId;
+        if(userRepository.findByEmail(createUser.email.getEmail()) == null){
+            final UserId userId = userRepository.nextIdentity();
+            User user = new User(
+                    userId,
+                    createUser.lastname,
+                    createUser.firstname,
+                    new Email(createUser.email.getEmail()),
+                    createUser.password);
+            userRepository.add(user);
+            eventEventDispatcher.dispatch(new CreateUserEvent(userId));
+            return userId;
+        }
+        throw AlreadyExistsException.withEmail(createUser.email);
     }
 }

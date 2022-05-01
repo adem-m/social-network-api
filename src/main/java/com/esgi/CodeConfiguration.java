@@ -2,10 +2,10 @@ package com.esgi;
 
 import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.EventDispatcher;
-import com.esgi.modules.code.application.RunCode;
-import com.esgi.modules.code.application.RunCodeCommandHandler;
-import com.esgi.modules.code.application.RunCodeEvent;
-import com.esgi.modules.code.application.RunCodeEventListener;
+import com.esgi.kernel.QueryBus;
+import com.esgi.modules.code.application.*;
+import com.esgi.modules.code.domain.CodeRepository;
+import com.esgi.modules.code.infrastructure.SpringDataCodeRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,22 +18,39 @@ public class CodeConfiguration {
     }
 
     @Bean
-    public RunCodeEventListener runCodeEventListener() {
+    public CodeRepository codeRepository() {
+        return new SpringDataCodeRepository();
+    }
+
+    @Bean
+    public CreateCodeEventListener createCodeEventListener() {
         EventDispatcher dispatcher = this.kernelConfiguration.eventDispatcher();
-        RunCodeEventListener listener = new RunCodeEventListener();
-        dispatcher.addListener(RunCodeEvent.class, listener);
+        CreateCodeEventListener listener = new CreateCodeEventListener();
+        dispatcher.addListener(CreateCodeEvent.class, listener);
         return listener;
     }
 
     @Bean
-    public RunCodeCommandHandler runCodeCommandHandler() {
-        return new RunCodeCommandHandler(kernelConfiguration.eventDispatcher());
+    public CreateCodeCommandHandler createCodeCommandHandler() {
+        return new CreateCodeCommandHandler(codeRepository(), kernelConfiguration.eventDispatcher());
     }
 
     @Bean
-    public CommandBus codeCommandBus() {
+    public CommandBus createCodeCommandBus() {
         final CommandBus commandBus = kernelConfiguration.commandBus();
-        commandBus.addHandler(RunCode.class, runCodeCommandHandler());
+        commandBus.addHandler(CreateCode.class, createCodeCommandHandler());
         return commandBus;
+    }
+
+    @Bean
+    public QueryBus codePostIdQueryBus() {
+        final QueryBus queryBus = kernelConfiguration.queryBus();
+        queryBus.addHandler(RetrieveCodeByPostId.class, new RetrieveCodeByPostIdHandler(codeRepository()));
+        return queryBus;
+    }
+
+    @Bean
+    public RetrieveCodeByPostIdHandler retrieveCodeByPostIdHandler() {
+        return new RetrieveCodeByPostIdHandler(codeRepository());
     }
 }

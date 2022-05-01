@@ -1,21 +1,14 @@
 package com.esgi.modules.post.exposition;
 
-import com.esgi.modules.user.domain.UserId;
+import com.esgi.modules.code.exposition.CodeRequest;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 public class PostRequest {
-    @NotNull
-    @NotBlank
     public String content;
 
-    @NotNull
-    @NotBlank
-    public UserId userId;
+    public CodeRequest code;
 
     @NotNull
-    @NotBlank
-    public Date date;
+    public String userId;
 }

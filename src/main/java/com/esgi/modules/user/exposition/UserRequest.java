@@ -13,7 +13,10 @@ public class UserRequest {
     public String firstname;
 
     @NotNull
-    public EmailRequest email;
+    @NotBlank
+    public String email;
 
+    @NotNull
+    @NotBlank
     public String password;
 }

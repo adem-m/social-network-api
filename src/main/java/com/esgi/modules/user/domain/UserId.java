@@ -1,16 +1,17 @@
 package com.esgi.modules.user.domain;
 
 import com.esgi.kernel.ValueObjectID;
+
 import java.util.Objects;
 
 public final class UserId implements ValueObjectID {
-    private final int value;
+    private final String value;
 
-    public UserId(int value) {
+    public UserId(String value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
@@ -19,7 +20,7 @@ public final class UserId implements ValueObjectID {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserId userId = (UserId) o;
-        return value == userId.value;
+        return Objects.equals(value, userId.value);
     }
 
     @Override
@@ -30,7 +31,7 @@ public final class UserId implements ValueObjectID {
     @Override
     public String toString() {
         return "UserId{" +
-                "value=" + value +
+                "value='" + value + '\'' +
                 '}';
     }
 }
