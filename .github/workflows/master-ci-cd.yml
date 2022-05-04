@@ -9,12 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Build dev image
+    - name: Build prod image
       run: |
         make build-docker IMAGE_TAG=latest
         echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin quay.io
         make deploy-docker IMAGE_TAG=latest
-        
+
   build_and_deploy:
     runs-on: ubuntu-latest
 
