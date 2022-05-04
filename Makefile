@@ -17,11 +17,11 @@ build-docker:
 .PHONY-docker: build
 
 deploy-docker:
-	docker push $(IMAGE_NAME)-docker:$(IMAGE_TAG)
+	docker push $(IMAGE_NAME):$(IMAGE_TAG)
 .PHONY-docker: deploy
 
 rmi-docker:
-	docker rmi $(IMAGE_NAME)-docker:$(IMAGE_TAG)
+	docker rmi $(IMAGE_NAME):$(IMAGE_TAG)
 .PHONY-docker: rmi
 
 run-docker:
@@ -32,10 +32,6 @@ test-docker:
 	$(MAKE) build IMAGE_TAG=$(TEST_TAG)
 	docker run --entrypoint=mvn $(IMAGE_NAME)-docker:$(TEST_TAG) test
 .PHONY-docker: test
-
-deploy-docker-docker:
-	docker push $(IMAGE_NAME)-docker:$(IMAGE_TAG)
-.PHONY-docker: deploy
 
 debug-docker:
 	docker run -ti --entrypoint=sh $(IMAGE)-docker:$(TAG)

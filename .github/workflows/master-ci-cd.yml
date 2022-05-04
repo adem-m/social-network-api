@@ -4,6 +4,7 @@ on:
   push:
     branches: [ master ]
 
+
 jobs:
   deploy_docker:
     runs-on: ubuntu-latest
@@ -12,7 +13,7 @@ jobs:
     - name: Build prod image
       run: |
         make build-docker IMAGE_TAG=latest
-        echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin quay.io
+        echo ${{ secrets.QUAY_PASSWORD }} | docker login -u ${{ secrets.QUAY_LOGIN }} --password-stdin quay.io
         make deploy-docker IMAGE_TAG=latest
 
   build_and_deploy:
