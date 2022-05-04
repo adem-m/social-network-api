@@ -3,8 +3,6 @@ name: Continuous integration for Release
 on:
   release:
     types: [ created ]
-env:
-  TAG: ${GITHUB_REF/refs\/tags\//}
 
 jobs:
   deploy_docker:
@@ -13,6 +11,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build prod release image
       run: |
+        TAG=${GITHUB_REF/refs\/tags\//}
         make build-docker IMAGE_TAG=$TAG
         echo ${{ secrets.QUAY_PASSWORD }} | docker login -u ${{ secrets.QUAY_LOGIN }} --password-stdin quay.io
         make deploy-docker IMAGE_TAG=$TAG
