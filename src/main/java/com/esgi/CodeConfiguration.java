@@ -36,16 +36,17 @@ public class CodeConfiguration {
     }
 
     @Bean
-    public CommandBus createCodeCommandBus() {
+    public CommandBus codeCommandBus() {
         final CommandBus commandBus = kernelConfiguration.commandBus();
         commandBus.addHandler(CreateCode.class, createCodeCommandHandler());
         return commandBus;
     }
 
     @Bean
-    public QueryBus codePostIdQueryBus() {
+    public QueryBus codeQueryBus() {
         final QueryBus queryBus = kernelConfiguration.queryBus();
         queryBus.addHandler(RetrieveCodeByPostId.class, new RetrieveCodeByPostIdHandler(codeRepository()));
+        queryBus.addHandler(RetrieveCodeById.class, new RetrieveCodeByIdHandler(codeRepository()));
         return queryBus;
     }
 
