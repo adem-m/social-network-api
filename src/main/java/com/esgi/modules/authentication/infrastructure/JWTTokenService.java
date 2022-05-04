@@ -1,7 +1,7 @@
 package com.esgi.modules.authentication.infrastructure;
 
 import com.esgi.modules.authentication.domain.Token;
-import com.esgi.modules.authentication.domain.TokenService;
+import com.esgi.kernel.TokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;

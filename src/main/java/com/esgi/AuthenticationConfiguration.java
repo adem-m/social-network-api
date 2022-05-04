@@ -2,7 +2,7 @@ package com.esgi;
 
 import com.esgi.kernel.CommandBus;
 import com.esgi.modules.authentication.application.*;
-import com.esgi.modules.authentication.domain.TokenService;
+import com.esgi.kernel.TokenService;
 import com.esgi.modules.authentication.infrastructure.JWTTokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

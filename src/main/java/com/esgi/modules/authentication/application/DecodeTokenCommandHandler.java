@@ -1,7 +1,7 @@
 package com.esgi.modules.authentication.application;
 
 import com.esgi.kernel.CommandHandler;
-import com.esgi.modules.authentication.domain.TokenService;
+import com.esgi.kernel.TokenService;
 import com.esgi.modules.user.domain.UserId;
 
 public record DecodeTokenCommandHandler(

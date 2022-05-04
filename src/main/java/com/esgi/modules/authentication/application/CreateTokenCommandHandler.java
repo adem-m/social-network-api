@@ -2,7 +2,7 @@ package com.esgi.modules.authentication.application;
 
 import com.esgi.kernel.CommandHandler;
 import com.esgi.modules.authentication.domain.Token;
-import com.esgi.modules.authentication.domain.TokenService;
+import com.esgi.kernel.TokenService;
 
 public record CreateTokenCommandHandler(
         TokenService tokenService) implements CommandHandler<CreateTokenCommand, Token> {
