@@ -1,14 +1,13 @@
-name: Continuous integration and deployment
+name: Continuous integration for PR
 
-on:
-  push:
-    branches: [ push, pull_request ]
+on:  
+  pull_request:
+    branches:
+      - master 
 
 jobs:
   build_and_deploy:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 17

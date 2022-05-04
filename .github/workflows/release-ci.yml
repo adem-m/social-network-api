@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Build dev image
+    - name: Build prod release image
       run: |
         make build-docker IMAGE_TAG=$TAG
         echo $QUAY_PASSWORD | docker login -u $QUAY_USER --password-stdin quay.io
