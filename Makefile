@@ -13,7 +13,7 @@ test-mvn:
 .PHONY-docker: test
 
 build-docker:
-	docker build -f Dockerfile -t $(IMAGE_NAME)-docker:$(IMAGE_TAG) .
+	docker build -f Dockerfile -t $(IMAGE_NAME):$(IMAGE_TAG) .
 .PHONY-docker: build
 
 deploy-docker:
@@ -25,7 +25,7 @@ rmi-docker:
 .PHONY-docker: rmi
 
 run-docker:
-	docker run --rm -p 8080-docker:8080 $(IMAGE_NAME)-docker:$(IMAGE_TAG)
+	docker run --rm -p 8080:8080 $(IMAGE_NAME):$(IMAGE_TAG)
 .PHONY-docker: run
 
 test-docker:
