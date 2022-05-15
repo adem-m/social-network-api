@@ -1,9 +1,6 @@
 package com.esgi.modules.post.application;
 
-import com.esgi.kernel.CommandHandler;
-import com.esgi.kernel.Event;
-import com.esgi.kernel.EventDispatcher;
-import com.esgi.kernel.QueryBus;
+import com.esgi.kernel.*;
 import com.esgi.modules.code.application.RetrieveCodeByPostId;
 import com.esgi.modules.code.domain.Code;
 import com.esgi.modules.post.domain.Post;
@@ -26,13 +23,16 @@ public final class EditPostCommandHandler implements CommandHandler<EditPost, Po
     public PostId handle(EditPost editPost) {
         var postId = new PostId(editPost.postId);
         Post post = postRepository.findById(postId);
-        if(editPost.content != null && !editPost.content.equals("") && !post.getContent().equals(editPost.content))
+        if (!post.getUserId().getValue().equals(editPost.userId)) {
+            throw new ForbiddenOperationException("You can't edit this post");
+        }
+        if (editPost.content != null && !editPost.content.equals("") && !post.getContent().equals(editPost.content))
             post.changeContent(editPost.content);
-        if(editPost.code != null) {
+        if (editPost.code != null) {
             final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
             code.changeSource(editPost.code.source);
         }
-        if((editPost.content != null && !editPost.content.equals("")) || editPost.code != null) {
+        if ((editPost.content != null && !editPost.content.equals("")) || editPost.code != null) {
             post.changeLocalDateTime(LocalDateTime.now());
         }
         postRepository.add(post);

@@ -8,7 +8,4 @@ public class CommentRequest {
 
     @NotNull
     public String content;
-
-    @NotNull
-    public String userId;
 }
