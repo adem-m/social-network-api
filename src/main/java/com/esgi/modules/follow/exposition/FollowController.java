@@ -2,11 +2,14 @@ package com.esgi.modules.follow.exposition;
 
 import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.QueryBus;
+import com.esgi.modules.authentication.application.DecodeTokenCommand;
+import com.esgi.modules.authentication.domain.Token;
 import com.esgi.modules.follow.application.*;
 import com.esgi.modules.follow.domain.Follow;
 import com.esgi.modules.follow.domain.FollowId;
 import com.esgi.modules.user.application.RetrieveUserById;
 import com.esgi.modules.user.domain.User;
+import com.esgi.modules.user.domain.UserId;
 import com.esgi.modules.user.exposition.UserResponse;
 import com.esgi.modules.user.exposition.UsersResponse;
 import org.springframework.http.MediaType;
@@ -31,8 +34,10 @@ public class FollowController {
     }
 
     @PostMapping(path = "/follow", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createFollow(@RequestBody @Valid FollowRequest request) {
-        CreateFollow createFollow = new CreateFollow(request.followerId, request.followedId);
+    public ResponseEntity<Void> createFollow(@RequestHeader("authorization") String token,
+                                             @RequestBody @Valid FollowRequest request) {
+        UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+        CreateFollow createFollow = new CreateFollow(userId.getValue(), request.followedId);
         FollowId followId = (FollowId) commandBus.send(createFollow);
         return ResponseEntity.created(URI.create("/follows/id=" + followId.getValue())).build();
     }
@@ -76,8 +81,10 @@ public class FollowController {
     }
 
     @DeleteMapping(path = "/unfollow", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> unfollow(@RequestBody @Valid FollowRequest request) {
-        Unfollow unfollow = new Unfollow(request.followerId, request.followedId);
+    public ResponseEntity<Void> unfollow(@RequestHeader("authorization") String token,
+                                         @RequestBody @Valid FollowRequest request) {
+        UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+        Unfollow unfollow = new Unfollow(userId.getValue(), request.followedId);
         commandBus.send(unfollow);
         return ResponseEntity.noContent().build();
     }
