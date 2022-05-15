@@ -1,11 +1,13 @@
 package com.esgi.modules.authentication.infrastructure;
 
 import com.esgi.modules.authentication.domain.Token;
-import com.esgi.kernel.TokenService;
+import com.esgi.modules.authentication.domain.TokenService;
+import com.esgi.modules.authentication.domain.TokenUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
@@ -14,7 +16,8 @@ import java.util.Date;
 
 
 public class JWTTokenService implements TokenService {
-    private static final String SECRET_KEY = "SECRET";
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
     private static final int EXPIRATION_TIME = 1000 * 60 * 60 * 24;
 
     @Override
@@ -45,7 +48,7 @@ public class JWTTokenService implements TokenService {
     public String getUserId(Token token) {
         Claims body = Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
-                .parseClaimsJws(token.value()).getBody();
+                .parseClaimsJws(TokenUtils.getTokenValue(token)).getBody();
         return body.getIssuer();
     }
 }

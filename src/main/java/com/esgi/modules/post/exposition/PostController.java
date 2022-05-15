@@ -2,12 +2,15 @@ package com.esgi.modules.post.exposition;
 
 import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.QueryBus;
+import com.esgi.modules.authentication.application.DecodeTokenCommand;
+import com.esgi.modules.authentication.domain.Token;
 import com.esgi.modules.code.application.RetrieveCodeByPostId;
 import com.esgi.modules.code.domain.Code;
 import com.esgi.modules.code.exposition.CodeResponse;
 import com.esgi.modules.post.application.*;
 import com.esgi.modules.post.domain.Post;
 import com.esgi.modules.post.domain.PostId;
+import com.esgi.modules.user.domain.UserId;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +32,10 @@ public class PostController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> create(@RequestBody @Valid PostRequest request) {
-        CreatePost createPost = new CreatePost(request.content, request.code, request.userId);
+    public ResponseEntity<Void> create(@RequestHeader("authorization") String token,
+                                       @RequestBody @Valid PostRequest request) {
+        UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+        CreatePost createPost = new CreatePost(request.content, request.code, userId.getValue());
         PostId postId = (PostId) commandBus.send(createPost);
         return ResponseEntity.created(URI.create("/posts/" + postId.getValue())).build();
     }
@@ -58,9 +63,10 @@ public class PostController {
         return getPostsResponseResponseEntity(posts);
     }
 
-    @GetMapping(path = "/feed/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PostsResponse> getFeed(@PathVariable String id) {
-        final List<Post> posts = (List<Post>) queryBus.send(new RetrieveFeedByUserId(id));
+    @GetMapping(path = "/feed", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PostsResponse> getFeed(@RequestHeader("authorization") String token) {
+        UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+        final List<Post> posts = (List<Post>) queryBus.send(new RetrieveFeedByUserId(userId.getValue()));
         return getPostsResponseResponseEntity(posts);
     }
 
@@ -83,8 +89,11 @@ public class PostController {
     }
 
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PostResponse> edit(@PathVariable String id, @RequestBody @Valid EditPostRequest request) {
-        EditPost editPost = new EditPost(id, request.content, request.code);
+    public ResponseEntity<PostResponse> edit(@RequestHeader("authorization") String token,
+                                             @PathVariable String id,
+                                             @RequestBody @Valid EditPostRequest request) {
+        UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+        EditPost editPost = new EditPost(id, request.content, request.code, userId.getValue());
         commandBus.send(editPost);
         final Post post = (Post) queryBus.send(new RetrievePostById(editPost.postId));
         final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
@@ -102,8 +111,10 @@ public class PostController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> deletePost(@PathVariable String id) {
-        DeletePost deletePost = new DeletePost(id);
+    public ResponseEntity<Void> deletePost(@RequestHeader("authorization") String token,
+                                           @PathVariable String id) {
+        UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+        DeletePost deletePost = new DeletePost(id, userId.getValue());
         commandBus.send(deletePost);
         return ResponseEntity.noContent().build();
     }

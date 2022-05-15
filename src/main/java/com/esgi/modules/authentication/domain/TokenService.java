@@ -1,6 +1,4 @@
-package com.esgi.kernel;
-
-import com.esgi.modules.authentication.domain.Token;
+package com.esgi.modules.authentication.domain;
 
 public interface TokenService {
     Token generateToken(String username, String userId);
