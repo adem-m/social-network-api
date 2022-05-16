@@ -11,6 +11,7 @@ import com.esgi.modules.code.domain.CodeId;
 import com.esgi.modules.codeCompiler.application.RunCode;
 import com.esgi.modules.codeCompiler.domain.Language;
 import com.esgi.modules.codeCompiler.domain.Output;
+import com.esgi.modules.file.application.CreateFile;
 import com.esgi.modules.user.domain.UserId;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,6 +32,8 @@ public record RunChallengeQueryHandler(
                     com.esgi.modules.codeCompiler.domain.Code mappedCode = new com.esgi.modules.codeCompiler.domain.Code(
                             code.getSource(),
                             Language.fromString(code.getLanguage()));
+                    CreateFile createFile = new CreateFile(mappedCode.language().getSourceName(), mappedCode.source());
+                    commandBus.send(createFile);
                     Output output = (Output) commandBus.send(
                             new RunCode(mappedCode)
                     );
