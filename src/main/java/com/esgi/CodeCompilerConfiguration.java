@@ -31,8 +31,6 @@ public class CodeCompilerConfiguration {
     public CommandBus codeCompilerCommandBus() {
         final CommandBus commandBus = kernelConfiguration.commandBus();
         commandBus.addHandler(RunCode.class, runCodeCommandHandler());
-        commandBus.addHandler(RunChallenge.class,
-                new RunChallengeCommandHandler(kernelConfiguration.queryBus(), kernelConfiguration.commandBus()));
         return commandBus;
     }
 }
