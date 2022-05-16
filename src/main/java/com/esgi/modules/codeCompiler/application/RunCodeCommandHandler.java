@@ -10,7 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
 
-final public class RunCodeCommandHandler implements CommandHandler<RunCode, Output> {
+public record RunCodeCommandHandler(
+        EventDispatcher<Event> eventEventDispatcher) implements CommandHandler<RunCode, Output> {
     private final static int MAX_OUTPUT_SIZE = 100;
     private final static int SUCCESS_CODE = 0;
     private final static String SCRIPTS_DIRECTORY = "/home/ec2-user/";
@@ -18,12 +19,6 @@ final public class RunCodeCommandHandler implements CommandHandler<RunCode, Outp
             Language.C, new Script(SCRIPTS_DIRECTORY + Language.C.getScriptName()),
             Language.PYTHON, new Script(SCRIPTS_DIRECTORY + Language.PYTHON.getScriptName())
     );
-
-    private final EventDispatcher<Event> eventEventDispatcher;
-
-    public RunCodeCommandHandler(EventDispatcher<Event> eventEventDispatcher) {
-        this.eventEventDispatcher = eventEventDispatcher;
-    }
 
 
     @Override

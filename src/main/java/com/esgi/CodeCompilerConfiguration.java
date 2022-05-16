@@ -2,10 +2,7 @@ package com.esgi;
 
 import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.EventDispatcher;
-import com.esgi.modules.codeCompiler.application.RunCode;
-import com.esgi.modules.codeCompiler.application.RunCodeCommandHandler;
-import com.esgi.modules.codeCompiler.application.RunCodeEvent;
-import com.esgi.modules.codeCompiler.application.RunCodeEventListener;
+import com.esgi.modules.codeCompiler.application.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,7 +28,7 @@ public class CodeCompilerConfiguration {
     }
 
     @Bean
-    public CommandBus codeCommandBus() {
+    public CommandBus codeCompilerCommandBus() {
         final CommandBus commandBus = kernelConfiguration.commandBus();
         commandBus.addHandler(RunCode.class, runCodeCommandHandler());
         return commandBus;
