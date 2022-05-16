@@ -12,9 +12,11 @@ import com.esgi.modules.codeCompiler.application.RunCode;
 import com.esgi.modules.codeCompiler.domain.Language;
 import com.esgi.modules.codeCompiler.domain.Output;
 import com.esgi.modules.user.domain.UserId;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+@Slf4j
 public record RunChallengeQueryHandler(
         CommandBus commandBus,
         QueryBus queryBus,
@@ -23,6 +25,7 @@ public record RunChallengeQueryHandler(
     public List<ChallengeOutput> handle(RunChallengeQuery command) {
         List<CodeId> codeIds = repository.findCodeIdsByUserId(new UserId(command.userId()));
         List<Code> codes = codeIds.stream().map(codeId -> (Code) queryBus.send(new RetrieveCodeById(codeId))).toList();
+        log.info("Challenge ran");
         return codes.stream().map(code -> {
                     com.esgi.modules.codeCompiler.domain.Code mappedCode = new com.esgi.modules.codeCompiler.domain.Code(
                             code.getSource(),

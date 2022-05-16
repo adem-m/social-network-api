@@ -7,7 +7,9 @@ import com.esgi.modules.challenge.domain.ChallengeEntryId;
 import com.esgi.modules.challenge.domain.ChallengeEntryRepository;
 import com.esgi.modules.code.domain.CodeId;
 import com.esgi.modules.user.domain.UserId;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public record AddChallengeEntryCommandHandler(
         CommandBus commandBus,
         ChallengeEntryRepository challengeEntryRepository) implements CommandHandler<AddChallengeEntryCommand, ChallengeEntryId> {
@@ -18,6 +20,7 @@ public record AddChallengeEntryCommandHandler(
                 challengeEntryId,
                 new UserId(command.userId()),
                 new CodeId(command.codeId())));
+        log.info("Added challenge entry {}", challengeEntryId.value());
         return challengeEntryId;
     }
 }
