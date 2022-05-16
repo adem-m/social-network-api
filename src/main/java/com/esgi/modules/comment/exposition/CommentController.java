@@ -2,9 +2,12 @@ package com.esgi.modules.comment.exposition;
 
 import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.QueryBus;
+import com.esgi.modules.authentication.application.DecodeTokenCommand;
+import com.esgi.modules.authentication.domain.Token;
 import com.esgi.modules.comment.application.*;
 import com.esgi.modules.comment.domain.Comment;
 import com.esgi.modules.comment.domain.CommentId;
+import com.esgi.modules.user.domain.UserId;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +30,10 @@ public class CommentController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> create(@RequestBody @Valid CommentRequest request) {
-        CreateComment createComment = new CreateComment(request.postId, request.content, request.userId);
+    public ResponseEntity<Void> create(@RequestHeader("authorization") String token,
+                                       @RequestBody @Valid CommentRequest request) {
+        UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+        CreateComment createComment = new CreateComment(request.postId, request.content, userId.getValue());
         CommentId commentId = (CommentId) commandBus.send(createComment);
         return ResponseEntity.created(URI.create("/comments/id=" + commentId.getValue())).build();
     }
@@ -86,8 +91,9 @@ public class CommentController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> deleteComment(@PathVariable String id) {
-        DeleteComment deleteComment = new DeleteComment(id);
+    public ResponseEntity<Void> deleteComment(@RequestHeader("authorization") String token, @PathVariable String id) {
+        UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+        DeleteComment deleteComment = new DeleteComment(id, userId);
         commandBus.send(deleteComment);
         return ResponseEntity.noContent().build();
     }

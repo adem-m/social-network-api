@@ -8,7 +8,4 @@ public class PostRequest {
     public String content;
 
     public CodeRequest code;
-
-    @NotNull
-    public String userId;
 }

@@ -2,6 +2,8 @@ package com.esgi.modules.user.exposition;
 
 import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.QueryBus;
+import com.esgi.modules.authentication.application.DecodeTokenCommand;
+import com.esgi.modules.authentication.domain.Token;
 import com.esgi.modules.user.application.*;
 import com.esgi.modules.user.domain.Email;
 import com.esgi.modules.user.domain.User;
@@ -88,9 +90,11 @@ public class UserController {
         return ResponseEntity.ok(usersResponseResult);
     }
 
-    @PutMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UserResponse> updateUser(@PathVariable String id, @RequestBody @Valid UpdateUserRequest request) {
-        UpdateUser updateUser = new UpdateUser(id, new Email(request.email), request.password);
+    @PutMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<UserResponse> updateUser(@RequestHeader("authorization") String token,
+                                                   @RequestBody @Valid UpdateUserRequest request) {
+        UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+        UpdateUser updateUser = new UpdateUser(userId.getValue(), new Email(request.email), request.password);
         commandBus.send(updateUser);
         final User user = (User) queryBus.send(new RetrieveUserById(updateUser.userId));
         UserResponse userResponseResult =
@@ -102,9 +106,10 @@ public class UserController {
         return ResponseEntity.ok(userResponseResult);
     }
 
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
-        DeleteUser deleteUser = new DeleteUser(id);
+    @DeleteMapping
+    public ResponseEntity<Void> deleteUser(@RequestHeader("authorization") String token) {
+        UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+        DeleteUser deleteUser = new DeleteUser(userId.getValue());
         commandBus.send(deleteUser);
         return ResponseEntity.noContent().build();
     }
