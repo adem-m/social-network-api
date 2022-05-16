@@ -48,6 +48,7 @@ public class ChallengeConfiguration {
         return commandBus;
     }
 
+    @Bean
     public QueryBus challengeQueryBus() {
         final QueryBus queryBus = kernelConfiguration.queryBus();
         queryBus.addHandler(RunChallengeQuery.class, runChallengeQueryHandler());

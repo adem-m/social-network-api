@@ -24,6 +24,7 @@ public record RunChallengeQueryHandler(
     @Override
     public List<ChallengeOutput> handle(RunChallengeQuery command) {
         List<CodeId> codeIds = repository.findCodeIdsByUserId(new UserId(command.userId()));
+        if (codeIds.isEmpty()) throw new EmptyChallengeQueueException();
         List<Code> codes = codeIds.stream().map(codeId -> (Code) queryBus.send(new RetrieveCodeById(codeId))).toList();
         log.info("Challenge ran");
         return codes.stream().map(code -> {

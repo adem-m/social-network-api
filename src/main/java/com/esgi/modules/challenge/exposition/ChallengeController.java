@@ -6,6 +6,7 @@ import com.esgi.modules.authentication.application.DecodeTokenCommand;
 import com.esgi.modules.authentication.domain.Token;
 import com.esgi.modules.challenge.application.AddChallengeEntryCommand;
 import com.esgi.modules.challenge.application.DeleteChallengeEntryCommand;
+import com.esgi.modules.challenge.application.EmptyChallengeQueueException;
 import com.esgi.modules.challenge.application.RunChallengeQuery;
 import com.esgi.modules.challenge.domain.ChallengeEntryId;
 import com.esgi.modules.challenge.domain.ChallengeOutput;
@@ -29,7 +30,9 @@ public class ChallengeController {
         this.queryBus = queryBus;
     }
 
-    @PostMapping(value = "/add-to-queue", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/add-to-queue",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> addToQueue(@RequestHeader("authorization") String token,
                                            @RequestBody @Valid AddToQueueRequest request) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
@@ -46,12 +49,17 @@ public class ChallengeController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RunChallengeResponse> runChallenge(@RequestHeader("authorization") String token) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         List<ChallengeOutputResponse> challengeOutput =
                 ((List<ChallengeOutput>) queryBus.send(
                         new RunChallengeQuery(userId.getValue()))).stream().map(ChallengeOutputMapper::toDto).toList();
         return ResponseEntity.ok(new RunChallengeResponse(challengeOutput));
+    }
+
+    @ExceptionHandler(EmptyChallengeQueueException.class)
+    public ResponseEntity<Void> handleEmptyChallengeQueueException() {
+        return ResponseEntity.noContent().build();
     }
 }
