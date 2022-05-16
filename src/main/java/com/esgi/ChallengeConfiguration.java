@@ -3,6 +3,8 @@ package com.esgi;
 import com.esgi.kernel.CommandBus;
 import com.esgi.modules.challenge.application.AddChallengeEntryCommand;
 import com.esgi.modules.challenge.application.AddChallengeEntryCommandHandler;
+import com.esgi.modules.challenge.application.DeleteChallengeEntryCommand;
+import com.esgi.modules.challenge.application.DeleteChallengeEntryCommandHandler;
 import com.esgi.modules.challenge.domain.ChallengeEntryRepository;
 import com.esgi.modules.challenge.infastructure.SpringDataChallengeEntryRepository;
 import org.springframework.context.annotation.Bean;
@@ -27,9 +29,15 @@ public class ChallengeConfiguration {
     }
 
     @Bean
+    public DeleteChallengeEntryCommandHandler deleteChallengeEntryCommandHandler() {
+        return new DeleteChallengeEntryCommandHandler(challengeEntryRepository());
+    }
+
+    @Bean
     public CommandBus challengeCommandBus() {
         final CommandBus commandBus = kernelConfiguration.commandBus();
         commandBus.addHandler(AddChallengeEntryCommand.class, addChallengeEntryCommandHandler());
+        commandBus.addHandler(DeleteChallengeEntryCommand.class, deleteChallengeEntryCommandHandler());
         return commandBus;
     }
 }
