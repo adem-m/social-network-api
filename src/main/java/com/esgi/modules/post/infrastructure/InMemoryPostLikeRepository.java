@@ -61,4 +61,9 @@ public final class InMemoryPostLikeRepository implements PostLikeRepository {
         return data.values().stream()
                 .filter(postLike -> postLike.getUserId().equals(userId) && postLike.getPostId().equals(postId)).collect(Collectors.toList()).get(0);
     }
+
+    @Override
+    public long countByPostId(PostId postId) {
+        return data.values().stream().filter(postLike -> postLike.getPostId().equals(postId)).count();
+    }
 }

@@ -1,6 +1,7 @@
 package com.esgi.modules.post.exposition;
 
 import com.esgi.kernel.CommandBus;
+import com.esgi.kernel.CoreUserMapper;
 import com.esgi.kernel.QueryBus;
 import com.esgi.modules.authentication.application.DecodeTokenCommand;
 import com.esgi.modules.authentication.domain.Token;
@@ -11,9 +12,12 @@ import com.esgi.modules.post.application.LikePost;
 import com.esgi.modules.post.application.RetrieveLikedPostsByUserId;
 import com.esgi.modules.post.application.RetrievePostById;
 import com.esgi.modules.post.application.UnlikePost;
+import com.esgi.modules.post.domain.FullPost;
 import com.esgi.modules.post.domain.Post;
 import com.esgi.modules.post.domain.PostLike;
 import com.esgi.modules.post.domain.PostLikeId;
+import com.esgi.modules.user.application.RetrieveUserById;
+import com.esgi.modules.user.domain.User;
 import com.esgi.modules.user.domain.UserId;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +46,7 @@ public class PostLikeController {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         LikePost likePost = new LikePost(userId.getValue(), request.postId);
         PostLikeId postLikeId = (PostLikeId) commandBus.send(likePost);
-        if(postLikeId == null)
+        if (postLikeId == null)
             return ResponseEntity.noContent().build();
         return ResponseEntity.created(URI.create("/likePosts/id=" + postLikeId.getValue())).build();
     }
@@ -52,8 +56,10 @@ public class PostLikeController {
         final List<PostLike> likedPosts = (List<PostLike>) queryBus.send(new RetrieveLikedPostsByUserId(id));
         PostsResponse postsResponseResult = new PostsResponse(new ArrayList<>());
         for (PostLike postLike : likedPosts) {
-            final Post post = (Post) queryBus.send(new RetrievePostById(postLike.getPostId().getValue()));
+            final FullPost fullPost = (FullPost) queryBus.send(new RetrievePostById(id));
+            final Post post = fullPost.post();
             final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
+            final User user = (User) queryBus.send(new RetrieveUserById(post.getUserId().getValue()));
             postsResponseResult.posts.add(new PostResponse(
                     String.valueOf(post.getId().getValue()),
                     post.getContent(),
@@ -62,8 +68,9 @@ public class PostLikeController {
                             code.getPostId().getValue(),
                             code.getSource(),
                             code.getLanguage()),
-                    post.getUserId().getValue(),
-                    post.getDate()));
+                    CoreUserMapper.map(user),
+                    post.getDate().toString(),
+                    fullPost.likes()));
         }
         return ResponseEntity.ok(postsResponseResult);
     }
