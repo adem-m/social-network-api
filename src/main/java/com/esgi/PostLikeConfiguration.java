@@ -67,6 +67,7 @@ public class PostLikeConfiguration {
         final QueryBus queryBus = kernelConfiguration.queryBus();
         queryBus.addHandler(RetrieveLikedPostsByUserId.class, new RetrieveLikedPostsByUserIdHandler(postLikeRepository()));
         queryBus.addHandler(CountPostLikesQuery.class, new CountPostLikesQueryHandler(postLikeRepository()));
+        queryBus.addHandler(IsPostLikedQuery.class, new IsPostLikedQueryHandler(postLikeRepository()));
         return queryBus;
     }
 

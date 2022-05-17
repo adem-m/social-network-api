@@ -45,9 +45,15 @@ public class PostController {
     }
 
     @GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PostResponse> getPostById(@PathVariable String id) {
+    public ResponseEntity<PostResponse> getPostById(@RequestHeader(value = "authorization", required = false) String token,
+                                                    @PathVariable String id) {
+        boolean isLiked = false;
         final FullPost fullPost = (FullPost) queryBus.send(new RetrievePostById(id));
         final Post post = fullPost.post();
+        if (token != null) {
+            UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+            isLiked = (Boolean) queryBus.send(new IsPostLikedQuery(post.getId().getValue(), userId.getValue()));
+        }
         final User user = (User) queryBus.send(new RetrieveUserById(post.getUserId().getValue()));
         final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
         PostResponse postResponseResult = new PostResponse(
@@ -61,29 +67,37 @@ public class PostController {
                         code.getLanguage()),
                 CoreUserMapper.map(user),
                 post.getDate().toString(),
-                fullPost.likes());
+                fullPost.likes(),
+                isLiked);
         return ResponseEntity.ok(postResponseResult);
     }
 
     @GetMapping(path = "/user={id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PostsResponse> getAllPostsByUserId(@PathVariable String id) {
+    public ResponseEntity<PostsResponse> getAllPostsByUserId(
+            @RequestHeader(value = "authorization", required = false) String token,
+            @PathVariable String id) {
         final List<FullPost> posts = (List<FullPost>) queryBus.send(new RetrievePostsByUserId(id));
-        return getPostsResponseResponseEntity(posts);
+        return getPostsResponseResponseEntity(posts, token);
     }
 
     @GetMapping(path = "/feed", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PostsResponse> getFeed(@RequestHeader("authorization") String token) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         final List<FullPost> posts = (List<FullPost>) queryBus.send(new RetrieveFeedByUserId(userId.getValue()));
-        return getPostsResponseResponseEntity(posts);
+        return getPostsResponseResponseEntity(posts, token);
     }
 
-    private ResponseEntity<PostsResponse> getPostsResponseResponseEntity(List<FullPost> posts) {
+    private ResponseEntity<PostsResponse> getPostsResponseResponseEntity(List<FullPost> posts, String token) {
         PostsResponse postsResponseResult = new PostsResponse(new ArrayList<>());
         for (FullPost fullPost : posts) {
+            boolean isLiked = false;
             final Post post = fullPost.post();
             final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
             final User user = (User) queryBus.send(new RetrieveUserById(post.getUserId().getValue()));
+            if (token != null) {
+                UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+                isLiked = (Boolean) queryBus.send(new IsPostLikedQuery(post.getId().getValue(), userId.getValue()));
+            }
             postsResponseResult.posts.add(new PostResponse(
                     post.getId().getValue(),
                     post.getContent(),
@@ -94,7 +108,8 @@ public class PostController {
                             code.getLanguage()),
                     CoreUserMapper.map(user),
                     post.getDate().toString(),
-                    fullPost.likes()));
+                    fullPost.likes(),
+                    isLiked));
         }
         return ResponseEntity.ok(postsResponseResult);
     }
@@ -110,6 +125,8 @@ public class PostController {
         final Post post = fullPost.post();
         final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
         final User user = (User) queryBus.send(new RetrieveUserById(post.getUserId().getValue()));
+        final Boolean isLiked = (Boolean) queryBus.send(new IsPostLikedQuery(post.getId().getValue(), userId.getValue()));
+
         PostResponse postResponseResult = new PostResponse(
                 String.valueOf(post.getId().getValue()),
                 post.getContent(),
@@ -120,7 +137,8 @@ public class PostController {
                         code.getLanguage()),
                 CoreUserMapper.map(user),
                 post.getDate().toString(),
-                fullPost.likes());
+                fullPost.likes(),
+                isLiked);
         return ResponseEntity.ok(postResponseResult);
     }
 

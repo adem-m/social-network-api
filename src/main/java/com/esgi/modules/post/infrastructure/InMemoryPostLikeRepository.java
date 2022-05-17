@@ -55,7 +55,7 @@ public final class InMemoryPostLikeRepository implements PostLikeRepository {
 
     @Override
     public PostLike findLikeByUserIdAndPostId(UserId userId, PostId postId) {
-        if(data.values().stream().noneMatch(postLike -> postLike.getUserId().equals(userId) && postLike.getPostId().equals(postId))){
+        if (data.values().stream().noneMatch(postLike -> postLike.getUserId().equals(userId) && postLike.getPostId().equals(postId))) {
             return null;
         }
         return data.values().stream()
@@ -65,5 +65,11 @@ public final class InMemoryPostLikeRepository implements PostLikeRepository {
     @Override
     public long countByPostId(PostId postId) {
         return data.values().stream().filter(postLike -> postLike.getPostId().equals(postId)).count();
+    }
+
+    @Override
+    public boolean isLikedByUser(UserId userId, PostId postId) {
+        return data.values().stream()
+                .anyMatch(postLike -> postLike.getUserId().equals(userId) && postLike.getPostId().equals(postId));
     }
 }

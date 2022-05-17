@@ -8,10 +8,7 @@ import com.esgi.modules.authentication.domain.Token;
 import com.esgi.modules.code.application.RetrieveCodeByPostId;
 import com.esgi.modules.code.domain.Code;
 import com.esgi.modules.code.exposition.CodeResponse;
-import com.esgi.modules.post.application.LikePost;
-import com.esgi.modules.post.application.RetrieveLikedPostsByUserId;
-import com.esgi.modules.post.application.RetrievePostById;
-import com.esgi.modules.post.application.UnlikePost;
+import com.esgi.modules.post.application.*;
 import com.esgi.modules.post.domain.FullPost;
 import com.esgi.modules.post.domain.Post;
 import com.esgi.modules.post.domain.PostLike;
@@ -60,6 +57,7 @@ public class PostLikeController {
             final Post post = fullPost.post();
             final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
             final User user = (User) queryBus.send(new RetrieveUserById(post.getUserId().getValue()));
+            final Boolean isLiked = (Boolean) queryBus.send(new IsPostLikedQuery(post.getId().getValue(), id));
             postsResponseResult.posts.add(new PostResponse(
                     String.valueOf(post.getId().getValue()),
                     post.getContent(),
@@ -70,7 +68,8 @@ public class PostLikeController {
                             code.getLanguage()),
                     CoreUserMapper.map(user),
                     post.getDate().toString(),
-                    fullPost.likes()));
+                    fullPost.likes(),
+                    isLiked));
         }
         return ResponseEntity.ok(postsResponseResult);
     }
