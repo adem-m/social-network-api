@@ -63,7 +63,7 @@ public class SpringDataPostLikeRepository implements PostLikeRepository {
 
     @Override
     public long countByPostId(PostId postId) {
-        return jpaPostLikeRepository.countAllByPostId(postId.getValue());
+        return jpaPostLikeRepository.countByPostId(postId.getValue());
     }
 
     @Override
@@ -78,7 +78,7 @@ interface JpaPostLikeRepository extends JpaRepository<PostLikeEntity, String> {
 
     PostLikeEntity findByUserIdAndPostId(String userId, String postId);
 
-    long countAllByPostId(String postId);
+    long countByPostId(String postId);
 
     boolean existsByUserIdAndPostId(String userId, String postId);
 }
