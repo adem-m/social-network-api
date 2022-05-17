@@ -89,36 +89,36 @@ public class PostConfiguration {
     @Bean
     public QueryBus postQueryBus() {
         final QueryBus queryBus = kernelConfiguration.queryBus();
-        queryBus.addHandler(RetrievePostById.class, new RetrievePostByIdHandler(postRepository()));
+        queryBus.addHandler(RetrievePostById.class, new RetrievePostByIdHandler(postRepository(), queryBus));
         return queryBus;
     }
 
     @Bean
     public RetrievePostByIdHandler retrievePostHandler() {
-        return new RetrievePostByIdHandler(postRepository());
+        return new RetrievePostByIdHandler(postRepository(), postQueryBus());
     }
 
     @Bean
     public QueryBus postsQueryBus() {
         final QueryBus queryBus = kernelConfiguration.queryBus();
-        queryBus.addHandler(RetrievePostsByUserId.class, new RetrievePostsByUserIdHandler(postRepository()));
+        queryBus.addHandler(RetrievePostsByUserId.class, new RetrievePostsByUserIdHandler(postRepository(), queryBus));
         return queryBus;
     }
 
     @Bean
     public RetrievePostsByUserIdHandler retrievePostsHandler() {
-        return new RetrievePostsByUserIdHandler(postRepository());
+        return new RetrievePostsByUserIdHandler(postRepository(), postQueryBus());
     }
 
     @Bean
     public QueryBus feedQueryBus() {
         final QueryBus queryBus = kernelConfiguration.queryBus();
-        queryBus.addHandler(RetrieveFeedByUserId.class, new RetrieveFeedByUserIdHandler(postRepository()));
+        queryBus.addHandler(RetrieveFeedByUserId.class, new RetrieveFeedByUserIdHandler(postRepository(), queryBus));
         return queryBus;
     }
 
     @Bean
     public RetrieveFeedByUserIdHandler retrieveFeedByUserIdHandler() {
-        return new RetrieveFeedByUserIdHandler(postRepository());
+        return new RetrieveFeedByUserIdHandler(postRepository(), feedQueryBus());
     }
 }

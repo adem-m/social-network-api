@@ -1,12 +1,16 @@
 package com.esgi.modules.comment.exposition;
 
 import com.esgi.kernel.CommandBus;
+import com.esgi.kernel.CoreUserMapper;
 import com.esgi.kernel.QueryBus;
 import com.esgi.modules.authentication.application.DecodeTokenCommand;
 import com.esgi.modules.authentication.domain.Token;
 import com.esgi.modules.comment.application.*;
 import com.esgi.modules.comment.domain.Comment;
 import com.esgi.modules.comment.domain.CommentId;
+import com.esgi.modules.comment.domain.FullComment;
+import com.esgi.modules.user.application.RetrieveUserById;
+import com.esgi.modules.user.domain.User;
 import com.esgi.modules.user.domain.UserId;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,56 +43,83 @@ public class CommentController {
     }
 
     @GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<CommentResponse> getCommentById(@PathVariable String id) {
-        final Comment comment = (Comment) queryBus.send(new RetrieveCommentById(id));
+    public ResponseEntity<CommentResponse> getCommentById(
+            @RequestHeader(value = "authorization", required = false) String token,
+            @PathVariable String id) {
+        boolean isLiked = false;
+        final FullComment fullComment = (FullComment) queryBus.send(new RetrieveCommentById(id));
+        final Comment comment = fullComment.comment();
+        if (token != null) {
+            UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+            isLiked = (Boolean) queryBus.send(new IsCommentLikedQuery(comment.id().getValue(), userId.getValue()));
+        }
+        final User user = (User) queryBus.send(new RetrieveUserById(comment.getUserId().getValue()));
         CommentResponse commentResponseResult = new CommentResponse(
                 String.valueOf(comment.getCommentId().getValue()),
                 String.valueOf(comment.getPostId().getValue()),
                 comment.getContent(),
-                comment.getUserId().getValue(),
-                comment.getDate());
+                CoreUserMapper.map(user),
+                comment.getDate().toString(),
+                fullComment.likes(),
+                isLiked);
         return ResponseEntity.ok(commentResponseResult);
     }
 
     @GetMapping(path = "/user={id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<CommentsResponse> getCommentsByUserId(@PathVariable String id) {
-        final List<Comment> comments = (List<Comment>) queryBus.send(new RetrieveComments(id));
-        CommentsResponse commentsResponseResult = new CommentsResponse(
-                comments.stream().map(comment -> new CommentResponse(
-                        String.valueOf(comment.getCommentId().getValue()),
-                        String.valueOf(comment.getUserId().getValue()),
-                        comment.getContent(),
-                        comment.getUserId().getValue(),
-                        comment.getDate())).collect(Collectors.toList()));
-        return ResponseEntity.ok(commentsResponseResult);
+    public ResponseEntity<CommentsResponse> getCommentsByUserId(
+            @RequestHeader(value = "authorization", required = false) String token,
+            @PathVariable String id) {
+        final List<FullComment> comments = (List<FullComment>) queryBus.send(new RetrieveComments(id));
+        return getCommentsResponseResponseEntity(token, comments);
     }
 
     @GetMapping(path = "/post={id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<CommentsResponse> getCommentsByPostId(@PathVariable String id) {
-        final List<Comment> comments = (List<Comment>) queryBus.send(new RetrieveCommentsByPostId(id));
+    public ResponseEntity<CommentsResponse> getCommentsByPostId(
+            @RequestHeader(value = "authorization", required = false) String token,
+            @PathVariable String id) {
+        final List<FullComment> comments = (List<FullComment>) queryBus.send(new RetrieveCommentsByPostId(id));
+        return getCommentsResponseResponseEntity(token, comments);
+    }
+
+    private ResponseEntity<CommentsResponse> getCommentsResponseResponseEntity(String token, List<FullComment> comments) {
         CommentsResponse commentsResponseResult = new CommentsResponse(
-                comments.stream().map(comment -> new CommentResponse(
-                        String.valueOf(comment.getCommentId().getValue()),
-                        String.valueOf(comment.getUserId().getValue()),
-                        comment.getContent(),
-                        comment.getUserId().getValue(),
-                        comment.getDate())).collect(Collectors.toList()));
+                comments.stream().map(fullComment -> {
+                    boolean isLiked = false;
+                    final Comment comment = fullComment.comment();
+                    if (token != null) {
+                        UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+                        isLiked = (Boolean) queryBus.send(new IsCommentLikedQuery(comment.id().getValue(), userId.getValue()));
+                    }
+                    final User user = (User) queryBus.send(new RetrieveUserById(comment.getUserId().getValue()));
+                    return new CommentResponse(
+                            comment.getCommentId().getValue(),
+                            comment.getUserId().getValue(),
+                            comment.getContent(),
+                            CoreUserMapper.map(user),
+                            comment.getDate().toString(),
+                            fullComment.likes(),
+                            isLiked);
+                }).collect(Collectors.toList()));
         return ResponseEntity.ok(commentsResponseResult);
     }
 
-    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<CommentResponse> edit(@PathVariable String id, @RequestBody @Valid EditCommentRequest request) {
-        EditComment editComment = new EditComment(id, request.content);
-        commandBus.send(editComment);
-        final Comment comment = (Comment) queryBus.send(new RetrieveCommentById(editComment.commentId));
-        CommentResponse commentResponseResult = new CommentResponse(
-                String.valueOf(comment.getCommentId().getValue()),
-                String.valueOf(comment.getPostId().getValue()),
-                comment.getContent(),
-                comment.getUserId().getValue(),
-                comment.getDate());
-        return ResponseEntity.ok(commentResponseResult);
-    }
+//    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
+//    public ResponseEntity<CommentResponse> edit(@PathVariable String id, @RequestBody @Valid EditCommentRequest request) {
+//        EditComment editComment = new EditComment(id, request.content);
+//        commandBus.send(editComment);
+//        final FullComment fullComment = (FullComment) queryBus.send(new RetrieveCommentById(editComment.commentId));
+//        final Comment comment = fullComment.comment();
+//        final User user = (User) queryBus.send(new RetrieveUserById(comment.getUserId().getValue()));
+//        CommentResponse commentResponseResult = new CommentResponse(
+//                comment.getCommentId().getValue(),
+//                comment.getUserId().getValue(),
+//                comment.getContent(),
+//                CoreUserMapper.map(user),
+//                comment.getDate().toString(),
+//                fullComment.likes(),
+//                fullComment.isLiked());
+//        return ResponseEntity.ok(commentResponseResult);
+//    }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteComment(@RequestHeader("authorization") String token, @PathVariable String id) {

@@ -61,11 +61,26 @@ public class SpringDataCommentLikeRepository implements CommentLikeRepository {
         CommentLikeEntity commentLikeEntity = jpaCommentLikeRepository.findByUserIdAndCommentId(userId.getValue(), commentId.getValue());
         return commentLikeEntity == null ? null : commentLikeMapper.toModel(commentLikeEntity);
     }
+
+    @Override
+    public long countByCommentId(CommentId commentId) {
+        return jpaCommentLikeRepository.countByCommentId(commentId.getValue());
+    }
+
+    @Override
+    public boolean isLikedByUser(UserId userId, CommentId commentId) {
+        return jpaCommentLikeRepository.existsByUserIdAndCommentId(userId.getValue(), commentId.getValue());
+    }
 }
 
 @Repository
 interface JpaCommentLikeRepository extends JpaRepository<CommentLikeEntity, String> {
     List<CommentLikeEntity> findByUserId(String id);
+
     CommentLikeEntity findByUserIdAndCommentId(String userId, String commentId);
+
+    long countByCommentId(String commentId);
+
+    boolean existsByUserIdAndCommentId(String userId, String commentId);
 }
 
