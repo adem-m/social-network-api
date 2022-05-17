@@ -60,10 +60,25 @@ public class SpringDataPostLikeRepository implements PostLikeRepository {
         PostLikeEntity postLikeEntity = jpaPostLikeRepository.findByUserIdAndPostId(userId.getValue(), postId.getValue());
         return postLikeEntity == null ? null : postLikeMapper.toModel(postLikeEntity);
     }
+
+    @Override
+    public long countByPostId(PostId postId) {
+        return jpaPostLikeRepository.countByPostId(postId.getValue());
+    }
+
+    @Override
+    public boolean isLikedByUser(UserId userId, PostId postId) {
+        return jpaPostLikeRepository.existsByUserIdAndPostId(userId.getValue(), postId.getValue());
+    }
 }
 
 @Repository
 interface JpaPostLikeRepository extends JpaRepository<PostLikeEntity, String> {
     List<PostLikeEntity> findAllByUserId(String id);
+
     PostLikeEntity findByUserIdAndPostId(String userId, String postId);
+
+    long countByPostId(String postId);
+
+    boolean existsByUserIdAndPostId(String userId, String postId);
 }

@@ -1,33 +1,37 @@
 package com.esgi.modules.post.exposition;
 
+import com.esgi.kernel.CoreUserResponse;
 import com.esgi.modules.code.exposition.CodeResponse;
-
-import java.time.LocalDateTime;
-import java.util.Date;
 
 public class PostResponse {
     public String id;
     public String content;
     public CodeResponse code;
-    public String userId;
-    public LocalDateTime date;
+    public CoreUserResponse creator;
+    public String date;
+    public long likes;
+    public boolean isLiked;
 
-    public PostResponse(String id, String content, CodeResponse code, String userId, LocalDateTime date){
+    public PostResponse(String id, String content, CodeResponse code, CoreUserResponse creator, String date, long likes, boolean isLiked) {
         this.id = id;
         this.content = content;
         this.code = code;
-        this.userId = userId;
+        this.creator = creator;
         this.date = date;
+        this.likes = likes;
+        this.isLiked = isLiked;
     }
 
     @Override
     public String toString() {
-        return "PostDTO{" +
-                "id=" + id +
+        return "PostResponse{" +
+                "id='" + id + '\'' +
                 ", content='" + content + '\'' +
-                ", code='" + code + '\'' +
-                ", creatorId='" + userId + '\'' +
-                ", date=" + date + '\'' +
+                ", code=" + code +
+                ", creator=" + creator +
+                ", date='" + date + '\'' +
+                ", likes=" + likes +
+                ", isLiked=" + isLiked +
                 '}';
     }
 }

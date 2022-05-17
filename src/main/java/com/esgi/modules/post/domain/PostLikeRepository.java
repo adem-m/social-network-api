@@ -9,4 +9,6 @@ public interface PostLikeRepository extends Repository<PostLikeId, PostLike> {
     List<PostLike> findAll();
     List<PostLike> findPostsLikedByUserId(UserId id);
     PostLike findLikeByUserIdAndPostId(UserId userId, PostId postId);
+    long countByPostId(PostId postId);
+    boolean isLikedByUser(UserId userId, PostId postId);
 }

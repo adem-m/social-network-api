@@ -44,18 +44,18 @@ public class CommentLikeController {
         return ResponseEntity.created(URI.create("/likeComments/id=" + commentLikeId.getValue())).build();
     }
 
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<CommentsResponse> getCommentsLikedByUserId(@RequestHeader("authorization") String token) {
-        UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
-        final List<CommentLike> likedComments =
-                (List<CommentLike>) queryBus.send(new RetrieveLikedCommentsByUserId(userId.getValue()));
-        CommentsResponse commentsResponseResult = new CommentsResponse(new ArrayList<>());
-        for (CommentLike commentLike : likedComments) {
-            final Comment comment = (Comment) queryBus.send(new RetrieveCommentById(commentLike.getCommentId().getValue()));
-            commentsResponseResult.comments.add(new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getPostId().getValue()), comment.getContent(), comment.getUserId().getValue(), comment.getDate()));
-        }
-        return ResponseEntity.ok(commentsResponseResult);
-    }
+//    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+//    public ResponseEntity<CommentsResponse> getCommentsLikedByUserId(@RequestHeader("authorization") String token) {
+//        UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+//        final List<CommentLike> likedComments =
+//                (List<CommentLike>) queryBus.send(new RetrieveLikedCommentsByUserId(userId.getValue()));
+//        CommentsResponse commentsResponseResult = new CommentsResponse(new ArrayList<>());
+//        for (CommentLike commentLike : likedComments) {
+//            final Comment comment = (Comment) queryBus.send(new RetrieveCommentById(commentLike.getCommentId().getValue()));
+//            commentsResponseResult.comments.add(new CommentResponse(String.valueOf(comment.getCommentId().getValue()), String.valueOf(comment.getPostId().getValue()), comment.getContent(), comment.getUserId().getValue(), comment.getDate()));
+//        }
+//        return ResponseEntity.ok(commentsResponseResult);
+//    }
 
     @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> unlikeComment(@RequestHeader("authorization") String token,

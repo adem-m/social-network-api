@@ -68,6 +68,8 @@ public class CommentLikeConfiguration {
     public QueryBus likeCommentQueryBus() {
         final QueryBus queryBus = kernelConfiguration.queryBus();
         queryBus.addHandler(RetrieveLikedCommentsByUserId.class, new RetrieveLikedCommentsByUserIdHandler(commentLikeRepository()));
+        queryBus.addHandler(IsCommentLikedQuery.class, new IsCommentLikedQueryHandler(commentLikeRepository()));
+        queryBus.addHandler(CountCommentLikesQuery.class, new CountCommentLikesQueryHandler(commentLikeRepository()));
         return queryBus;
     }
 
