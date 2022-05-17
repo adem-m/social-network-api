@@ -4,6 +4,7 @@ import com.esgi.kernel.CommandBus;
 import com.esgi.modules.authentication.application.LoginCommand;
 import com.esgi.modules.authentication.application.WrongPasswordException;
 import com.esgi.modules.authentication.domain.Email;
+import com.esgi.modules.authentication.domain.FullToken;
 import com.esgi.modules.authentication.domain.Password;
 import com.esgi.modules.authentication.domain.Token;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +28,8 @@ public class AuthenticationController {
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
         LoginCommand loginCommand = new LoginCommand(new Email(loginRequest.email), new Password(loginRequest.password));
-        Token token = (Token) commandBus.send(loginCommand);
-        return ResponseEntity.ok(new LoginResponse(token.value()));
+        FullToken fullToken = (FullToken) commandBus.send(loginCommand);
+        return ResponseEntity.ok(new LoginResponse(fullToken.token(), fullToken.userId()));
     }
 
     @ExceptionHandler(WrongPasswordException.class)
