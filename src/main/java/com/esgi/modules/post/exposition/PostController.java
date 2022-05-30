@@ -101,11 +101,12 @@ public class PostController {
             postsResponseResult.posts.add(new PostResponse(
                     post.getId().getValue(),
                     post.getContent(),
-                    new CodeResponse(
-                            String.valueOf(code.getCodeId().getValue()),
-                            code.getPostId().getValue(),
-                            code.getSource(),
-                            code.getLanguage()),
+                    code == null ? null :
+                            new CodeResponse(
+                                    String.valueOf(code.getCodeId().getValue()),
+                                    code.getPostId().getValue(),
+                                    code.getSource(),
+                                    code.getLanguage()),
                     CoreUserMapper.map(user),
                     post.getDate().toString(),
                     fullPost.likes(),
