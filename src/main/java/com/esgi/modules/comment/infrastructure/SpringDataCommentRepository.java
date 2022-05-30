@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -51,7 +52,7 @@ public class SpringDataCommentRepository implements CommentRepository {
     @Override
     public List<Comment> findByPostId(PostId postId) {
         return jpaCommentRepository
-                .findByPostId(postId.getValue())
+                .findByPostIdOrderByDate(postId.getValue())
                 .stream().map(commentMapper::toModel)
                 .collect(Collectors.toList());
     }
@@ -67,6 +68,6 @@ public class SpringDataCommentRepository implements CommentRepository {
 
 @Repository
 interface JpaCommentRepository extends JpaRepository<CommentEntity, String> {
-    List<CommentEntity> findByPostId(String id);
+    List<CommentEntity> findByPostIdOrderByDate(String id);
     List<CommentEntity> findByUserId(String id);
 }
