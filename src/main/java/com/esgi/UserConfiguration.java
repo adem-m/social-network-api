@@ -32,7 +32,7 @@ public class UserConfiguration {
 
     @Bean
     public CreateUserCommandHandler createUserCommandHandler() {
-        return new CreateUserCommandHandler(userRepository(), kernelConfiguration.eventDispatcher());
+        return new CreateUserCommandHandler(userRepository(), kernelConfiguration.eventDispatcher(), kernelConfiguration.commandBus());
     }
 
     @Bean
