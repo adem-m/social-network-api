@@ -40,6 +40,14 @@ public class UserController {
         return ResponseEntity.created(URI.create("/users/id=" + userId.getValue())).build();
     }
 
+    @GetMapping(path = "/self", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<GetSelfResponse> getSelf(@RequestHeader("authorization") String token) {
+        UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+        final User user = (User) queryBus.send(new RetrieveUserById(userId.getValue()));
+        final GetSelfResponse response = new GetSelfResponse(user.getId().getValue());
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping(path = "/id={id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserResponse> getUserById(@PathVariable String id) {
         final User user = (User) queryBus.send(new RetrieveUserById(id));
