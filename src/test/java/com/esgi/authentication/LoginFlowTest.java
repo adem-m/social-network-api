@@ -1,11 +1,14 @@
 package com.esgi.authentication;
 
 import com.esgi.fixtures.UserTestFixtures;
+import com.esgi.modules.authentication.exposition.LoginRequest;
 import com.esgi.modules.authentication.exposition.LoginResponse;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
@@ -19,6 +22,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.json.JSONObject;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(
         webEnvironment = WebEnvironment.RANDOM_PORT
@@ -29,7 +34,7 @@ public class LoginFlowTest {
     @LocalServerPort
     int port;
 
-    @BeforeEach
+    @Before
     public void setup() {
         RestAssured.port = port;
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
@@ -37,12 +42,19 @@ public class LoginFlowTest {
 
     @Test
     public void should_return_jwt() {
-        UserTestFixtures.insertTestUser(port);
+        UserTestFixtures.insertTestUser(port)
+            .then()
+            .statusCode(201);
+
+        LoginRequest body = new LoginRequest();
+        body.email = "test@example.com";
+        body.password = "azertyUIOP123$";
 
         var res =
                 given()
                         .port(port)
                         .contentType(ContentType.JSON)
+                        .with().body(body)
                         .when()
                         .post("/login")
                         .then()
@@ -53,6 +65,8 @@ public class LoginFlowTest {
         assertThat(res.token()).isInstanceOf(String.class);
         assertThat(res.userId()).isInstanceOf(String.class);
 
-        UserTestFixtures.deleteUser(res.token(), port);
+        UserTestFixtures.deleteUser(res.token(), port)
+            .then()
+            .statusCode(204);
     }
 }

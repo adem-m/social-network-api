@@ -29,7 +29,7 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
         LoginCommand loginCommand = new LoginCommand(new Email(loginRequest.email), new Password(loginRequest.password));
         FullToken fullToken = (FullToken) commandBus.send(loginCommand);
-        return ResponseEntity.ok(new LoginResponse(fullToken.token(), fullToken.userId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new LoginResponse(fullToken.token(), fullToken.userId()));
     }
 
     @ExceptionHandler(WrongPasswordException.class)

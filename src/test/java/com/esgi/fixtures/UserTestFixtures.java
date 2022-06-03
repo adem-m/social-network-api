@@ -1,7 +1,5 @@
 package com.esgi.fixtures;
 
-import com.esgi.modules.user.application.CreateUser;
-import com.esgi.modules.user.domain.Email;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
@@ -9,11 +7,11 @@ import static io.restassured.RestAssured.given;
 
 public class UserTestFixtures {
     public static Response insertTestUser(int port) {
-        final var request = new CreateUser("lastname", "firstname", new Email("test@example.com"), "azertyUIOP123$");
+        final var request = new UserTestFixtures.Data("lastname", "firstname", "test@example.com", "azertyUIOP123$");
         return given()
                 .port(port)
                 .contentType(ContentType.JSON)
-                .body(request)
+                .with().body(request)
                 .when()
                 .post("/users/register");
     }
@@ -24,5 +22,19 @@ public class UserTestFixtures {
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .delete("/users");
+    }
+
+    static class Data {
+        final public String lastname;
+        final public String firstname;
+        final public String email;
+        final public String password;
+
+        public Data(String lastname, String firstname, String email, String password) {
+            this.lastname = lastname;
+            this.firstname = firstname;
+            this.email = email;
+            this.password = password;
+        }
     }
 }
