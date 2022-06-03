@@ -8,6 +8,7 @@ import com.esgi.modules.user.domain.UserRepository;
 import com.esgi.modules.user.infrastructure.SpringDataUserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class UserConfiguration {
@@ -18,6 +19,7 @@ public class UserConfiguration {
     }
 
     @Bean
+    @Primary
     public UserRepository userRepository() {
         return new SpringDataUserRepository();
     }
