@@ -1,11 +1,9 @@
 package com.esgi.user;
 
 import java.util.HashMap;
+import java.util.Map;
 
-import com.esgi.kernel.AlreadyExistsException;
-import com.esgi.kernel.DefaultEventDispatcher;
-import com.esgi.kernel.Event;
-import com.esgi.kernel.EventDispatcher;
+import com.esgi.kernel.*;
 import com.esgi.modules.user.application.CreateUser;
 import com.esgi.modules.user.application.CreateUserCommandHandler;
 import com.esgi.modules.user.domain.Email;
@@ -21,6 +19,7 @@ public class CreateUserHandlerTest {
     CreateUserCommandHandler handler;
     InMemoryUserRepository repository;
     EventDispatcher<Event> dispatcher;
+    CommandBus commandBus;
 
     final CreateUser request = new CreateUser("lastname", "firstname", new Email("test@example.com"), "azertyUIOP123$");
     
@@ -28,7 +27,8 @@ public class CreateUserHandlerTest {
     void setup() {
         repository = new InMemoryUserRepository();
         dispatcher = new DefaultEventDispatcher<Event>(new HashMap());
-        handler = new CreateUserCommandHandler(repository, dispatcher);
+        commandBus = new DefaultCommandBus(Map.of());
+        handler = new CreateUserCommandHandler(repository, dispatcher, commandBus);
     }
 
     @Test
