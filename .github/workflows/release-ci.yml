@@ -1,0 +1,17 @@
+name: Continuous integration for Release
+
+on:
+  release:
+    types: [ created ]
+
+jobs:
+  deploy_docker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build prod release image
+      run: |
+        TAG=${GITHUB_REF/refs\/tags\//}
+        make build-docker IMAGE_TAG=$TAG
+        echo ${{ secrets.QUAY_PASSWORD }} | docker login -u ${{ secrets.QUAY_LOGIN }} --password-stdin quay.io
+        make deploy-docker IMAGE_TAG=$TAG
