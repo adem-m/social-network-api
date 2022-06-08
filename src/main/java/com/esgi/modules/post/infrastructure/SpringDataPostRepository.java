@@ -69,6 +69,6 @@ public class SpringDataPostRepository implements PostRepository {
 @Repository
 interface JpaPostRepository extends JpaRepository<PostEntity, String> {
     List<PostEntity> findAllByCreatorIdOrderByCreationDateDesc(String id);
-    @Query("SELECT p FROM PostEntity p, FollowEntity f WHERE p.creatorId = f.followedId AND f.followerId = :id ORDER BY p.creationDate DESC")
+    @Query("SELECT p FROM PostEntity p JOIN FollowEntity f ON f.followerId = p.creatorId WHERE f.followedId = :id")
     List<PostEntity> findFeedByUserId(@Param("id") String id);
 }
