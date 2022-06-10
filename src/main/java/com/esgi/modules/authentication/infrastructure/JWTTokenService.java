@@ -18,7 +18,8 @@ import java.util.Date;
 public class JWTTokenService implements TokenService {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
-    private static final int EXPIRATION_TIME = 1000 * 60 * 60 * 24;
+    private static final int SEVEN_DAYS = 1000 * 60 * 60 * 24 * 7;
+    private static final int EXPIRATION_TIME = SEVEN_DAYS;
 
     @Override
     public Token generateToken(String email, String userId) {
