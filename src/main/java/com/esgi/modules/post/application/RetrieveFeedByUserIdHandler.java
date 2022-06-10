@@ -22,9 +22,15 @@ public class RetrieveFeedByUserIdHandler implements QueryHandler<RetrieveFeedByU
 
     @Override
     public List<FullPost> handle(RetrieveFeedByUserId query) {
-        UserId userId = new UserId(query.id);
-        log.info("Retrieving feed for user {}", userId.getValue());
-        List<Post> posts = postRepository.findFeedByUserId(userId);
+        List<Post> posts = null;
+        if (query.id == null) {
+            log.info("Retrieving feed for anonymous user");
+            posts = postRepository.findAll();
+        } else {
+            UserId userId = new UserId(query.id);
+            log.info("Retrieving feed for user {}", userId.getValue());
+            posts = postRepository.findFeedByUserId(userId);
+        }
         return posts.stream().map(post -> {
             Long likes = (Long) queryBus.send(new CountPostLikesQuery(post.id().getValue()));
             return new FullPost(post, likes);

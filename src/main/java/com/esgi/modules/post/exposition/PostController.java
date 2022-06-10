@@ -81,8 +81,11 @@ public class PostController {
     }
 
     @GetMapping(path = "/feed", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PostsResponse> getFeed(@RequestHeader("authorization") String token) {
-        UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+    public ResponseEntity<PostsResponse> getFeed(@RequestHeader(value = "authorization", required = false) String token) {
+        UserId userId = new UserId(null);
+        if (token != null) {
+            userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+        }
         final List<FullPost> posts = (List<FullPost>) queryBus.send(new RetrieveFeedByUserId(userId.getValue()));
         return getPostsResponseResponseEntity(posts, token);
     }

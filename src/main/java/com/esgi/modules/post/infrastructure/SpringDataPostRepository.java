@@ -46,7 +46,7 @@ public class SpringDataPostRepository implements PostRepository {
 
     @Override
     public List<Post> findAll() {
-        return jpaPostRepository.findAll().stream().map(postMapper::toModel).collect(Collectors.toList());
+        return jpaPostRepository.findAllByIdNotNullOrderByCreationDateDesc().stream().map(postMapper::toModel).toList();
     }
 
     @Override
@@ -68,7 +68,10 @@ public class SpringDataPostRepository implements PostRepository {
 
 @Repository
 interface JpaPostRepository extends JpaRepository<PostEntity, String> {
+    List<PostEntity> findAllByIdNotNullOrderByCreationDateDesc();
+
     List<PostEntity> findAllByCreatorIdOrderByCreationDateDesc(String id);
+
     @Query("SELECT p FROM PostEntity p JOIN FollowEntity f ON f.followerId = p.creatorId WHERE f.followedId = :id")
     List<PostEntity> findFeedByUserId(@Param("id") String id);
 }
