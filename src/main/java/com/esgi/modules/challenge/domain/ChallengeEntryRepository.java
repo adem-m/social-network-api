@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ChallengeEntryRepository extends Repository<ChallengeEntryId, ChallengeEntry> {
     List<CodeId> findCodeIdsByUserId(UserId userId);
+    ChallengeEntry findByCodeIdAndUserId(CodeId codeId, UserId userId);
 }

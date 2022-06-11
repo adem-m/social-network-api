@@ -49,10 +49,18 @@ public class SpringDataChallengeEntryRepository implements ChallengeEntryReposit
                 .stream().map(CodeId::new)
                 .toList();
     }
+
+    @Override
+    public ChallengeEntry findByCodeIdAndUserId(CodeId codeId, UserId userId) {
+        ChallengeEntryEntity entity = repository.findByCodeIdAndUserId(codeId.getValue(), userId.getValue());
+        return entity == null ? null : ChallengeEntryMapper.toDomain(entity);
+    }
 }
 
 @Repository
 interface JpaChallengeEntryRepository extends JpaRepository<ChallengeEntryEntity, String> {
     @Query("SELECT e.codeId FROM ChallengeEntryEntity e WHERE e.userId = ?1")
     List<String> findCodeIdsByUserId(String userId);
+
+    ChallengeEntryEntity findByCodeIdAndUserId(String codeId, String userId);
 }

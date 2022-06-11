@@ -61,8 +61,8 @@ public class ChallengeController {
             @RequestHeader(value = "authorization", required = false) String token) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         List<Code> codes = (List<Code>) queryBus.send(new RetrieveChallengeQuery(userId.getValue()));
-        List<CodeResponse> codeResponses =
-                codes.stream().map(code -> new CodeResponse(code.getSource(), code.getLanguage())).toList();
+        List<ChallengeEntry> codeResponses =
+                codes.stream().map(code -> new ChallengeEntry(code.getCodeId().getValue(), code.getSource(), code.getLanguage())).toList();
         return ResponseEntity.ok(new GetChallengeResponse(codeResponses));
     }
 

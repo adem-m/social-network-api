@@ -1,5 +1,6 @@
 package com.esgi.modules.challenge.application;
 
+import com.esgi.kernel.AlreadyExistsException;
 import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.CommandHandler;
 import com.esgi.modules.challenge.domain.ChallengeEntry;
@@ -15,6 +16,12 @@ public record AddChallengeEntryCommandHandler(
         ChallengeEntryRepository challengeEntryRepository) implements CommandHandler<AddChallengeEntryCommand, ChallengeEntryId> {
     @Override
     public ChallengeEntryId handle(AddChallengeEntryCommand command) {
+        ChallengeEntry challengeEntry =
+                challengeEntryRepository.findByCodeIdAndUserId(new CodeId(command.codeId()), new UserId(command.userId()));
+        if (challengeEntry != null) {
+            log.error("Challenge entry {} already exists", challengeEntry.id().value());
+            throw new AlreadyExistsException("Challenge entry already exists");
+        }
         ChallengeEntryId challengeEntryId = challengeEntryRepository.nextIdentity();
         challengeEntryRepository.add(new ChallengeEntry(
                 challengeEntryId,
