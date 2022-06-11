@@ -34,7 +34,7 @@ public class CommentController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> create(@RequestHeader("authorization") String token,
+    public ResponseEntity<Void> create(@RequestHeader(value = "authorization", required = false) String token,
                                        @RequestBody @Valid CommentRequest request) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         CreateComment createComment = new CreateComment(request.postId, request.content, userId.getValue());
@@ -122,7 +122,9 @@ public class CommentController {
 //    }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> deleteComment(@RequestHeader("authorization") String token, @PathVariable String id) {
+    public ResponseEntity<Void> deleteComment(
+            @RequestHeader(value = "authorization", required = false) String token,
+            @PathVariable String id) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         DeleteComment deleteComment = new DeleteComment(id, userId);
         commandBus.send(deleteComment);

@@ -32,6 +32,11 @@ public class ChallengeConfiguration {
     }
 
     @Bean
+    public RetrieveChallengeQueryHandler retrieveChallengeQueryHandler() {
+        return new RetrieveChallengeQueryHandler(kernelConfiguration.queryBus(), challengeEntryRepository());
+    }
+
+    @Bean
     public RunChallengeQueryHandler runChallengeQueryHandler() {
         return new RunChallengeQueryHandler(
                 kernelConfiguration.commandBus(),
@@ -52,6 +57,7 @@ public class ChallengeConfiguration {
     public QueryBus challengeQueryBus() {
         final QueryBus queryBus = kernelConfiguration.queryBus();
         queryBus.addHandler(RunChallengeQuery.class, runChallengeQueryHandler());
+        queryBus.addHandler(RetrieveChallengeQuery.class, retrieveChallengeQueryHandler());
         return queryBus;
     }
 }

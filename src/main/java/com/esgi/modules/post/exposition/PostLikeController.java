@@ -38,7 +38,7 @@ public class PostLikeController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> likePost(@RequestHeader("authorization") String token,
+    public ResponseEntity<Void> likePost(@RequestHeader(value = "authorization", required = false) String token,
                                          @RequestBody @Valid PostLikeRequest request) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         LikePost likePost = new LikePost(userId.getValue(), request.postId);
@@ -75,7 +75,7 @@ public class PostLikeController {
     }
 
     @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> unlike(@RequestHeader("authorization") String token,
+    public ResponseEntity<Void> unlike(@RequestHeader(value = "authorization", required = false) String token,
                                        @RequestBody @Valid PostLikeRequest request) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         UnlikePost unlikePost = new UnlikePost(userId.getValue(), request.postId);

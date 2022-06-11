@@ -34,7 +34,7 @@ public class CommentLikeController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> likeComment(@RequestHeader("authorization") String token,
+    public ResponseEntity<Void> likeComment(@RequestHeader(value = "authorization", required = false) String token,
                                             @RequestBody @Valid CommentLikeRequest request) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         LikeComment likeComment = new LikeComment(userId.getValue(), request.commentId);
@@ -58,7 +58,7 @@ public class CommentLikeController {
 //    }
 
     @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> unlikeComment(@RequestHeader("authorization") String token,
+    public ResponseEntity<Void> unlikeComment(@RequestHeader(value = "authorization", required = false) String token,
                                               @RequestBody @Valid CommentLikeRequest request) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         UnlikeComment unlikeComment = new UnlikeComment(userId.getValue(), request.commentId);

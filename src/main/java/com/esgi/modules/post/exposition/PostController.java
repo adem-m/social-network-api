@@ -36,7 +36,7 @@ public class PostController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> create(@RequestHeader("authorization") String token,
+    public ResponseEntity<Void> create(@RequestHeader(value = "authorization", required = false) String token,
                                        @RequestBody @Valid PostRequest request) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         CreatePost createPost = new CreatePost(request.content, request.code, userId.getValue());
@@ -119,7 +119,7 @@ public class PostController {
     }
 
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PostResponse> edit(@RequestHeader("authorization") String token,
+    public ResponseEntity<PostResponse> edit(@RequestHeader(value = "authorization", required = false) String token,
                                              @PathVariable String id,
                                              @RequestBody @Valid EditPostRequest request) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
@@ -147,7 +147,7 @@ public class PostController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> deletePost(@RequestHeader("authorization") String token,
+    public ResponseEntity<Void> deletePost(@RequestHeader(value = "authorization", required = false) String token,
                                            @PathVariable String id) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         DeletePost deletePost = new DeletePost(id, userId.getValue());
