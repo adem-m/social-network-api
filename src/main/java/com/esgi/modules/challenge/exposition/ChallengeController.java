@@ -28,8 +28,7 @@ public class ChallengeController {
         this.queryBus = queryBus;
     }
 
-    @PostMapping(value = "/add-to-queue",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> addToQueue(@RequestHeader(value = "authorization", required = false) String token,
                                            @RequestBody @Valid AddToQueueRequest request) {
