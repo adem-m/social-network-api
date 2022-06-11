@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/self", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<GetSelfResponse> getSelf(@RequestHeader("authorization") String token) {
+    public ResponseEntity<GetSelfResponse> getSelf(@RequestHeader(value = "authorization", required = false) String token) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         final User user = (User) queryBus.send(new RetrieveUserById(userId.getValue()));
         final GetSelfResponse response = new GetSelfResponse(user.getId().getValue());
@@ -99,7 +99,7 @@ public class UserController {
     }
 
     @PutMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UserResponse> updateUser(@RequestHeader("authorization") String token,
+    public ResponseEntity<UserResponse> updateUser(@RequestHeader(value = "authorization", required = false) String token,
                                                    @RequestBody @Valid UpdateUserRequest request) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         UpdateUser updateUser = new UpdateUser(userId.getValue(), new Email(request.email), request.password);
@@ -115,7 +115,7 @@ public class UserController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteUser(@RequestHeader("authorization") String token) {
+    public ResponseEntity<Void> deleteUser(@RequestHeader(value = "authorization", required = false) String token) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         DeleteUser deleteUser = new DeleteUser(userId.getValue());
         commandBus.send(deleteUser);

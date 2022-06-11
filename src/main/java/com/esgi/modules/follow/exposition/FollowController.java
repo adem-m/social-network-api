@@ -34,7 +34,7 @@ public class FollowController {
     }
 
     @PostMapping(path = "/follow", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createFollow(@RequestHeader("authorization") String token,
+    public ResponseEntity<Void> createFollow(@RequestHeader(value = "authorization", required = false) String token,
                                              @RequestBody @Valid FollowRequest request) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         CreateFollow createFollow = new CreateFollow(userId.getValue(), request.followedId);
@@ -91,7 +91,7 @@ public class FollowController {
     }
 
     @DeleteMapping(path = "/unfollow", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> unfollow(@RequestHeader("authorization") String token,
+    public ResponseEntity<Void> unfollow(@RequestHeader(value = "authorization", required = false) String token,
                                          @RequestBody @Valid FollowRequest request) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         Unfollow unfollow = new Unfollow(userId.getValue(), request.followedId);
