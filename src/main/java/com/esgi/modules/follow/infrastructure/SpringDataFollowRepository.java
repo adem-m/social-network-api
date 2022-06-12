@@ -48,15 +48,15 @@ public class SpringDataFollowRepository implements FollowRepository {
     }
 
     @Override
-    public List<Follow> findFollowingByUserId(UserId followedId) {
-        return jpaFollowRepository.findByFollowedId(followedId.getValue())
+    public List<Follow> findFollowingByUserId(UserId followerId) {
+        return jpaFollowRepository.findByFollowerId(followerId.getValue())
                 .stream().map(followMapper::toModel)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Follow> findFollowersByUserId(UserId followerId) {
-        return jpaFollowRepository.findByFollowerId(followerId.getValue())
+    public List<Follow> findFollowersByUserId(UserId followedId) {
+        return jpaFollowRepository.findByFollowedId(followedId.getValue())
                 .stream().map(followMapper::toModel)
                 .collect(Collectors.toList());
     }
@@ -66,6 +66,11 @@ public class SpringDataFollowRepository implements FollowRepository {
         FollowEntity followEntity = jpaFollowRepository.findByFollowerIdAndFollowedId(followerId.getValue(), followedId.getValue());
         return followEntity == null ? null : followMapper.toModel(followEntity);
     }
+
+    @Override
+    public boolean isFollowing(UserId followerId, UserId followedId) {
+        return jpaFollowRepository.existsByFollowerIdAndFollowedId(followerId.getValue(), followedId.getValue());
+    }
 }
 
 @Repository
@@ -73,4 +78,5 @@ interface JpaFollowRepository extends JpaRepository<FollowEntity, String> {
     List<FollowEntity> findByFollowedId(String id);
     List<FollowEntity> findByFollowerId(String id);
     FollowEntity findByFollowerIdAndFollowedId(String followerId, String followedId);
+    boolean existsByFollowerIdAndFollowedId(String followerId, String followedId);
 }

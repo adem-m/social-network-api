@@ -49,14 +49,20 @@ public class UserController {
     }
 
     @GetMapping(path = "/id={id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UserResponse> getUserById(@PathVariable String id) {
-        final User user = (User) queryBus.send(new RetrieveUserById(id));
+    public ResponseEntity<UserResponse> getUserById(@RequestHeader(value = "authorization", required = false) String token,
+                                                    @PathVariable String id) {
+        UserId userId = new UserId(null);
+        if (token != null) {
+            userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
+        }
+        final User user = (User) queryBus.send(new RetrieveUserById(id, userId.getValue()));
         UserResponse userResponseResult =
                 new UserResponse(
                         String.valueOf(user.getId().getValue()),
                         user.getLastname(),
                         user.getFirstname(),
-                        user.getEmail().getEmail());
+                        user.getEmail().getEmail(),
+                        user.isFollowed());
         return ResponseEntity.ok(userResponseResult);
     }
 

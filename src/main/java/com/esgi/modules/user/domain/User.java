@@ -11,12 +11,24 @@ public final class User implements Entity<UserId> {
     private Email email;
     private String password;
 
+    private boolean isFollowed;
+
     public User(UserId id, String lastname, String firstname, Email email, String password) {
         this.id = Objects.requireNonNull(id);
         this.lastname = Objects.requireNonNull(lastname);
         this.firstname = Objects.requireNonNull(firstname);
         this.email = Objects.requireNonNull(email);
         this.password = Objects.requireNonNull(password);
+        this.isFollowed = false;
+    }
+
+    public User(UserId id, String lastname, String firstname, Email email, String password, boolean isFollowed) {
+        this.id = Objects.requireNonNull(id);
+        this.lastname = Objects.requireNonNull(lastname);
+        this.firstname = Objects.requireNonNull(firstname);
+        this.email = Objects.requireNonNull(email);
+        this.password = Objects.requireNonNull(password);
+        this.isFollowed = isFollowed;
     }
 
     @Override
@@ -48,6 +60,10 @@ public final class User implements Entity<UserId> {
         this.password = Objects.requireNonNull(newPassword);
     }
 
+    public void setFollowed(boolean followed) {
+        isFollowed = followed;
+    }
+
     public void changeEmail(Email newEmail) {
         this.email = Objects.requireNonNull(newEmail);
     }
@@ -74,5 +90,9 @@ public final class User implements Entity<UserId> {
                 ", email=" + email +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    public boolean isFollowed() {
+        return isFollowed;
     }
 }

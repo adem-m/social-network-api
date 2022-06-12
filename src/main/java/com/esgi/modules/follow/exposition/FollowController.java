@@ -47,7 +47,7 @@ public class FollowController {
         final List<Follow> follows = (List<Follow>) queryBus.send(new RetrieveFollowing(id));
         UsersResponse usersResponseResult = new UsersResponse(new ArrayList<>());
         for (Follow follow : follows) {
-            final User user = (User) queryBus.send(new RetrieveUserById(follow.getFollowerId().getValue()));
+            final User user = (User) queryBus.send(new RetrieveUserById(follow.getFollowedId().getValue()));
             usersResponseResult.members.add(
                     new UserResponse(
                             String.valueOf(user.getId().getValue()),
@@ -59,7 +59,7 @@ public class FollowController {
     }
 
     @GetMapping(path = "/followers/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UsersResponse> getFollowersByFollowerId(@PathVariable String id) {
+    public ResponseEntity<UsersResponse> getFollowersByFollowingId(@PathVariable String id) {
         final List<Follow> follows = (List<Follow>) queryBus.send(new RetrieveFollowers(id));
         return getUsersResponseResponseEntity(follows);
     }
@@ -67,7 +67,7 @@ public class FollowController {
     private ResponseEntity<UsersResponse> getUsersResponseResponseEntity(List<Follow> follows) {
         UsersResponse usersResponseResult = new UsersResponse(new ArrayList<>());
         for (Follow follow : follows) {
-            final User user = (User) queryBus.send(new RetrieveUserById(follow.getFollowedId().getValue()));
+            final User user = (User) queryBus.send(new RetrieveUserById(follow.getFollowerId().getValue()));
             usersResponseResult.members.add(
                     new UserResponse(
                             String.valueOf(user.getId().getValue()),
