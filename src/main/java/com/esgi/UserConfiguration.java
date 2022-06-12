@@ -13,9 +13,11 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class UserConfiguration {
     private final KernelConfiguration kernelConfiguration;
+    private final FollowConfiguration followConfiguration;
 
-    public UserConfiguration(KernelConfiguration kernelConfiguration) {
+    public UserConfiguration(KernelConfiguration kernelConfiguration, FollowConfiguration followConfiguration) {
         this.kernelConfiguration = kernelConfiguration;
+        this.followConfiguration = followConfiguration;
     }
 
     @Bean
@@ -87,13 +89,14 @@ public class UserConfiguration {
     @Bean
     public QueryBus userIdQueryBus() {
         final QueryBus queryBus = kernelConfiguration.queryBus();
-        queryBus.addHandler(RetrieveUserById.class, new RetrieveUserByIdHandler(userRepository()));
+        queryBus.addHandler(RetrieveUserById.class, new RetrieveUserByIdHandler(followConfiguration.followRepository(),
+                userRepository()));
         return queryBus;
     }
 
     @Bean
     public RetrieveUserByIdHandler retrieveUserByIdHandler() {
-        return new RetrieveUserByIdHandler(userRepository());
+        return new RetrieveUserByIdHandler(followConfiguration.followRepository(), userRepository());
     }
 
     @Bean
