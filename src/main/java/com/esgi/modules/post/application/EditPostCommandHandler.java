@@ -8,6 +8,7 @@ import com.esgi.modules.post.domain.PostId;
 import com.esgi.modules.post.domain.PostRepository;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public final class EditPostCommandHandler implements CommandHandler<EditPost, PostId> {
     private final PostRepository postRepository;
@@ -33,7 +34,7 @@ public final class EditPostCommandHandler implements CommandHandler<EditPost, Po
             code.changeSource(editPost.code.source);
         }
         if ((editPost.content != null && !editPost.content.equals("")) || editPost.code != null) {
-            post.changeLocalDateTime(LocalDateTime.now());
+            post.changeLocalDateTime(LocalDateTime.now(ZoneId.of("Europe/Paris")));
         }
         postRepository.add(post);
         eventEventDispatcher.dispatch(new EditPostEvent(postId));

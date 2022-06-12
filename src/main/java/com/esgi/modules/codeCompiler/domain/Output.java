@@ -6,7 +6,7 @@ public final class Output {
 
     private final String value;
     private final Status status;
-    private final Duration duration;
+    private Duration duration;
 
     private Output(String value, Status status, Duration duration) {
         this.value = value;
@@ -36,5 +36,9 @@ public final class Output {
 
     public Duration getDuration() {
         return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
     }
 }

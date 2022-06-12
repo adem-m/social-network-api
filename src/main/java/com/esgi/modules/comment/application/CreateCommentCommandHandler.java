@@ -10,6 +10,7 @@ import com.esgi.modules.post.domain.PostId;
 import com.esgi.modules.user.domain.UserId;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public final class CreateCommentCommandHandler implements CommandHandler<CreateComment, CommentId> {
     private final CommentRepository commentRepository;
@@ -24,7 +25,7 @@ public final class CreateCommentCommandHandler implements CommandHandler<CreateC
         final CommentId commentId = commentRepository.nextIdentity();
         final PostId postId = new PostId(createComment.postId);
         final UserId creatorId = new UserId(createComment.creatorId);
-        Comment comment = new Comment(commentId, postId, createComment.content, creatorId, LocalDateTime.now());
+        Comment comment = new Comment(commentId, postId, createComment.content, creatorId, LocalDateTime.now(ZoneId.of("Europe/Paris")));
         commentRepository.add(comment);
         eventEventDispatcher.dispatch(new CreateCommentEvent(commentId));
         return commentId;
