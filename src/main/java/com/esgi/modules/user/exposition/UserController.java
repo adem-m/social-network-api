@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,7 +35,7 @@ public class UserController {
                                          @RequestParam String firstname,
                                          @RequestParam String lastname,
                                          @RequestParam String email,
-                                         @RequestParam String password) throws IOException {
+                                         @RequestParam String password) {
         CreateUser createUser = new CreateUser(
                 lastname,
                 firstname,
@@ -56,19 +55,21 @@ public class UserController {
     }
 
     @GetMapping(path = "/id={id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UserResponse> getUserById(@RequestHeader(value = "authorization", required = false) String token,
-                                                    @PathVariable String id) {
+    public ResponseEntity<UserResponse> getUserById(
+            @RequestHeader(value = "authorization", required = false) String token,
+            @PathVariable String id) {
         UserId userId = new UserId(null);
         if (token != null) {
             userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         }
-        final User user = (User) queryBus.send(new RetrieveUserById(id, userId.getValue()));
+        final User user = (User) queryBus.send(new RetrieveUserById(id, userId.getValue(), false));
         UserResponse userResponseResult =
                 new UserResponse(
                         String.valueOf(user.getId().getValue()),
                         user.getLastname(),
                         user.getFirstname(),
                         user.getEmail().getEmail(),
+                        user.getImage(),
                         user.isFollowed());
         return ResponseEntity.ok(userResponseResult);
     }
@@ -81,7 +82,8 @@ public class UserController {
                         String.valueOf(user.getId().getValue()),
                         user.getLastname(),
                         user.getFirstname(),
-                        user.getEmail().getEmail());
+                        user.getEmail().getEmail(),
+                        user.getImage());
         return ResponseEntity.ok(userResponseResult);
     }
 
@@ -94,7 +96,8 @@ public class UserController {
                                 String.valueOf(user.getId().getValue()),
                                 user.getLastname(),
                                 user.getFirstname(),
-                                user.getEmail().getEmail())).collect(Collectors.toList()));
+                                user.getEmail().getEmail(),
+                                user.getImage())).collect(Collectors.toList()));
         return ResponseEntity.ok(usersResponseResult);
     }
 
@@ -107,7 +110,8 @@ public class UserController {
                                 String.valueOf(user.getId().getValue()),
                                 user.getLastname(),
                                 user.getFirstname(),
-                                user.getEmail().getEmail())).collect(Collectors.toList()));
+                                user.getEmail().getEmail(),
+                                user.getImage())).collect(Collectors.toList()));
         return ResponseEntity.ok(usersResponseResult);
     }
 
@@ -123,7 +127,8 @@ public class UserController {
                         String.valueOf(user.getId().getValue()),
                         user.getLastname(),
                         user.getFirstname(),
-                        user.getEmail().getEmail());
+                        user.getEmail().getEmail(),
+                        user.getImage());
         return ResponseEntity.ok(userResponseResult);
     }
 

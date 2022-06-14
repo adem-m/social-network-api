@@ -1,17 +1,22 @@
 package com.esgi.fixtures;
 
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.config.EncoderConfig.encoderConfig;
 
 public class UserTestFixtures {
     public static Response insertTestUser(int port) {
         final var request = new UserTestFixtures.Data("lastname", "firstname", "test@example.com", "azertyUIOP123$");
         return given()
+                .config(RestAssured.config().encoderConfig(encoderConfig().encodeContentTypeAs("multipart/form-data", ContentType.TEXT)))
                 .port(port)
-                .contentType(ContentType.JSON)
-                .with().body(request)
+                .formParam("lastname", request.lastname)
+                .formParam("firstname", request.firstname)
+                .formParam("email", request.email)
+                .formParam("password", request.password)
                 .when()
                 .post("/users/register");
     }

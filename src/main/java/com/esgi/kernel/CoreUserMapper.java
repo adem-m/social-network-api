@@ -6,6 +6,8 @@ public class CoreUserMapper {
     public static CoreUserResponse map(User user) {
         return new CoreUserResponse(
                 user.id().getValue(),
-                user.getFirstname(), user.getLastname());
+                user.getFirstname(),
+                user.getLastname(),
+                user.getImage());
     }
 }

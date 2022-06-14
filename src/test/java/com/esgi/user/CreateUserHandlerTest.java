@@ -1,16 +1,16 @@
 package com.esgi.user;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.esgi.kernel.*;
 import com.esgi.modules.user.application.CreateUser;
 import com.esgi.modules.user.application.CreateUserCommandHandler;
 import com.esgi.modules.user.domain.Email;
 import com.esgi.modules.user.infrastructure.InMemoryUserRepository;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.mock.web.MockMultipartFile;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -21,8 +21,13 @@ public class CreateUserHandlerTest {
     EventDispatcher<Event> dispatcher;
     CommandBus commandBus;
 
-    final CreateUser request = new CreateUser("lastname", "firstname", new Email("test@example.com"), "azertyUIOP123$");
-    
+    final CreateUser request = new CreateUser(
+            "lastname",
+            "firstname",
+            new Email("test@example.com"),
+            "azertyUIOP123$",
+            new MockMultipartFile("fileName", new byte[0]));
+
     @BeforeEach
     void setup() {
         repository = new InMemoryUserRepository();
@@ -47,6 +52,6 @@ public class CreateUserHandlerTest {
         handler.handle(request);
 
         assertThatThrownBy(() -> handler.handle(request))
-            .isInstanceOf(AlreadyExistsException.class);
+                .isInstanceOf(AlreadyExistsException.class);
     }
 }

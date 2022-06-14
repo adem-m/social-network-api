@@ -40,12 +40,17 @@ public class FileConfiguration {
     }
 
     @Bean
+    public DeleteImageCommandHandler deleteImageCommandHandler() {
+        return new DeleteImageCommandHandler(fileRepository());
+    }
+
+    @Bean
     public CommandBus fileCommandBus() {
         final CommandBus commandBus = kernelConfiguration.commandBus();
         commandBus.addHandler(CreateFile.class, new CreateFileCommandHandler(kernelConfiguration.eventDispatcher()));
         commandBus.addHandler(ResizeImageCommand.class, new ResizeImageCommandHandler(imageResizeService()));
         commandBus.addHandler(SaveImageCommand.class, new SaveImageCommandHandler(fileRepository()));
-        commandBus.addHandler(DeleteImageCommand.class, new DeleteImageCommandHandler(fileRepository()));
+        commandBus.addHandler(DeleteImageCommand.class, deleteImageCommandHandler());
         return commandBus;
     }
 

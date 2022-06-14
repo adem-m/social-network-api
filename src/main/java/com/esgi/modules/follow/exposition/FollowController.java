@@ -53,7 +53,8 @@ public class FollowController {
                             String.valueOf(user.getId().getValue()),
                             user.getLastname(),
                             user.getFirstname(),
-                            user.getEmail().getEmail()));
+                            user.getEmail().getEmail(),
+                            user.getImage()));
         }
         return ResponseEntity.ok(usersResponseResult);
     }
@@ -73,7 +74,8 @@ public class FollowController {
                             String.valueOf(user.getId().getValue()),
                             user.getLastname(),
                             user.getFirstname(),
-                            user.getEmail().getEmail()));
+                            user.getEmail().getEmail(),
+                            user.getImage()));
         }
         return ResponseEntity.ok(usersResponseResult);
     }
