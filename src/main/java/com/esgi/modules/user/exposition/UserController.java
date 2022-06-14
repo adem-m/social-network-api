@@ -11,8 +11,10 @@ import com.esgi.modules.user.domain.UserId;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,13 +31,18 @@ public class UserController {
         this.queryBus = queryBus;
     }
 
-    @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> register(@RequestBody @Valid UserRequest request) {
+    @PostMapping(path = "/register")
+    public ResponseEntity<Void> register(@RequestPart(required = false) MultipartFile image,
+                                         @RequestParam String firstname,
+                                         @RequestParam String lastname,
+                                         @RequestParam String email,
+                                         @RequestParam String password) throws IOException {
         CreateUser createUser = new CreateUser(
-                request.lastname,
-                request.firstname,
-                new Email(request.email),
-                request.password);
+                lastname,
+                firstname,
+                new Email(email),
+                password,
+                image);
         UserId userId = (UserId) commandBus.send(createUser);
         return ResponseEntity.created(URI.create("/users/id=" + userId.getValue())).build();
     }

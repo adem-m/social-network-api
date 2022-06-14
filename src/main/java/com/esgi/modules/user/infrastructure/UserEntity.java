@@ -24,15 +24,18 @@ public class UserEntity {
     @Column(nullable = false)
     private String lastname;
 
+    private String image;
+
     public UserEntity() {
     }
 
-    public UserEntity(String id, String email, String password, String firstname, String lastname) {
+    public UserEntity(String id, String email, String password, String firstname, String lastname, String image) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.firstname = firstname;
         this.lastname = lastname;
+        this.image = image;
     }
 
     public String getId() {
@@ -53,5 +56,9 @@ public class UserEntity {
 
     public String getLastname() {
         return lastname;
+    }
+
+    public String getImage() {
+        return image;
     }
 }

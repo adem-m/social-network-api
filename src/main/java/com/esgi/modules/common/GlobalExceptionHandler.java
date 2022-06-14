@@ -1,13 +1,15 @@
 package com.esgi.modules.common;
 
 import com.esgi.kernel.AlreadyExistsException;
-import com.esgi.kernel.NoSuchEntityException;
 import com.esgi.kernel.ForbiddenOperationException;
+import com.esgi.kernel.NoSuchEntityException;
 import com.esgi.modules.authentication.application.NoTokenProvidedException;
+import com.esgi.modules.user.application.InvalidImageException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,6 +67,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> on(ForbiddenOperationException ex) {
         log.error(ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(SizeLimitExceededException.class)
+    public ResponseEntity<String> on(SizeLimitExceededException ex) {
+        log.error(ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidImageException.class)
+    public ResponseEntity<String> on(InvalidImageException ex) {
+        log.error(ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @Override
