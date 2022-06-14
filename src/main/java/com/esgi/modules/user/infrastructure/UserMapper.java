@@ -13,7 +13,8 @@ public class UserMapper {
                 user.getEmail().getEmail(),
                 user.getPassword(),
                 user.getFirstname(),
-                user.getLastname());
+                user.getLastname(),
+                user.getImage());
     }
 
     public User toModel(UserEntity userEntity) {
@@ -22,6 +23,8 @@ public class UserMapper {
                 userEntity.getLastname(),
                 userEntity.getFirstname(),
                 new Email(userEntity.getEmail()),
-                userEntity.getPassword());
+                userEntity.getPassword(),
+                userEntity.getImage(),
+                false);
     }
 }

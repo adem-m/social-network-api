@@ -11,6 +11,7 @@ import com.esgi.modules.user.domain.UserId;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -29,13 +30,18 @@ public class UserController {
         this.queryBus = queryBus;
     }
 
-    @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> register(@RequestBody @Valid UserRequest request) {
+    @PostMapping(path = "/register")
+    public ResponseEntity<Void> register(@RequestPart(required = false) MultipartFile image,
+                                         @RequestParam String firstname,
+                                         @RequestParam String lastname,
+                                         @RequestParam String email,
+                                         @RequestParam String password) {
         CreateUser createUser = new CreateUser(
-                request.lastname,
-                request.firstname,
-                new Email(request.email),
-                request.password);
+                lastname,
+                firstname,
+                new Email(email),
+                password,
+                image);
         UserId userId = (UserId) commandBus.send(createUser);
         return ResponseEntity.created(URI.create("/users/id=" + userId.getValue())).build();
     }
@@ -49,19 +55,21 @@ public class UserController {
     }
 
     @GetMapping(path = "/id={id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UserResponse> getUserById(@RequestHeader(value = "authorization", required = false) String token,
-                                                    @PathVariable String id) {
+    public ResponseEntity<UserResponse> getUserById(
+            @RequestHeader(value = "authorization", required = false) String token,
+            @PathVariable String id) {
         UserId userId = new UserId(null);
         if (token != null) {
             userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         }
-        final User user = (User) queryBus.send(new RetrieveUserById(id, userId.getValue()));
+        final User user = (User) queryBus.send(new RetrieveUserById(id, userId.getValue(), false));
         UserResponse userResponseResult =
                 new UserResponse(
                         String.valueOf(user.getId().getValue()),
                         user.getLastname(),
                         user.getFirstname(),
                         user.getEmail().getEmail(),
+                        user.getImage(),
                         user.isFollowed());
         return ResponseEntity.ok(userResponseResult);
     }
@@ -74,7 +82,8 @@ public class UserController {
                         String.valueOf(user.getId().getValue()),
                         user.getLastname(),
                         user.getFirstname(),
-                        user.getEmail().getEmail());
+                        user.getEmail().getEmail(),
+                        user.getImage());
         return ResponseEntity.ok(userResponseResult);
     }
 
@@ -87,7 +96,8 @@ public class UserController {
                                 String.valueOf(user.getId().getValue()),
                                 user.getLastname(),
                                 user.getFirstname(),
-                                user.getEmail().getEmail())).collect(Collectors.toList()));
+                                user.getEmail().getEmail(),
+                                user.getImage())).collect(Collectors.toList()));
         return ResponseEntity.ok(usersResponseResult);
     }
 
@@ -100,7 +110,8 @@ public class UserController {
                                 String.valueOf(user.getId().getValue()),
                                 user.getLastname(),
                                 user.getFirstname(),
-                                user.getEmail().getEmail())).collect(Collectors.toList()));
+                                user.getEmail().getEmail(),
+                                user.getImage())).collect(Collectors.toList()));
         return ResponseEntity.ok(usersResponseResult);
     }
 
@@ -116,7 +127,8 @@ public class UserController {
                         String.valueOf(user.getId().getValue()),
                         user.getLastname(),
                         user.getFirstname(),
-                        user.getEmail().getEmail());
+                        user.getEmail().getEmail(),
+                        user.getImage());
         return ResponseEntity.ok(userResponseResult);
     }
 

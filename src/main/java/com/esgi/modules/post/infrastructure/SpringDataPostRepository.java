@@ -72,6 +72,6 @@ interface JpaPostRepository extends JpaRepository<PostEntity, String> {
 
     List<PostEntity> findAllByCreatorIdOrderByCreationDateDesc(String id);
 
-    @Query("SELECT p FROM PostEntity p JOIN FollowEntity f ON f.followerId = p.creatorId WHERE f.followedId = :id")
+    @Query("SELECT p FROM PostEntity p JOIN FollowEntity f ON f.followedId = p.creatorId WHERE f.followerId = :id")
     List<PostEntity> findFeedByUserId(@Param("id") String id);
 }

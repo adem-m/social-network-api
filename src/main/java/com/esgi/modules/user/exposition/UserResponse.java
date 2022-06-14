@@ -5,31 +5,24 @@ public class UserResponse {
     public String lastname;
     public String firstname;
     public String email;
+    public String image;
     public boolean isFollowed;
 
-    public UserResponse(String id, String lastname, String firstname, String email) {
+    public UserResponse(String id, String lastname, String firstname, String email, String image) {
         this.id = id;
         this.lastname = lastname;
         this.firstname = firstname;
         this.email = email;
+        this.image = image;
         this.isFollowed = false;
     }
 
-    public UserResponse(String id, String lastname, String firstname, String email, boolean isFollowed) {
+    public UserResponse(String id, String lastname, String firstname, String email, String image, boolean isFollowed) {
         this.id = id;
         this.lastname = lastname;
         this.firstname = firstname;
         this.email = email;
+        this.image = image;
         this.isFollowed = isFollowed;
-    }
-
-    @Override
-    public String toString() {
-        return "MemberDTO{" +
-                "id=" + id +
-                ", lastname='" + lastname + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", email=" + email + '\'' +
-                '}';
     }
 }

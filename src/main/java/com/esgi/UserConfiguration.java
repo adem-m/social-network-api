@@ -87,16 +87,16 @@ public class UserConfiguration {
     }
 
     @Bean
-    public QueryBus userIdQueryBus() {
-        final QueryBus queryBus = kernelConfiguration.queryBus();
-        queryBus.addHandler(RetrieveUserById.class, new RetrieveUserByIdHandler(followConfiguration.followRepository(),
-                userRepository()));
-        return queryBus;
+    public RetrieveUserByIdHandler retrieveUserByIdHandler() {
+        return new RetrieveUserByIdHandler(followConfiguration.followRepository(), userRepository(),
+                kernelConfiguration.queryBus());
     }
 
     @Bean
-    public RetrieveUserByIdHandler retrieveUserByIdHandler() {
-        return new RetrieveUserByIdHandler(followConfiguration.followRepository(), userRepository());
+    public QueryBus userIdQueryBus() {
+        final QueryBus queryBus = kernelConfiguration.queryBus();
+        queryBus.addHandler(RetrieveUserById.class, retrieveUserByIdHandler());
+        return queryBus;
     }
 
     @Bean

@@ -1,6 +1,6 @@
 package com.esgi.modules.user.domain;
 
-import com.esgi.kernel.*;
+import com.esgi.kernel.Entity;
 
 import java.util.Objects;
 
@@ -10,6 +10,7 @@ public final class User implements Entity<UserId> {
     private final String firstname;
     private Email email;
     private String password;
+    private String image;
 
     private boolean isFollowed;
 
@@ -20,6 +21,7 @@ public final class User implements Entity<UserId> {
         this.email = Objects.requireNonNull(email);
         this.password = Objects.requireNonNull(password);
         this.isFollowed = false;
+        this.image = null;
     }
 
     public User(UserId id, String lastname, String firstname, Email email, String password, boolean isFollowed) {
@@ -28,6 +30,16 @@ public final class User implements Entity<UserId> {
         this.firstname = Objects.requireNonNull(firstname);
         this.email = Objects.requireNonNull(email);
         this.password = Objects.requireNonNull(password);
+        this.isFollowed = isFollowed;
+    }
+
+    public User(UserId id, String lastname, String firstname, Email email, String password, String image, boolean isFollowed) {
+        this.id = id;
+        this.lastname = lastname;
+        this.firstname = firstname;
+        this.email = email;
+        this.password = password;
+        this.image = image;
         this.isFollowed = isFollowed;
     }
 
@@ -94,5 +106,13 @@ public final class User implements Entity<UserId> {
 
     public boolean isFollowed() {
         return isFollowed;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
