@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,6 +57,7 @@ public class FollowController {
                             user.getEmail().getEmail(),
                             user.getImage()));
         }
+        usersResponseResult.members.sort(Comparator.comparing(o -> o.firstname));
         return ResponseEntity.ok(usersResponseResult);
     }
 
@@ -77,6 +79,7 @@ public class FollowController {
                             user.getEmail().getEmail(),
                             user.getImage()));
         }
+        usersResponseResult.members.sort(Comparator.comparing(o -> o.firstname));
         return ResponseEntity.ok(usersResponseResult);
     }
 
