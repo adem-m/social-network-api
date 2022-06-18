@@ -64,6 +64,6 @@ public class SpringDataUserRepository implements UserRepository {
 interface JpaUserRepository extends JpaRepository<UserEntity, String> {
     UserEntity findByEmail(String email);
 
-    @Query("SELECT u FROM UserEntity u WHERE u.firstname LIKE %:name% OR u.lastname LIKE %:name%")
+    @Query("SELECT u FROM UserEntity u WHERE u.firstname LIKE %:name% OR u.lastname LIKE %:name% ORDER BY u.firstname")
     List<UserEntity> findByName(@Param("name") String name);
 }
