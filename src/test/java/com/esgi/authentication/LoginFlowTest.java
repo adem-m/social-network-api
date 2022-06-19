@@ -10,26 +10,19 @@ import io.restassured.http.ContentType;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.json.JSONObject;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(
-        webEnvironment = WebEnvironment.RANDOM_PORT
+    webEnvironment = WebEnvironment.RANDOM_PORT
 )
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
 public class LoginFlowTest {
     @LocalServerPort
     int port;
@@ -50,17 +43,16 @@ public class LoginFlowTest {
         body.email = "test@example.com";
         body.password = "azertyUIOP123$";
 
-        var res =
-                given()
-                        .port(port)
-                        .contentType(ContentType.JSON)
-                        .with().body(body)
-                        .when()
-                        .post("/login")
-                        .then()
-                        .statusCode(201)
-                        .extract()
-                        .body().jsonPath().getObject(".", LoginResponse.class);
+        var res = given()
+            .port(port)
+            .contentType(ContentType.JSON)
+            .with().body(body)
+            .when()
+            .post("/login")
+            .then()
+            .statusCode(201)
+            .extract()
+            .body().jsonPath().getObject(".", LoginResponse.class);
 
         assertThat(res.token()).isInstanceOf(String.class);
         assertThat(res.userId()).isInstanceOf(String.class);
