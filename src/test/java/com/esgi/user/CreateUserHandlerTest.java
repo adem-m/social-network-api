@@ -27,7 +27,7 @@ public class CreateUserHandlerTest {
     @BeforeEach
     void setup() {
         repository = new InMemoryUserRepository();
-        dispatcher = new DefaultEventDispatcher<Event>(new HashMap());
+        dispatcher = new DefaultEventDispatcher<Event>(new HashMap<>());
         handler = new CreateUserCommandHandler(repository, dispatcher);
     }
 

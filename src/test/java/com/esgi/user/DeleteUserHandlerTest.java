@@ -26,7 +26,7 @@ public class DeleteUserHandlerTest {
     @BeforeEach
     void setup() {
         repository = new InMemoryUserRepository();
-        dispatcher = new DefaultEventDispatcher<Event>(new HashMap());
+        dispatcher = new DefaultEventDispatcher<Event>(new HashMap<>());
         handler = new DeleteUserCommandHandler(repository, dispatcher);
         user = new User(
             new UserId(repository.nextIdentity().toString()),
