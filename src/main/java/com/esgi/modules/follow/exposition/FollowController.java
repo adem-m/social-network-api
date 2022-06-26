@@ -64,10 +64,6 @@ public class FollowController {
     @GetMapping(path = "/followers/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UsersResponse> getFollowersByFollowingId(@PathVariable String id) {
         final List<Follow> follows = (List<Follow>) queryBus.send(new RetrieveFollowers(id));
-        return getUsersResponseResponseEntity(follows);
-    }
-
-    private ResponseEntity<UsersResponse> getUsersResponseResponseEntity(List<Follow> follows) {
         UsersResponse usersResponseResult = new UsersResponse(new ArrayList<>());
         for (Follow follow : follows) {
             final User user = (User) queryBus.send(new RetrieveUserById(follow.getFollowerId().getValue()));

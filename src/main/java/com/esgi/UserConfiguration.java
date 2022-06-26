@@ -127,12 +127,12 @@ public class UserConfiguration {
     @Bean
     public QueryBus usersByNameQueryBus() {
         final QueryBus queryBus = kernelConfiguration.queryBus();
-        queryBus.addHandler(RetrieveUsersByName.class, new RetrieveUsersByNameHandler(userRepository()));
+        queryBus.addHandler(RetrieveUsersByName.class, retrieveUsersByNameHandler());
         return queryBus;
     }
 
     @Bean
     public RetrieveUsersByNameHandler retrieveUsersByNameHandler() {
-        return new RetrieveUsersByNameHandler(userRepository());
+        return new RetrieveUsersByNameHandler(userRepository(), kernelConfiguration.queryBus());
     }
 }

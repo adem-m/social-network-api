@@ -134,7 +134,8 @@ public class PostController {
         PostResponse postResponseResult = new PostResponse(
                 String.valueOf(post.getId().getValue()),
                 post.getContent(),
-                new CodeResponse(
+                code == null ? null
+                        : new CodeResponse(
                         String.valueOf(code.getCodeId().getValue()),
                         code.getPostId().getValue(),
                         code.getSource(),

@@ -89,7 +89,7 @@ public class UserController {
 
     @GetMapping(path = "/{name}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UsersResponse> getUserByName(@PathVariable String name) {
-        final List<User> users = (List<User>) queryBus.send(new RetrieveUsersByName(name));
+        final List<User> users = (List<User>) queryBus.send(new RetrieveUsersByName(name, false));
         UsersResponse usersResponseResult =
                 new UsersResponse(users.stream().map(user ->
                         new UserResponse(
