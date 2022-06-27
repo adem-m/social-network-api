@@ -56,7 +56,9 @@ public class UserConfiguration {
 
     @Bean
     public UpdateUserCommandHandler updateUserCommandHandler() {
-        return new UpdateUserCommandHandler(userRepository(), kernelConfiguration.eventDispatcher());
+        return new UpdateUserCommandHandler(userRepository(),
+                kernelConfiguration.eventDispatcher(),
+                kernelConfiguration.commandBus());
     }
 
     @Bean

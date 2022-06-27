@@ -80,6 +80,10 @@ public final class User implements Entity<UserId> {
         this.email = Objects.requireNonNull(newEmail);
     }
 
+    public void changeImage(String newImage) {
+        this.image = newImage;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
