@@ -2,6 +2,7 @@ package com.esgi.user;
 
 import java.util.HashMap;
 
+import com.esgi.kernel.CommandBus;
 import com.esgi.kernel.DefaultEventDispatcher;
 import com.esgi.kernel.Event;
 import com.esgi.kernel.EventDispatcher;
@@ -21,13 +22,14 @@ public class DeleteUserHandlerTest {
     DeleteUserCommandHandler handler;
     InMemoryUserRepository repository;
     EventDispatcher<Event> dispatcher;
+    CommandBus commandBus;
     User user;
 
     @BeforeEach
     void setup() {
         repository = new InMemoryUserRepository();
         dispatcher = new DefaultEventDispatcher<Event>(new HashMap());
-        handler = new DeleteUserCommandHandler(repository, dispatcher);
+        handler = new DeleteUserCommandHandler(repository, dispatcher, commandBus);
         user = new User(
             new UserId(repository.nextIdentity().toString()),
             "lastname", 
