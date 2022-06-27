@@ -76,7 +76,7 @@ public class UserConfiguration {
 
     @Bean
     public DeleteUserCommandHandler deleteUserCommandHandler() {
-        return new DeleteUserCommandHandler(userRepository(), kernelConfiguration.eventDispatcher());
+        return new DeleteUserCommandHandler(userRepository(), kernelConfiguration.eventDispatcher(), kernelConfiguration.commandBus());
     }
 
     @Bean
