@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -117,9 +116,11 @@ public class UserController {
 
     @PutMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserResponse> updateUser(@RequestHeader(value = "authorization", required = false) String token,
-                                                   @RequestBody @Valid UpdateUserRequest request) {
+                                                   @RequestPart(required = false) MultipartFile image,
+                                                   @RequestParam(required = false) String email,
+                                                   @RequestParam(required = false) String password) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
-        UpdateUser updateUser = new UpdateUser(userId.getValue(), new Email(request.email), request.password);
+        UpdateUser updateUser = new UpdateUser(userId.getValue(), new Email(email), password, image);
         commandBus.send(updateUser);
         final User user = (User) queryBus.send(new RetrieveUserById(updateUser.userId));
         UserResponse userResponseResult =
