@@ -7,8 +7,10 @@ import com.esgi.modules.comment.application.*;
 import com.esgi.modules.file.application.CreateFileEvent;
 import com.esgi.modules.follow.application.CreateFollowEvent;
 import com.esgi.modules.follow.application.UnfollowEvent;
-import com.esgi.kernel.DefaultEventDispatcher;
-import com.esgi.modules.post.application.*;
+import com.esgi.modules.post.application.CreatePostEvent;
+import com.esgi.modules.post.application.DeletePostEvent;
+import com.esgi.modules.post.application.LikePostEvent;
+import com.esgi.modules.post.application.UnlikePostEvent;
 import com.esgi.modules.user.application.CreateUserEvent;
 import com.esgi.modules.user.application.DeleteUserEvent;
 import com.esgi.modules.user.application.UpdateUserEvent;
@@ -36,7 +38,6 @@ public class KernelConfiguration {
         dispatcher.registerEvent(UnfollowEvent.class);
 
         dispatcher.registerEvent(CreatePostEvent.class);
-        dispatcher.registerEvent(EditPostEvent.class);
         dispatcher.registerEvent(DeletePostEvent.class);
         dispatcher.registerEvent(LikePostEvent.class);
         dispatcher.registerEvent(UnlikePostEvent.class);

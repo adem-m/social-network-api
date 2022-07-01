@@ -79,18 +79,6 @@ public class FollowController {
         return ResponseEntity.ok(usersResponseResult);
     }
 
-    @GetMapping(path = "/follows", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<FollowsResponse> getAllFollows() {
-        final List<Follow> follows = (List<Follow>) queryBus.send(new RetrieveFollows());
-        FollowsResponse followsResponseResult = new FollowsResponse(
-                follows.stream().map(follow -> new FollowResponse(
-                                String.valueOf(follow.getFollowId().getValue()),
-                                follow.getFollowerId().getValue(),
-                                follow.getFollowedId().getValue()))
-                        .collect(Collectors.toList()));
-        return ResponseEntity.ok(followsResponseResult);
-    }
-
     @DeleteMapping(path = "/unfollow", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> unfollow(@RequestHeader(value = "authorization", required = false) String token,
                                          @RequestBody @Valid FollowRequest request) {

@@ -73,36 +73,9 @@ public class UserController {
         return ResponseEntity.ok(userResponseResult);
     }
 
-    @GetMapping(path = "/email={email}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String email) {
-        final User user = (User) queryBus.send(new RetrieveUserByEmail(email));
-        UserResponse userResponseResult =
-                new UserResponse(
-                        String.valueOf(user.getId().getValue()),
-                        user.getLastname(),
-                        user.getFirstname(),
-                        user.getEmail().getEmail(),
-                        user.getImage());
-        return ResponseEntity.ok(userResponseResult);
-    }
-
     @GetMapping(path = "/{name}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UsersResponse> getUserByName(@PathVariable String name) {
         final List<User> users = (List<User>) queryBus.send(new RetrieveUsersByName(name, false));
-        UsersResponse usersResponseResult =
-                new UsersResponse(users.stream().map(user ->
-                        new UserResponse(
-                                String.valueOf(user.getId().getValue()),
-                                user.getLastname(),
-                                user.getFirstname(),
-                                user.getEmail().getEmail(),
-                                user.getImage())).collect(Collectors.toList()));
-        return ResponseEntity.ok(usersResponseResult);
-    }
-
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UsersResponse> getAllUsers() {
-        final List<User> users = (List<User>) queryBus.send(new RetrieveUsers());
         UsersResponse usersResponseResult =
                 new UsersResponse(users.stream().map(user ->
                         new UserResponse(
@@ -140,7 +113,4 @@ public class UserController {
         commandBus.send(deleteUser);
         return ResponseEntity.noContent().build();
     }
-
-    //TODO getUserByToken
-    //TODO block an user ?
 }
