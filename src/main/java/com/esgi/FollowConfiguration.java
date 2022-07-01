@@ -85,16 +85,4 @@ public class FollowConfiguration {
     public RetrieveFollowersHandler retrieveFollowersHandler() {
         return new RetrieveFollowersHandler(followRepository());
     }
-
-    @Bean
-    public QueryBus followsQueryBus() {
-        final QueryBus queryBus = kernelConfiguration.queryBus();
-        queryBus.addHandler(RetrieveFollows.class, new RetrieveFollowsHandler(followRepository()));
-        return queryBus;
-    }
-
-    @Bean
-    public RetrieveFollowsHandler retrieveFollowsHandler() {
-        return new RetrieveFollowsHandler(followRepository());
-    }
 }

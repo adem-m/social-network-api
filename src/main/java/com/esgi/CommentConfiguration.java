@@ -83,18 +83,6 @@ public class CommentConfiguration {
     }
 
     @Bean
-    public QueryBus commentByIdQueryBus() {
-        final QueryBus queryBus = kernelConfiguration.queryBus();
-        queryBus.addHandler(RetrieveCommentById.class, new RetrieveCommentByIdHandler(commentRepository(), kernelConfiguration.queryBus()));
-        return queryBus;
-    }
-
-    @Bean
-    public RetrieveCommentByIdHandler retrieveCommentByIdHandler() {
-        return new RetrieveCommentByIdHandler(commentRepository(), kernelConfiguration.queryBus());
-    }
-
-    @Bean
     public QueryBus commentsByPostIdQueryBus() {
         final QueryBus queryBus = kernelConfiguration.queryBus();
         queryBus.addHandler(RetrieveCommentsByPostId.class, new RetrieveCommentsByPostIdHandler(commentRepository(), kernelConfiguration.queryBus()));
@@ -104,17 +92,5 @@ public class CommentConfiguration {
     @Bean
     public RetrieveCommentsByPostIdHandler retrieveCommentsByPostIdHandler() {
         return new RetrieveCommentsByPostIdHandler(commentRepository(), kernelConfiguration.queryBus());
-    }
-
-    @Bean
-    public QueryBus commentsQueryBus() {
-        final QueryBus queryBus = kernelConfiguration.queryBus();
-        queryBus.addHandler(RetrieveComments.class, new RetrieveCommentsHandler(commentRepository(), kernelConfiguration.queryBus()));
-        return queryBus;
-    }
-
-    @Bean
-    public RetrieveCommentsHandler retrieveCommentsHandler() {
-        return new RetrieveCommentsHandler(commentRepository(), kernelConfiguration.queryBus());
     }
 }

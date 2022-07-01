@@ -118,35 +118,6 @@ public class PostController {
         return ResponseEntity.ok(postsResponseResult);
     }
 
-    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PostResponse> edit(@RequestHeader(value = "authorization", required = false) String token,
-                                             @PathVariable String id,
-                                             @RequestBody @Valid EditPostRequest request) {
-        UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
-        EditPost editPost = new EditPost(id, request.content, request.code, userId.getValue());
-        commandBus.send(editPost);
-        final FullPost fullPost = (FullPost) queryBus.send(new RetrievePostById(id));
-        final Post post = fullPost.post();
-        final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
-        final User user = (User) queryBus.send(new RetrieveUserById(post.getUserId().getValue()));
-        final Boolean isLiked = (Boolean) queryBus.send(new IsPostLikedQuery(post.getId().getValue(), userId.getValue()));
-
-        PostResponse postResponseResult = new PostResponse(
-                String.valueOf(post.getId().getValue()),
-                post.getContent(),
-                code == null ? null
-                        : new CodeResponse(
-                        String.valueOf(code.getCodeId().getValue()),
-                        code.getPostId().getValue(),
-                        code.getSource(),
-                        code.getLanguage()),
-                CoreUserMapper.map(user),
-                post.getDate().toString(),
-                fullPost.likes(),
-                isLiked);
-        return ResponseEntity.ok(postResponseResult);
-    }
-
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deletePost(@RequestHeader(value = "authorization", required = false) String token,
                                            @PathVariable String id) {
@@ -155,6 +126,4 @@ public class PostController {
         commandBus.send(deletePost);
         return ResponseEntity.noContent().build();
     }
-
-    //TODO share a post ?
 }

@@ -42,37 +42,6 @@ public class CommentController {
         return ResponseEntity.created(URI.create("/comments/id=" + commentId.getValue())).build();
     }
 
-    @GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<CommentResponse> getCommentById(
-            @RequestHeader(value = "authorization", required = false) String token,
-            @PathVariable String id) {
-        boolean isLiked = false;
-        final FullComment fullComment = (FullComment) queryBus.send(new RetrieveCommentById(id));
-        final Comment comment = fullComment.comment();
-        if (token != null) {
-            UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
-            isLiked = (Boolean) queryBus.send(new IsCommentLikedQuery(comment.id().getValue(), userId.getValue()));
-        }
-        final User user = (User) queryBus.send(new RetrieveUserById(comment.getUserId().getValue()));
-        CommentResponse commentResponseResult = new CommentResponse(
-                String.valueOf(comment.getCommentId().getValue()),
-                String.valueOf(comment.getPostId().getValue()),
-                comment.getContent(),
-                CoreUserMapper.map(user),
-                comment.getDate().toString(),
-                fullComment.likes(),
-                isLiked);
-        return ResponseEntity.ok(commentResponseResult);
-    }
-
-    @GetMapping(path = "/user={id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<CommentsResponse> getCommentsByUserId(
-            @RequestHeader(value = "authorization", required = false) String token,
-            @PathVariable String id) {
-        final List<FullComment> comments = (List<FullComment>) queryBus.send(new RetrieveComments(id));
-        return getCommentsResponseResponseEntity(token, comments);
-    }
-
     @GetMapping(path = "/post={id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<CommentsResponse> getCommentsByPostId(
             @RequestHeader(value = "authorization", required = false) String token,
@@ -102,24 +71,6 @@ public class CommentController {
                 }).collect(Collectors.toList()));
         return ResponseEntity.ok(commentsResponseResult);
     }
-
-//    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
-//    public ResponseEntity<CommentResponse> edit(@PathVariable String id, @RequestBody @Valid EditCommentRequest request) {
-//        EditComment editComment = new EditComment(id, request.content);
-//        commandBus.send(editComment);
-//        final FullComment fullComment = (FullComment) queryBus.send(new RetrieveCommentById(editComment.commentId));
-//        final Comment comment = fullComment.comment();
-//        final User user = (User) queryBus.send(new RetrieveUserById(comment.getUserId().getValue()));
-//        CommentResponse commentResponseResult = new CommentResponse(
-//                comment.getCommentId().getValue(),
-//                comment.getUserId().getValue(),
-//                comment.getContent(),
-//                CoreUserMapper.map(user),
-//                comment.getDate().toString(),
-//                fullComment.likes(),
-//                fullComment.isLiked());
-//        return ResponseEntity.ok(commentResponseResult);
-//    }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteComment(

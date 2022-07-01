@@ -45,28 +45,6 @@ public class PostConfiguration {
     }
 
     @Bean
-    public EditPostEventListener editPostEventListener() {
-        EventDispatcher dispatcher = this.kernelConfiguration.eventDispatcher();
-        EditPostEventListener listener = new EditPostEventListener();
-        dispatcher.addListener(EditPostEvent.class, listener);
-        return listener;
-    }
-
-    @Bean
-    public EditPostCommandHandler editPostCommandHandler() {
-        return new EditPostCommandHandler(postRepository(),
-                kernelConfiguration.eventDispatcher(),
-                kernelConfiguration.queryBus());
-    }
-
-    @Bean
-    public CommandBus postCommandBus() {
-        final CommandBus commandBus = kernelConfiguration.commandBus();
-        commandBus.addHandler(EditPost.class, editPostCommandHandler());
-        return commandBus;
-    }
-
-    @Bean
     public DeletePostEventListener deletePostEventListener() {
         EventDispatcher dispatcher = this.kernelConfiguration.eventDispatcher();
         DeletePostEventListener listener = new DeletePostEventListener();

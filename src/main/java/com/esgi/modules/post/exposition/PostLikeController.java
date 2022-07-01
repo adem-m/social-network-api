@@ -48,32 +48,6 @@ public class PostLikeController {
         return ResponseEntity.created(URI.create("/likePosts/id=" + postLikeId.getValue())).build();
     }
 
-    @GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PostsResponse> getAllPostsLikedByUserId(@PathVariable String id) {
-        final List<PostLike> likedPosts = (List<PostLike>) queryBus.send(new RetrieveLikedPostsByUserId(id));
-        PostsResponse postsResponseResult = new PostsResponse(new ArrayList<>());
-        for (PostLike postLike : likedPosts) {
-            final FullPost fullPost = (FullPost) queryBus.send(new RetrievePostById(id));
-            final Post post = fullPost.post();
-            final Code code = (Code) queryBus.send(new RetrieveCodeByPostId(post.getId().getValue()));
-            final User user = (User) queryBus.send(new RetrieveUserById(post.getUserId().getValue()));
-            final Boolean isLiked = (Boolean) queryBus.send(new IsPostLikedQuery(post.getId().getValue(), id));
-            postsResponseResult.posts.add(new PostResponse(
-                    String.valueOf(post.getId().getValue()),
-                    post.getContent(),
-                    new CodeResponse(
-                            String.valueOf(code.getCodeId().getValue()),
-                            code.getPostId().getValue(),
-                            code.getSource(),
-                            code.getLanguage()),
-                    CoreUserMapper.map(user),
-                    post.getDate().toString(),
-                    fullPost.likes(),
-                    isLiked));
-        }
-        return ResponseEntity.ok(postsResponseResult);
-    }
-
     @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> unlike(@RequestHeader(value = "authorization", required = false) String token,
                                        @RequestBody @Valid PostLikeRequest request) {
