@@ -15,4 +15,5 @@ FROM openjdk:${OPENJDK_TAG}@${OPENJDK_DIGEST} AS java
 WORKDIR /usr/src/app
 COPY --from=maven /usr/src/app/target/social-network-api-1.0-SNAPSHOT.jar .
 
-ENTRYPOINT ["java","-jar","social-network-api-1.0-SNAPSHOT.jar"]
+ADD entrypoint.sh .
+ENTRYPOINT ["./entrypoint.sh"]
