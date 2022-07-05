@@ -6,12 +6,13 @@ import java.util.Objects;
 
 public final class User implements Entity<UserId> {
     private final UserId id;
-    private final String lastname;
-    private final String firstname;
+
+    private String lastname;
+
+    private String firstname;
     private Email email;
     private String password;
     private String image;
-
     private boolean isFollowed;
 
     public User(UserId id, String lastname, String firstname, Email email, String password) {
@@ -118,5 +119,13 @@ public final class User implements Entity<UserId> {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 }

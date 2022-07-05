@@ -8,6 +8,7 @@ import com.esgi.modules.user.application.*;
 import com.esgi.modules.user.domain.Email;
 import com.esgi.modules.user.domain.User;
 import com.esgi.modules.user.domain.UserId;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
@@ -91,9 +93,19 @@ public class UserController {
     public ResponseEntity<UserResponse> updateUser(@RequestHeader(value = "authorization", required = false) String token,
                                                    @RequestPart(required = false) MultipartFile image,
                                                    @RequestParam(required = false) String email,
-                                                   @RequestParam(required = false) String password) {
+                                                   @RequestParam(required = false) String firstName,
+                                                   @RequestParam(required = false) String lastName,
+                                                   @RequestParam(required = false) String oldPassword,
+                                                   @RequestParam(required = false) String newPassword) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
-        UpdateUser updateUser = new UpdateUser(userId.getValue(), new Email(email), password, image);
+        UpdateUser updateUser = new UpdateUser(
+                userId.getValue(),
+                email == null ? null : new Email(email),
+                oldPassword,
+                newPassword,
+                firstName,
+                lastName,
+                image);
         commandBus.send(updateUser);
         final User user = (User) queryBus.send(new RetrieveUserById(updateUser.userId));
         UserResponse userResponseResult =
@@ -112,5 +124,10 @@ public class UserController {
         DeleteUser deleteUser = new DeleteUser(userId.getValue());
         commandBus.send(deleteUser);
         return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler(PasswordDoesNotMatchException.class)
+    public ResponseEntity<Map<String, String>> on(PasswordDoesNotMatchException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", ex.getMessage()));
     }
 }
