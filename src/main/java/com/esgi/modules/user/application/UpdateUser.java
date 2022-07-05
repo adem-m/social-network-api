@@ -11,13 +11,19 @@ import org.springframework.web.multipart.MultipartFile;
 public final class UpdateUser implements Command {
     public final String userId;
     public Email email;
-    public String password;
+    public String oldPassword;
+    public String newPassword;
+    public String firstName;
+    public String lastName;
     public MultipartFile image;
 
-    public UpdateUser(String userId, Email email, String password, MultipartFile image) {
+    public UpdateUser(String userId, Email email, String oldPassword, String newPassword, String firstName, String lastName, MultipartFile image) {
         this.userId = userId;
         this.email = email;
-        this.password = password;
+        this.oldPassword = oldPassword;
+        this.newPassword = newPassword;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.image = image;
     }
 }
