@@ -59,6 +59,6 @@ public record RunChallengeQueryHandler(
 
     private boolean isOutputCompliant(String expectedOutput, String actualOutput) {
         if (expectedOutput == null || expectedOutput.isEmpty()) return true;
-        return expectedOutput.equals(actualOutput);
+        return expectedOutput.trim().equals(actualOutput.trim());
     }
 }
