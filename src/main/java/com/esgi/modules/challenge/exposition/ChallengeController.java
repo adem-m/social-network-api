@@ -46,13 +46,17 @@ public class ChallengeController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/run", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/run", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RunChallengeResponse> runChallenge(
-            @RequestHeader(value = "authorization", required = false) String token) {
+            @RequestHeader(value = "authorization", required = false) String token,
+            @RequestBody RunChallengeRequest request) {
         UserId userId = (UserId) commandBus.send(new DecodeTokenCommand(new Token(token)));
         List<ChallengeOutputResponse> challengeOutput =
                 ((List<ChallengeOutput>) queryBus.send(
-                        new RunChallengeQuery(userId.getValue()))).stream().map(ChallengeOutputMapper::toDto).toList();
+                        new RunChallengeQuery(userId.getValue(), request.expectedOutput)))
+                        .stream()
+                        .map(ChallengeOutputMapper::toDto)
+                        .toList();
         return ResponseEntity.ok(new RunChallengeResponse(challengeOutput));
     }
 

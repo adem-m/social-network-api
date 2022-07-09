@@ -12,7 +12,8 @@ public class ChallengeOutputMapper {
                 new OutputResponse(
                         challengeOutput.output().getValue(),
                         challengeOutput.output().getStatus().name().toLowerCase(),
-                        challengeOutput.output().getDuration().value())
+                        challengeOutput.output().getDuration().value()),
+                challengeOutput.expectedOutputCompliant()
         );
     }
 }

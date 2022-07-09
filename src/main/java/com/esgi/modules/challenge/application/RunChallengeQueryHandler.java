@@ -27,8 +27,8 @@ public record RunChallengeQueryHandler(
     private final static int CODE_RUNS_COUNT = 3;
 
     @Override
-    public List<ChallengeOutput> handle(RunChallengeQuery command) {
-        List<CodeId> codeIds = repository.findCodeIdsByUserId(new UserId(command.userId()));
+    public List<ChallengeOutput> handle(RunChallengeQuery query) {
+        List<CodeId> codeIds = repository.findCodeIdsByUserId(new UserId(query.userId()));
         if (codeIds.isEmpty()) throw new EmptyChallengeQueueException();
         List<Code> codes = codeIds.stream().map(codeId -> (Code) queryBus.send(new RetrieveCodeById(codeId))).toList();
         log.info("Challenge ran");
@@ -48,8 +48,17 @@ public record RunChallengeQueryHandler(
                             .get();
                     Output output = outputs.get(0);
                     output.setDuration(new Duration(durationSum.value() / outputs.size()));
-                    return new ChallengeOutput(mappedCode, output);
+                    return new ChallengeOutput(
+                            mappedCode,
+                            output,
+                            isOutputCompliant(query.expectedOutput(), output.getValue())
+                    );
                 }
         ).toList();
+    }
+
+    private boolean isOutputCompliant(String expectedOutput, String actualOutput) {
+        if (expectedOutput == null || expectedOutput.isEmpty()) return true;
+        return expectedOutput.equals(actualOutput);
     }
 }
