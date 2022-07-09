@@ -5,7 +5,7 @@ import java.util.List;
 public record RunChallengeResponse(List<ChallengeOutputResponse> outputs) {
 }
 
-record ChallengeOutputResponse(CodeResponse code, OutputResponse output) {
+record ChallengeOutputResponse(CodeResponse code, OutputResponse output, boolean expectedOutputCompliant) {
 }
 
 record CodeResponse(String source, String language) {
