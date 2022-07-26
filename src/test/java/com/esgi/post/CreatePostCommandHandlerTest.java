@@ -7,7 +7,6 @@ import com.esgi.kernel.DefaultCommandBus;
 import com.esgi.kernel.DefaultEventDispatcher;
 import com.esgi.kernel.Event;
 import com.esgi.kernel.EventDispatcher;
-import com.esgi.modules.code.exposition.CodeRequest;
 import com.esgi.modules.post.application.CreatePost;
 import com.esgi.modules.post.application.CreatePostCommandHandler;
 import com.esgi.modules.post.infrastructure.InMemoryPostRepository;
